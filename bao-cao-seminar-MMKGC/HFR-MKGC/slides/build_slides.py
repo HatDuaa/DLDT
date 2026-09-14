@@ -70,7 +70,7 @@ def main() -> None:
     html = html.replace("{{SRC_SELF}}", SRC_SELF)
     html = html.replace("{{NOTES_JSON}}", json.dumps(NOTES, ensure_ascii=False))
     assert "{{" not in html, "unfilled placeholder"
-    out = HERE / "25C11050_25C15003_HFR-MKGC-slides.html"
+    out = HERE / "seminar-slides.html"
     out.write_text(html, encoding="utf-8")
     print(out, out.stat().st_size // 1024, "KB")
 
