@@ -106,7 +106,7 @@
     <div>
       <p><b>KGC</b>: cho (h, r, ?), xếp hạng <b>mọi</b> thực thể, đáp án đúng phải đứng đầu.</p>
       <p><b>MMKGC</b>: mỗi thực thể có thêm <span class="tag i">ảnh</span> và <span class="tag t">văn bản</span>, ngoài <span class="tag s">cấu trúc</span>.</p>
-      <p class="small">Không phải bài toán thêm node mới. Mọi node đã có trong bảng, chỉ thiếu cạnh.</p>
+      <p class="small">Không phải bài toán thêm node mới: mọi node đã có trong bảng, chỉ thiếu cạnh (transductive).</p>
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
@@ -135,7 +135,7 @@
       <p class="small">Điểm minh hoạ. Thứ hạng lấy từ case study của bài [1, Fig. 4].</p>
     </div>
   </div>
-  <div class="note ok" style="margin-top:22px"><b>Ảnh không nói gì về giọng hát</b>, văn bản thì có chữ "singer". Mô hình tốt phải biết <b>nghe văn bản nhiều hơn ảnh</b> khi câu hỏi là voice type.</div>
+  <div class="note ok" style="margin-top:22px"><b>Ảnh không chứa thông tin về giọng hát</b>; văn bản chứa từ khoá "singer". Với quan hệ voice type, mô hình cần <b>ưu tiên văn bản hơn ảnh</b>.</div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">3</div>
 </section>
 
@@ -144,8 +144,8 @@
   <h2>Hai điểm yếu của MMKGC hiện có</h2>
   <div class="cols" style="grid-template-columns:1fr 1.1fr">
     <div>
-      <div class="card a"><h3>1. Trộn mô thức "mù" quan hệ</h3><p>Trọng số cố định cho mọi quan hệ. Ảnh vô dụng với <i>voice type</i> nhưng vẫn được nghe như nhau → nhiễu.</p></div>
-      <div class="card a" style="margin-top:14px"><h3>2. LLM cho KGC còn cứng</h3><p>Chỉ dùng text + cấu trúc, trộn tĩnh, chưa dùng ảnh, không thích nghi theo từng bộ ba.</p></div>
+      <div class="card a"><h3>1. Trộn mô thức không phụ thuộc quan hệ</h3><p>Trọng số cố định cho mọi quan hệ. Ảnh không liên quan tới <i>voice type</i> nhưng vẫn có trọng số như các mô thức khác → nhiễu.</p></div>
+      <div class="card a" style="margin-top:14px"><h3>2. KGC dựa trên LLM thiếu thích nghi</h3><p>Chỉ dùng text + cấu trúc, trộn tĩnh, chưa dùng ảnh, không thích nghi theo từng bộ ba.</p></div>
     </div>
     <figure><img src="{{FIG1}}" style="max-height:470px"><figcaption>Nguồn: [1], Fig. 1</figcaption></figure>
   </div>
@@ -161,7 +161,7 @@
     <div class="card t"><h3>MNO</h3><p><b>Multi-modal Negative Optimization</b></p><p>Mẫu sai khó: LLaVA viết lại text, xoay + nhiễu vector ảnh. Train <b>đối kháng</b>.</p></div>
   </div>
   <p style="margin-top:26px">Nền: hàm điểm <b>RotatE</b> [2], encoder <b>CLIP</b><sup>a</sup> và <b>BERT</b><sup>b</sup> đóng băng, <b>LLaVA-1.5-7B</b> [3].</p>
-  <p class="small">Không có GNN. Mỗi node là một hàng tra bảng; cấu trúc đi vào mô hình qua hàm loss, không qua truyền tin.</p>
+  <p class="small">Không dùng GNN. Mỗi node là một hàng trong bảng embedding; cấu trúc đồ thị đi vào mô hình qua hàm loss, không qua truyền tin.</p>
   <div class="foot"><span class="src"><sup>a</sup> A. Radford et al., "Learning transferable visual models from natural language supervision," ICML 2021. &nbsp; <sup>b</sup> J. Devlin et al., "BERT," NAACL 2019.</span></div><div class="num">5</div>
 </section>
 
@@ -213,13 +213,13 @@
     <div class="legend">
       <span class="k i">e_Iv</span><span>ảnh → CLIP → chiếu: thị giác thô</span>
       <span class="k t">e_Ic</span><span>ảnh → LLaVA viết caption → BERT → chiếu: ngữ nghĩa</span>
-      <span class="k g">⟨·,·⟩</span><span>tích vô hướng: hai vector "đồng ý" bao nhiêu</span>
+      <span class="k g">⟨·,·⟩</span><span>tích vô hướng: độ tương đồng giữa hai vector</span>
       <span class="k g">σ</span><span>sigmoid → tỉ lệ trong (0,1)</span>
       <span class="k i">e_I</span><span>một vector ảnh duy nhất đi tiếp</span>
     </div>
     <div>
-      <div class="card"><p><b>Đồng ý nhiều</b> → tin caption (đã ở dạng ngôn ngữ, gần KG).<br><b>Đồng ý ít</b> → LLaVA có thể bịa, giữ CLIP.</p>
-      <p class="small">Không có tham số học ở cổng. Cái học được là hai lớp chiếu P_I, P_T, đưa CLIP (512) và BERT (768) về cùng d chiều để tích vô hướng có nghĩa.</p></div>
+      <div class="card"><p><b>Độ tương đồng cao</b> → tăng trọng số caption (dạng ngôn ngữ, gần KG).<br><b>Độ tương đồng thấp</b> → caption có thể sai, giữ trọng số CLIP.</p>
+      <p class="small">Cổng không có tham số. Tham số học được nằm ở hai lớp chiếu P_I, P_T, đưa CLIP (512) và BERT (768) về cùng d chiều.</p></div>
       <p class="small" style="margin-top:8px">Caption ví dụ: "A Golden Retriever carrying a stick in its mouth" [1, Fig. 1].</p>
     </div>
   </div>
@@ -271,12 +271,12 @@
         <rect x="70" y="50" width="60" height="110" fill="#e9a23b"/><text x="100" y="180" text-anchor="middle">T  0.55</text>
         <rect x="170" y="125" width="60" height="35" fill="#8e6cc8"/><text x="200" y="180" text-anchor="middle">I  0.10</text>
         <rect x="270" y="95" width="60" height="65" fill="#2a9d8f"/><text x="300" y="180" text-anchor="middle">S  0.35</text>
-        <text x="100" y="42" text-anchor="middle" font-size="12">"singer" hợp r</text><text x="200" y="117" text-anchor="middle" font-size="12">chỉ ngoại hình</text>
+        <text x="100" y="42" text-anchor="middle" font-size="12">"singer" liên quan r</text><text x="200" y="117" text-anchor="middle" font-size="12">chỉ có ngoại hình</text>
       </svg>
       <figcaption>Tỉ lệ minh hoạ theo [1, Fig. 4]. Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
     </figure>
   </div>
-  <p class="small">Cùng node, đổi r → ⟨e_m, r⟩ đổi → tỉ lệ đảo. Không có ma trận học riêng: "attention" với query = r, key = e_m trần.</p>
+  <p class="small">Cùng node, quan hệ khác → ⟨e_m, r⟩ khác → trọng số khác. Không có ma trận học riêng: tương đương attention với query = r, key = e_m.</p>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 2–4.</span></div><div class="num">9</div>
 </section>
 
@@ -299,11 +299,11 @@
         <line x1="140" y1="42" x2="240" y2="72" stroke="#5c6570" marker-end="url(#a4)"/><line x1="140" y1="112" x2="240" y2="82" stroke="#5c6570" marker-end="url(#a4)"/>
         <circle cx="255" cy="77" r="14" fill="#fff" stroke="#1f2328" stroke-width="1.5"/><text x="255" y="82" text-anchor="middle" font-weight="700">+</text>
         <line x1="269" y1="77" x2="320" y2="77" stroke="#5c6570" marker-end="url(#a4)"/><text x="330" y="82" font-weight="700">T̃(t)</text>
-        <line x1="75" y1="134" x2="75" y2="145" stroke="#c8553d" stroke-dasharray="3 3"/><text x="200" y="146" text-anchor="middle" font-size="11" fill="#c8553d">g tính từ chính T_MLLM: đáp án lạ → g nhỏ</text>
+        <line x1="75" y1="134" x2="75" y2="145" stroke="#c8553d" stroke-dasharray="3 3"/><text x="200" y="146" text-anchor="middle" font-size="11" fill="#c8553d">g tính từ T_MLLM: đáp án bất thường → g nhỏ</text>
       </svg>
       <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
     </figure>
-    <div class="note" style="margin-top:0"><b>g không nhìn ứng viên.</b> LLaVA sai thì mọi ứng viên bị kéo về cùng chỗ sai; cổng chỉ học "đáp án trông đáng tin không", không học "hợp câu hỏi không".</div>
+    <div class="note" style="margin-top:0"><b>g không phụ thuộc ứng viên và câu hỏi.</b> Nếu LLaVA sai, mọi ứng viên bị kéo về cùng một điểm sai. Cổng chỉ đánh giá độ tin cậy của đáp án, không đánh giá mức phù hợp với câu hỏi.</div>
   </div>
   <div class="foot"><span class="src">[1] Eq. 5–9. [3] LLaVA. <sup>a</sup> E. J. Hu et al., "LoRA: Low-rank adaptation of large language models," ICLR 2022.</span></div><div class="num">10</div>
 </section>
@@ -371,7 +371,7 @@
       </div>
     </div>
   </div>
-  <div class="note" style="margin-top:8px">Mẫu "giả" với λ nhỏ gần như vẫn là node thật. Bài không kiểm chứng chúng có sai thật không.</div>
+  <div class="note" style="margin-top:8px">Với λ nhỏ, mẫu giả gần như trùng node gốc. Bài không kiểm chứng các mẫu này có thực sự sai.</div>
   <div class="foot"><span class="src">[1] Eq. 11–14. [2] RotatE. <sup>a</sup> I. Gulrajani et al., "Improved training of Wasserstein GANs," NeurIPS 2017.</span></div><div class="num">12</div>
 </section>
 
@@ -452,7 +452,7 @@
     <div>
       <p>Hơn baseline tốt nhất (NativE): <b>+1.83</b> MKG-W, <b>+0.66</b> MKG-Y, <b>+1.61</b> DB15K.</p>
       <p>Đứng đầu <b>11/12</b> ô (MRR, Hits@1/3/10 × 3 tập).</p>
-      <div class="note" style="font-size:18px"><b>Ngoại lệ bài không nhấn:</b> Hits@1 trên DB15K 23.04 thua RSME 24.45, APKGC 24.39, MyGO 24.19.</div>
+      <div class="note" style="font-size:18px"><b>Ngoại lệ:</b> Hits@1 trên DB15K 23.04 thua RSME 24.45, APKGC 24.39, MyGO 24.19.</div>
       <p class="small">LLaVA thuần (prompt, không hàm điểm): Hits@10 chỉ 26% trên MKG-W, 3.6% trên MKG-Y.</p>
     </div>
   </div>
@@ -461,7 +461,7 @@
 
 <!-- 16 ABLATION -->
 <section class="slide">
-  <h2>Ablation trên MKG-W: mô-đun nào đáng tiền?</h2>
+  <h2>Ablation trên MKG-W</h2>
   <div class="cols" style="grid-template-columns:1.2fr 1fr">
     <div>
       <div class="bar"><span>Full</span><div class="tr"><div class="fi" style="width:100%;background:var(--acc)"></div></div><span class="v">38.62</span></div>
@@ -491,9 +491,9 @@
   <div class="cols" style="grid-template-columns:1.35fr 1fr">
     <figure><img src="{{FIG4}}" style="max-height:440px"><figcaption>Nguồn: [1], Fig. 4</figcaption></figure>
     <div>
-      <p><b>Không có RHF</b> (trọng số ngẫu nhiên): ảnh được nghe nhiều nhất dù chỉ có ngoại hình → Mezzo-soprano <b>hạng 2</b>.</p>
-      <p><b>Có RHF</b>: text lên, ảnh xuống → <b>hạng 1</b>.</p>
-      <p class="small">Đây là ví dụ input–output ở slide 3, khép lại vòng: cùng ba vector, khác tỉ lệ pha, khác kết quả.</p>
+      <p><b>Không có RHF</b> (trọng số ngẫu nhiên): ảnh có trọng số cao nhất dù chỉ chứa ngoại hình → Mezzo-soprano <b>hạng 2</b>.</p>
+      <p><b>Có RHF</b>: trọng số text tăng, ảnh giảm → <b>hạng 1</b>.</p>
+      <p class="small">Cùng ví dụ input–output ở slide 3: cùng ba vector, trọng số khác, kết quả khác.</p>
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">17</div>
@@ -506,8 +506,8 @@
     <div class="card"><h3>Chi phí</h3><p>LLaVA-7B chạy cho mỗi ảnh (caption), mỗi truy vấn (đoán), mỗi text (viết lại). Không báo cáo thời gian.</p></div>
     <div class="card"><h3>Tái lập</h3><p>Không công khai code. Nhiều baseline do tác giả tự chạy lại.</p></div>
     <div class="card"><h3>Cải thiện không đều</h3><p>MKG-Y chỉ +0.66. Thua Hits@1 trên DB15K. Ablation một tập.</p></div>
-    <div class="card"><h3>Cổng G mù ngữ cảnh</h3><p>g chỉ nhìn đáp án LLaVA, không nhìn câu hỏi. Không phân tích g hay tỉ lệ LLaVA đoán đúng.</p></div>
-    <div class="card"><h3>Mẫu giả có sai thật?</h3><p>Paraphrase "cùng nghĩa" và ảnh xoay nhẹ vẫn là node thật. Ngược hướng contrastive của MDBGF.</p></div>
+    <div class="card"><h3>Cổng G không dùng ngữ cảnh</h3><p>g chỉ phụ thuộc đáp án LLaVA, không phụ thuộc câu hỏi. Không có phân tích về g hay tỉ lệ LLaVA đoán đúng.</p></div>
+    <div class="card"><h3>Tính đúng đắn của mẫu giả</h3><p>Paraphrase cùng nghĩa và ảnh xoay nhẹ vẫn biểu diễn node gốc. Ngược hướng contrastive của MDBGF.</p></div>
     <div class="card"><h3>Căn chỉnh gián tiếp</h3><p>Tích vô hướng giữa CLIP và BERT chỉ có nghĩa nhờ lớp chiếu học qua loss KGC; không có loss căn chỉnh riêng.</p></div>
   </div>
   <p class="small" style="margin-top:14px">Thiếu chi tiết: prompt, epoch LoRA, cách chọn láng giềng, γ, c, τ, μ₁, có chuẩn hoá vector trước tích vô hướng hay không.</p>
@@ -518,12 +518,12 @@
 <section class="slide">
   <h2>Kết luận</h2>
   <ul style="margin-top:20px">
-    <li><b>Ý chính:</b> trọng số trộn mô thức phải phụ thuộc quan hệ đang hỏi. Cùng node, khác câu hỏi, khác vector.</li>
-    <li><b>Cách làm:</b> giữ RotatE làm hàm điểm, thay vector đầu vào bằng vector đã trộn ba mô thức theo r, cộng gợi ý của MLLM qua cổng, và train với mẫu sai khó.</li>
+    <li><b>Ý chính:</b> trọng số trộn mô thức phụ thuộc quan hệ đang xét. Cùng node, khác quan hệ, khác vector biểu diễn.</li>
+    <li><b>Phương pháp:</b> giữ RotatE làm hàm điểm; đầu vào là vector đã trộn ba mô thức theo r, bổ sung dự đoán của MLLM qua cổng; huấn luyện với mẫu sai khó.</li>
     <li><b>Bằng chứng:</b> +1.8 MRR trên MKG-W; RHF là mô-đun đóng góp nhiều nhất; cấu trúc vẫn là mô thức quan trọng nhất.</li>
-    <li><b>Còn mở:</b> chi phí MLLM, cổng không nhìn câu hỏi, mẫu giả chưa chắc sai, không có code.</li>
+    <li><b>Hạn chế:</b> chi phí MLLM, cổng không dùng ngữ cảnh câu hỏi, mẫu giả chưa được kiểm chứng, không có code.</li>
   </ul>
-  <div class="note ok" style="margin-top:30px">Một câu: <b>HFR-MKGC = RotatE + trộn mô thức có dẫn hướng bởi quan hệ + LLaVA làm cố vấn có kiểm soát + GAN nhỏ tạo mẫu sai.</b></div>
+  <div class="note ok" style="margin-top:30px"><b>HFR-MKGC = RotatE + trộn mô thức có dẫn hướng bởi quan hệ + dự đoán MLLM qua cổng có kiểm soát + huấn luyện đối kháng với mẫu sai đa mô thức.</b></div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">19</div>
 </section>
 
