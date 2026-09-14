@@ -8,4 +8,4 @@
 python build_slides.py
 ```
 
-Hình gốc lấy từ `../paper-vi/figures/` (cắt từ PDF bài báo). Hình tự vẽ ghi nguồn là link artifact do nhóm tạo với Claude.
+Hình gốc lấy từ `../paper-vi/figures/` (cắt từ PDF bài báo). Hình do AI tạo (Claude) ghi nguồn là link artifact.

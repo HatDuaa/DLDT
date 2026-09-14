@@ -95,7 +95,7 @@
   <h1>HFR-MKGC — tóm tắt có hình</h1>
   <div class="en">Hierarchical Fusion Reasoning with MLLMs for Multi-modal Knowledge Graph Completion</div>
   <div class="sub">D. Wang, J. Du, Z. Xue, M. Liang, G. Ye, Y. Shao, H. Li — AAAI 2026, tr. 15815–15823. Tác giả <b>không công khai code</b>.<br>
-  Hình có nhãn <b>[Bài báo]</b> cắt từ PDF gốc; hình có nhãn <b>[Tự vẽ]</b> do nhóm vẽ để giải thích, muốn dùng trên slide phải ghi nguồn là link chat này.</div>
+  Hình có nhãn <b>[Bài báo]</b> cắt từ PDF gốc; hình có nhãn <b>[AI tạo]</b> do nhóm vẽ để giải thích, muốn dùng trên slide phải ghi nguồn là link chat này.</div>
 </header>
 
 <!-- ============ 0 ============ -->
@@ -134,7 +134,7 @@
     <line x1="160" y1="115" x2="578" y2="115" stroke="#c8553d" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#ahr)"/><text x="370" y="108" text-anchor="middle" fill="#c8553d" font-weight="700">voice type = ?</text>
   </g>
 </svg>
-<figcaption><b>[Tự vẽ]</b> Bài toán KGC: đã biết một số cạnh của node, hỏi cạnh còn thiếu. Mô hình xếp hạng mọi node trong tập làm ứng viên, mong đáp án đứng hạng 1. Ví dụ lấy từ case study của bài (tr. 7).</figcaption>
+<figcaption><b>[AI tạo]</b> Bài toán KGC: đã biết một số cạnh của node, hỏi cạnh còn thiếu. Mô hình xếp hạng mọi node trong tập làm ứng viên, mong đáp án đứng hạng 1. Ví dụ lấy từ case study của bài (tr. 7).</figcaption>
 </figure>
 
 <h3>Hai điểm yếu của MMKGC hiện có (tr. 1)</h3>
@@ -195,7 +195,7 @@
   <rect x="700" y="117" width="140" height="66" rx="33" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/>
   <text x="770" y="143" text-anchor="middle" font-weight="700" fill="#2c5361">Quan hệ r</text><text x="770" y="163" text-anchor="middle" font-size="12">1 vector ℝ^d, không</text><text x="770" y="177" text-anchor="middle" font-size="12">có mô thức nào</text>
 </svg>
-<figcaption><b>[Tự vẽ]</b> Ba vector của cùng một node sau lớp chiếu P_m (học được) sống chung trong một không gian d chiều với vector quan hệ. Chiều d là siêu tham số, bài chọn trong {128, 256, 512}. Với RotatE, mỗi vector thực chất là d số phức (lưu 2d số thực), còn quan hệ chỉ cần d góc pha.</figcaption>
+<figcaption><b>[AI tạo]</b> Ba vector của cùng một node sau lớp chiếu P_m (học được) sống chung trong một không gian d chiều với vector quan hệ. Chiều d là siêu tham số, bài chọn trong {128, 256, 512}. Với RotatE, mỗi vector thực chất là d số phức (lưu 2d số thực), còn quan hệ chỉ cần d góc pha.</figcaption>
 </figure>
 
 <div class="note ok"><b>Không phải GNN.</b> Vector cấu trúc e_S không được tính từ hàng xóm. Nó bị hàng xóm ảnh hưởng gián tiếp: mỗi bộ ba đúng trong tập train kéo h xoay theo r về gần t qua gradient. Vì vậy không có yêu cầu bất biến hoán vị và cũng không thêm được node mới sau khi train (transductive).</div>
@@ -274,7 +274,7 @@
   <text x="560" y="490" text-anchor="middle" class="sm">MLLM paraphrase text · xoay + nhiễu vector ảnh → negative (h*,r,t), (h,r,t*), (h*,r,t*)</text>
   <text x="560" y="510" text-anchor="middle" class="sm">chấm bằng cùng hàm điểm ở trên; L_D (KGC + gradient penalty) ⇄ L_g (generator)</text>
 </svg>
-<figcaption><b>[Tự vẽ]</b> Luồng dữ liệu cho một truy vấn (h, r, ?). Nhánh trên: ba mô thức của h qua RHF ra H_joint. Nhánh giữa: MLLM đoán tên đáp án, BERT hoá thành T_MLLM, cổng G trộn vào embedding của từng ứng viên. Cuối: RotatE chấm điểm và xếp hạng. MNO chỉ hoạt động lúc huấn luyện.</figcaption>
+<figcaption><b>[AI tạo]</b> Luồng dữ liệu cho một truy vấn (h, r, ?). Nhánh trên: ba mô thức của h qua RHF ra H_joint. Nhánh giữa: MLLM đoán tên đáp án, BERT hoá thành T_MLLM, cổng G trộn vào embedding của từng ứng viên. Cuối: RotatE chấm điểm và xếp hạng. MNO chỉ hoạt động lúc huấn luyện.</figcaption>
 </figure>
 
 <!-- ---------- 3.1 ---------- -->
@@ -321,7 +321,7 @@
     <text x="180" y="238" text-anchor="middle" font-size="12" fill="#5c6570">quan hệ khác → ⟨e_m, r⟩ khác → trọng số đảo lại</text>
   </g>
 </svg>
-<figcaption><b>[Tự vẽ]</b> Ý nghĩa của Stage 2: cùng một node nhưng quan hệ khác thì trọng số trộn khác. Biểu đồ bên trái mô phỏng theo Figure 4 của bài; bên phải là ví dụ giả định để minh hoạ, không phải số liệu trong bài.</figcaption>
+<figcaption><b>[AI tạo]</b> Ý nghĩa của Stage 2: cùng một node nhưng quan hệ khác thì trọng số trộn khác. Biểu đồ bên trái mô phỏng theo Figure 4 của bài; bên phải là ví dụ giả định để minh hoạ, không phải số liệu trong bài.</figcaption>
 </figure>
 
 <!-- ---------- 3.2 ---------- -->
@@ -365,7 +365,7 @@
     <text x="180" y="268" text-anchor="middle" font-size="12" fill="#5c6570">g ≈ 1: tin MLLM · g ≈ 0: bỏ qua MLLM · học riêng từng chiều</text>
   </g>
 </svg>
-<figcaption><b>[Tự vẽ]</b> Trái: một chiều phức của RotatE. Phải: cổng G nội suy giữa embedding ứng viên và đáp án MLLM. Nếu MLLM ảo giác ra tên vô nghĩa, mô hình phải học để g nhỏ.</figcaption>
+<figcaption><b>[AI tạo]</b> Trái: một chiều phức của RotatE. Phải: cổng G nội suy giữa embedding ứng viên và đáp án MLLM. Nếu MLLM ảo giác ra tên vô nghĩa, mô hình phải học để g nhỏ.</figcaption>
 </figure>
 
 <div class="note"><b>Lưu ý khi đọc.</b> Bài ký hiệu H̃_joint trong Eq. 10 nhưng chỉ mô tả cổng cho tail. Hiểu hợp lý: head đã biết nên dùng H_joint từ RHF; chỉ tail (thứ cần đoán) mới trộn thêm gợi ý của MLLM.</div>
@@ -405,7 +405,7 @@
   <line x1="538" y1="100" x2="222" y2="100" stroke="#5c6570" stroke-width="1.6" marker-end="url(#a5)"/><text x="380" y="118" text-anchor="middle" font-size="12">điểm s_k → L_g phạt nếu s_k &lt; c</text>
   <text x="380" y="155" text-anchor="middle" font-size="12" fill="#5c6570">hai bên kéo ngược nhau, ranh giới đúng/sai sắc dần; λ tăng theo epoch làm mẫu khó dần</text>
 </svg>
-<figcaption><b>[Tự vẽ]</b> Vòng lặp đối kháng của MNO. Bỏ vòng này (w/o MNO) làm MRR trên MKG-W giảm từ 38.62 xuống 34.01.</figcaption>
+<figcaption><b>[AI tạo]</b> Vòng lặp đối kháng của MNO. Bỏ vòng này (w/o MNO) làm MRR trên MKG-W giảm từ 38.62 xuống 34.01.</figcaption>
 </figure>
 </section>
 
