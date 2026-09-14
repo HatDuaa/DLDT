@@ -1,7 +1,7 @@
 # Slide seminar HFR-MKGC
 
-- `seminar-slides.html` — slide chính, tự chứa, mở bằng trình duyệt. Phím ← → chuyển trang, **N** bật ghi chú nói, **P** in ra PDF.
-- `seminar-slides.pdf` — bản in sẵn (20 trang, 16:9) để nộp hoặc dự phòng.
+- `25C11050_25C15003_HFR-MKGC-slides.html` — slide chính, tự chứa, mở bằng trình duyệt. Phím ← → chuyển trang, **N** bật ghi chú nói, **P** in ra PDF.
+- `25C11050_25C15003_HFR-MKGC-slides.pdf` — bản in sẵn (20 trang, 16:9) để nộp hoặc dự phòng.
 - `seminar-slides-template.html` + `build_slides.py` — nguồn. Sửa template hoặc ghi chú nói trong `NOTES` rồi chạy:
 
 ```bash
