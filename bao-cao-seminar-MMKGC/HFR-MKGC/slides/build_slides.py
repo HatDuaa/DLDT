@@ -4,11 +4,16 @@ import io
 import json
 from pathlib import Path
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:  # không có Pillow: nhúng PNG gốc
+    Image = None
 
 HERE = Path(__file__).parent
 FIG_DIR = HERE.parent / "paper-vi" / "figures"
 SRC_SELF = "https://claude.ai/code/artifact/79ab1978-2487-4ea1-9077-c9996e7cbef2"
+# Link cuộc trò chuyện với AI đã hướng dẫn tạo/chỉnh sửa hình (yêu cầu của giảng viên).
+SRC_CHAT = "https://claude.ai/code/session_01A6LxsaCfbwEKQ5usCHaXPW"
 
 NOTES = [
     # 1
@@ -16,7 +21,7 @@ NOTES = [
     # 2
     "Bài toán là link prediction trên KG: biết head và quan hệ, tìm tail. Không có node mới, chỉ thiếu cạnh. Khác KGC thường ở chỗ mỗi node còn có ảnh và văn bản. Câu hỏi của bài: dùng ảnh và văn bản thế nào để không bị nhiễu.",
     # 3
-    "Ví dụ xuyên suốt: Gwen Stefani, quan hệ voice type. Input là ba loại thông tin của Gwen cộng tên quan hệ. Output là bảng xếp hạng toàn bộ 15 nghìn node. Điểm mấu chốt: ảnh chỉ có ngoại hình, không nói gì về giọng; văn bản có chữ singer. Mô hình phải biết nghe văn bản nhiều hơn với câu hỏi này.",
+    "Ví dụ xuyên suốt: Gwen Stefani, quan hệ voice type, lấy từ case study của bài. Input là ba loại thông tin của Gwen cộng tên quan hệ; láng giềng và điểm số trên slide là minh hoạ. Output là bảng xếp hạng toàn bộ 15 nghìn node. Điểm mấu chốt: ảnh chỉ có ngoại hình, không nói gì về giọng; văn bản có chữ singer. Mô hình phải biết nghe văn bản nhiều hơn với câu hỏi này.",
     # 4
     "Hai điểm yếu tác giả chỉ ra. Một: các phương pháp trước trộn ba mô thức với trọng số cố định, không tuỳ quan hệ. Hai: các phương pháp dùng LLM chỉ dùng text và cấu trúc, chưa dùng ảnh và không thích nghi. Hình 1 của bài so sánh ba mô hình: truyền thống, LLM-based, và HFR-MKGC gộp cả hai.",
     # 5
@@ -28,7 +33,7 @@ NOTES = [
     # 8
     "Tầng 1 chỉ xử lý ảnh. Ảnh được mã hoá hai cách: CLIP ra vector thô, LLaVA viết caption rồi BERT ra vector ngữ nghĩa. Cổng là sigmoid của tích vô hướng: hai vector đồng ý thì tin caption, không đồng ý thì giữ CLIP. Không có tham số học ở cổng; cái học là hai lớp chiếu, và chúng học gián tiếp qua loss KGC.",
     # 9
-    "Tầng 2 là trái tim của bài. Điểm thô của mỗi mô thức gồm hai phần: hợp với quan hệ bao nhiêu, và nhất quán với hai mô thức kia bao nhiêu. Softmax ra ba tỉ lệ, pha lại. Với voice type, text được 55%, ảnh 10%. Đổi quan hệ thì số hạng đầu đổi, tỉ lệ đảo. Đây là attention nhưng không có ma trận W: query là r trần, key là vector mô thức trần.",
+    "Tầng 2 là trái tim của bài. Điểm thô của mỗi mô thức gồm hai phần: hợp với quan hệ bao nhiêu, và nhất quán với hai mô thức kia bao nhiêu. Softmax ra ba tỉ lệ, pha lại. Với voice type, text được khoảng một nửa, ảnh rất thấp (số trên hình là minh hoạ, bài chỉ vẽ cột). Đổi quan hệ thì số hạng đầu đổi, tỉ lệ đảo. Đây là attention nhưng không có ma trận W: query là r trần, key là vector mô thức trần.",
     # 10
     "MER. Prompt gồm text, láng giềng, ảnh và quan hệ, vào LLaVA đã fine-tune LoRA, ra một cái tên. Tên đó BERT hoá thành T_MLLM. Cổng g là MLP hai lớp, chỉ nhìn T_MLLM, ra tỉ lệ tin từng chiều. Rồi mỗi ứng viên được kéo về phía T_MLLM theo g. Hạn chế: g không nhìn câu hỏi, chỉ nhìn đáp án, nên LLaVA đoán một tên có thật mà sai thì cổng khó nhận ra.",
     # 11
@@ -46,15 +51,22 @@ NOTES = [
     # 17
     "Case study khép lại ví dụ Gwen Stefani. Không RHF thì ảnh chiếm trọng số cao nhất, đáp án đứng hạng 2. Có RHF, text lên ảnh xuống, hạng 1.",
     # 18
-    "Nhận xét của nhóm. Chi phí LLaVA lớn và không được báo cáo. Không có code. Cải thiện không đều. Cổng G không nhìn câu hỏi. Mẫu giả chưa chắc sai. Căn chỉnh CLIP với BERT chỉ gián tiếp. Và nhiều siêu tham số không được nêu.",
+    "Nhận xét của nhóm. Chi phí LLaVA lớn và không được báo cáo. Không có code. Cải thiện không đều. Cổng G không nhìn câu hỏi. Mẫu giả chưa chắc sai. Căn chỉnh CLIP với BERT chỉ gián tiếp. Và nhiều siêu tham số không được nêu. Nếu còn thời gian thì nói thêm phụ lục, không thì dừng ở kết luận.",
     # 19
     "Kết luận một câu: HFR-MKGC là RotatE cộng trộn mô thức có dẫn hướng bởi quan hệ, cộng LLaVA làm cố vấn có kiểm soát, cộng GAN nhỏ tạo mẫu sai. Đóng góp thật nằm ở tầng 2 của RHF. Cảm ơn thầy và các bạn.",
     # 20
-    "Tài liệu tham khảo.",
+    "Tài liệu tham khảo. Hai slide sau là phụ lục cho phần hỏi đáp, không trình bày trong 15 phút.",
+    # 21
+    "Phụ lục A: bảng kết quả đầy đủ hơn nếu có người hỏi về Hits@1 hay các baseline khác. Chỉ ra ô Hits@1 DB15K thua RSME.",
+    # 22
+    "Phụ lục B: độ nhạy siêu tham số. Điểm đáng nói: 512 chiều cần 128 mẫu sai, thiếu mẫu sai thì 256 chiều còn hơn.",
 ]
 
 
 def embed(name: str) -> str:
+    if Image is None:
+        data = (FIG_DIR / f"{name}.png").read_bytes()
+        return "data:image/png;base64," + base64.b64encode(data).decode()
     im = Image.open(FIG_DIR / f"{name}.png").convert("RGB")
     if im.width > 1600:
         im = im.resize((1600, int(im.height * 1600 / im.width)), Image.LANCZOS)
@@ -65,9 +77,10 @@ def embed(name: str) -> str:
 
 def main() -> None:
     html = (HERE / "seminar-slides-template.html").read_text(encoding="utf-8")
-    for i in (1, 2, 4):
+    for i in (1, 2, 3, 4):
         html = html.replace("{{FIG%d}}" % i, embed(f"fig{i}"))
     html = html.replace("{{SRC_SELF}}", SRC_SELF)
+    html = html.replace("{{SRC_CHAT}}", SRC_CHAT)
     html = html.replace("{{NOTES_JSON}}", json.dumps(NOTES, ensure_ascii=False))
     assert "{{" not in html, "unfilled placeholder"
     out = HERE / "seminar-slides.html"
