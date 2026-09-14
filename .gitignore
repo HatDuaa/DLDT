@@ -1,0 +1,24 @@
+# LaTeX build
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+build.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# large data downloaded for final project (keep scripts + README only)
+final-project/data/raw/
+final-project/data/features/
