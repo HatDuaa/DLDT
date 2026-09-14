@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Seminar HFR-MKGC</title>
+<style>
+  :root{--ink:#1f2328;--muted:#5c6570;--line:#e4e2dc;--soft:#f3f1ec;--paper:#fff;
+        --s:#2a9d8f;--i:#8e6cc8;--t:#e9a23b;--r:#4a7c8c;--acc:#c8553d;--llm:#d97706;
+        --sbg:#dff3f0;--ibg:#ece4f8;--tbg:#fdeed5;--rbg:#dbe9ee;--accbg:#fbe9e3}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#2b2b2b;font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;color:var(--ink)}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{position:absolute;left:50%;top:50%;width:1280px;height:720px;background:var(--paper);transform:translate(-50%,-50%) scale(var(--sc,1));transform-origin:center;display:none;padding:44px 60px 40px;overflow:hidden}
+  .slide.active{display:block}
+  .slide h1{font-size:44px;margin:0 0 6px;line-height:1.15}
+  .slide h2{font-size:34px;margin:0 0 18px;padding-bottom:8px;border-bottom:3px solid var(--ink);display:inline-block}
+  .slide h3{font-size:22px;margin:14px 0 6px}
+  .slide p,.slide li{font-size:22px;line-height:1.45;margin:6px 0}
+  .slide ul{margin:6px 0;padding-left:26px}
+  .small{font-size:17px!important;color:var(--muted)}
+  .tiny{font-size:14px!important;color:var(--muted)}
+  .foot{position:absolute;left:60px;right:60px;bottom:14px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:5px;display:flex;justify-content:space-between;gap:20px}
+  .foot .src{flex:1}
+  .num{position:absolute;right:24px;bottom:14px;font-size:13px;color:var(--muted)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+  .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+  .card{background:var(--soft);border-radius:12px;padding:14px 18px}
+  .card h3{margin:0 0 6px;font-size:22px}
+  .card p{font-size:19px}
+  .card.s{border-top:6px solid var(--s)}.card.i{border-top:6px solid var(--i)}.card.t{border-top:6px solid var(--t)}.card.r{border-top:6px solid var(--r)}.card.a{border-top:6px solid var(--acc)}
+  .tag{display:inline-block;padding:2px 12px;border-radius:999px;font-weight:700;font-size:18px}
+  .tag.s{background:var(--sbg);color:#176b61}.tag.i{background:var(--ibg);color:#5b3f96}.tag.t{background:var(--tbg);color:#8d5a0d}.tag.r{background:var(--rbg);color:#2c5361}.tag.a{background:var(--accbg);color:#a33f2b}
+  .eq{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:30px;background:var(--soft);border-radius:12px;padding:16px 24px;margin:10px 0;text-align:center;white-space:nowrap}
+  .eq .no{float:right;font-size:16px;color:var(--muted);font-family:inherit}
+  .k{padding:1px 6px;border-radius:6px}
+  .k.s{background:var(--sbg)}.k.i{background:var(--ibg)}.k.t{background:var(--tbg)}.k.r{background:var(--rbg)}.k.a{background:var(--accbg)}.k.g{background:#e3e8ec}
+  .legend{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:19px;margin-top:10px}
+  .legend .k{font-family:"Cambria Math",serif;font-size:22px;text-align:center;min-width:70px}
+  figure{margin:0;text-align:center}
+  figure img,figure svg{max-width:100%;max-height:100%}
+  figcaption{font-size:14px;color:var(--muted);margin-top:4px}
+  .note{background:var(--accbg);border-left:6px solid var(--acc);padding:10px 16px;border-radius:0 10px 10px 0;font-size:20px;margin-top:12px}
+  .note.ok{background:var(--sbg);border-left-color:var(--s)}
+  table{border-collapse:collapse;width:100%;font-size:18px}
+  th,td{border:1px solid var(--line);padding:5px 9px;text-align:left}
+  th{background:var(--soft)}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  .best{color:var(--acc);font-weight:700}
+  .bar{display:grid;grid-template-columns:170px 1fr 70px;align-items:center;gap:10px;font-size:18px;margin:5px 0}
+  .bar .tr{height:18px;background:var(--soft);border-radius:9px;overflow:hidden}
+  .bar .fi{height:100%;border-radius:9px}
+  .bar .v{text-align:right;font-variant-numeric:tabular-nums}
+  .title-slide{background:linear-gradient(135deg,#1f2328 0%,#2c5361 100%);color:#fff}
+  .title-slide h1{font-size:46px}
+  .title-slide .sub{font-size:24px;color:#cfd6dc;margin-top:10px}
+  .title-slide .meta{position:absolute;bottom:60px;left:60px;right:60px;font-size:20px;color:#e6ebee}
+  .refs p{font-size:16px;margin:5px 0;padding-left:34px;text-indent:-34px;line-height:1.35}
+  .steps{counter-reset:st;list-style:none;padding:0}
+  .steps li{position:relative;padding-left:44px;margin:8px 0;font-size:21px}
+  .steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:3px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  #notes{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;background:#111;color:#eee;padding:12px 20px;font-size:15px;display:none;border-top:2px solid #555}
+  #notes.on{display:block}
+  #help{position:fixed;top:8px;right:12px;font-size:12px;color:#999}
+  @media print{
+    @page{size:1280px 720px;margin:0}
+    html,body{background:#fff}
+    #deck{width:auto;height:auto;overflow:visible}
+    .slide{display:block;position:relative;left:0;top:0;transform:none;page-break-after:always;margin:0}
+    #notes,#help{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div id="help">← → chuyển slide · N: ghi chú nói · P: in PDF</div>
+<div id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide">
+  <div style="margin-top:110px">
+    <div class="sub" style="letter-spacing:.1em;text-transform:uppercase;font-size:18px">Seminar · Học máy với dữ liệu đồ thị</div>
+    <h1>HFR-MKGC: Suy luận hợp nhất phân cấp với MLLM<br>cho hoàn thiện đồ thị tri thức đa phương thức</h1>
+    <div class="sub">D. Wang, J. Du, Z. Xue, M. Liang, G. Ye, Y. Shao, H. Li — AAAI 2026 [1]</div>
+  </div>
+  <div class="meta">Trình bày: Nguyễn Đình Lộc (25C11050) · Ngô Trương Minh Đạt (25C15003)</div>
+  <div class="num" style="color:#aaa">1</div>
+</section>
+
+<!-- 2 PROBLEM -->
+<section class="slide">
+  <h2>Bài toán: nối cạnh còn thiếu trong đồ thị tri thức</h2>
+  <div class="cols" style="grid-template-columns:1.25fr 1fr">
+    <figure>
+      <svg viewBox="0 0 640 300" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="17">
+        <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+        <marker id="ahr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c8553d"/></marker></defs>
+        <circle cx="110" cy="150" r="52" fill="#fdeed5" stroke="#e9a23b" stroke-width="3"/><text x="110" y="145" text-anchor="middle" font-weight="700">Gwen</text><text x="110" y="168" text-anchor="middle" font-weight="700">Stefani</text>
+        <circle cx="330" cy="55" r="42" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="330" y="61" text-anchor="middle">No Doubt</text>
+        <circle cx="330" cy="245" r="42" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="330" y="251" text-anchor="middle">Anaheim</text>
+        <circle cx="540" cy="150" r="52" fill="#fff" stroke="#c8553d" stroke-width="3" stroke-dasharray="7 5"/><text x="540" y="158" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="30">?</text>
+        <line x1="155" y1="128" x2="290" y2="70" stroke="#1f2328" stroke-width="2" marker-end="url(#ah)"/><text x="215" y="82" text-anchor="middle" font-size="15">member of</text>
+        <line x1="155" y1="172" x2="290" y2="230" stroke="#1f2328" stroke-width="2" marker-end="url(#ah)"/><text x="215" y="228" text-anchor="middle" font-size="15">place of birth</text>
+        <line x1="162" y1="150" x2="486" y2="150" stroke="#c8553d" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ahr)"/><text x="325" y="140" text-anchor="middle" fill="#c8553d" font-weight="700">voice type = ?</text>
+      </svg>
+      <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+    </figure>
+    <div>
+      <p><b>KGC</b>: cho (h, r, ?), xếp hạng <b>mọi</b> thực thể, đáp án đúng phải đứng đầu.</p>
+      <p><b>MMKGC</b>: mỗi thực thể có thêm <span class="tag i">ảnh</span> và <span class="tag t">văn bản</span>, ngoài <span class="tag s">cấu trúc</span>.</p>
+      <p class="small">Không phải bài toán thêm node mới. Mọi node đã có trong bảng, chỉ thiếu cạnh.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
+</section>
+
+<!-- 3 INPUT OUTPUT -->
+<section class="slide">
+  <h2>Ví dụ input → output</h2>
+  <div class="cols" style="grid-template-columns:1fr 1fr">
+    <div class="card" style="background:var(--tbg)">
+      <h3>Input: (Gwen Stefani, voice type, ?)</h3>
+      <p><span class="tag s">S</span> láng giềng: No Doubt, Anaheim, Gavin Rossdale…</p>
+      <p><span class="tag t">T</span> "Gwen Renée Stefani (born 1969) is an American singer, songwriter, actress…"</p>
+      <p><span class="tag i">I</span> ảnh chân dung</p>
+      <p><span class="tag r">r</span> voice type</p>
+    </div>
+    <div class="card" style="background:var(--sbg)">
+      <h3>Output: bảng xếp hạng 15 000 thực thể</h3>
+      <table>
+        <tr><th>Hạng</th><th>Ứng viên</th><th class="n">score</th></tr>
+        <tr><td class="best">1</td><td class="best">Mezzo-soprano</td><td class="n">−1.07</td></tr>
+        <tr><td>2</td><td>Double bass</td><td class="n">−1.35</td></tr>
+        <tr><td>3</td><td>Soprano</td><td class="n">−1.52</td></tr>
+        <tr><td>…</td><td>…</td><td class="n">…</td></tr>
+      </table>
+      <p class="small">Điểm minh hoạ. Thứ hạng lấy từ case study của bài [1, Fig. 4].</p>
+    </div>
+  </div>
+  <div class="note ok" style="margin-top:22px"><b>Ảnh không nói gì về giọng hát</b>, văn bản thì có chữ "singer". Mô hình tốt phải biết <b>nghe văn bản nhiều hơn ảnh</b> khi câu hỏi là voice type.</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">3</div>
+</section>
+
+<!-- 4 CHALLENGES -->
+<section class="slide">
+  <h2>Hai điểm yếu của MMKGC hiện có</h2>
+  <div class="cols" style="grid-template-columns:1fr 1.1fr">
+    <div>
+      <div class="card a"><h3>1. Trộn mô thức "mù" quan hệ</h3><p>Trọng số cố định cho mọi quan hệ. Ảnh vô dụng với <i>voice type</i> nhưng vẫn được nghe như nhau → nhiễu.</p></div>
+      <div class="card a" style="margin-top:14px"><h3>2. LLM cho KGC còn cứng</h3><p>Chỉ dùng text + cấu trúc, trộn tĩnh, chưa dùng ảnh, không thích nghi theo từng bộ ba.</p></div>
+    </div>
+    <figure><img src="{{FIG1}}" style="max-height:470px"><figcaption>Nguồn: [1], Fig. 1</figcaption></figure>
+  </div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">4</div>
+</section>
+
+<!-- 5 IDEA -->
+<section class="slide">
+  <h2>HFR-MKGC = RotatE + ba mô-đun</h2>
+  <div class="cols3" style="margin-top:20px">
+    <div class="card r"><h3>RHF</h3><p><b>Relation-guided Hierarchical Fusion</b></p><p>Tầng 1: trộn <i>bên trong</i> ảnh (CLIP + caption).<br>Tầng 2: trộn S/I/T với trọng số <b>tính từ quan hệ r</b>.</p></div>
+    <div class="card i"><h3>MER</h3><p><b>MLLM-Enhanced Reasoning</b></p><p>LLaVA (LoRA) đoán thẳng tên đáp án; đưa vào hàm điểm qua một <b>cổng</b> học được.</p></div>
+    <div class="card t"><h3>MNO</h3><p><b>Multi-modal Negative Optimization</b></p><p>Mẫu sai khó: LLaVA viết lại text, xoay + nhiễu vector ảnh. Train <b>đối kháng</b>.</p></div>
+  </div>
+  <p style="margin-top:26px">Nền: hàm điểm <b>RotatE</b> [2], encoder <b>CLIP</b><sup>a</sup> và <b>BERT</b><sup>b</sup> đóng băng, <b>LLaVA-1.5-7B</b> [3].</p>
+  <p class="small">Không có GNN. Mỗi node là một hàng tra bảng; cấu trúc đi vào mô hình qua hàm loss, không qua truyền tin.</p>
+  <div class="foot"><span class="src"><sup>a</sup> A. Radford et al., "Learning transferable visual models from natural language supervision," ICML 2021. &nbsp; <sup>b</sup> J. Devlin et al., "BERT," NAACL 2019.</span></div><div class="num">5</div>
+</section>
+
+<!-- 6 ARCH -->
+<section class="slide">
+  <h2>Kiến trúc tổng thể</h2>
+  <figure><img src="{{FIG2}}" style="max-height:520px"><figcaption>Nguồn: [1], Fig. 2</figcaption></figure>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">6</div>
+</section>
+
+<!-- 7 NODE = 3 MODALITIES -->
+<section class="slide">
+  <h2>Một node = ba vector, một quan hệ = một vector</h2>
+  <figure>
+    <svg viewBox="0 0 860 300" width="1100" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="14">
+      <defs><marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5c6570"/></marker></defs>
+      <rect x="20" y="105" width="150" height="90" rx="12" fill="#fdeed5" stroke="#e9a23b" stroke-width="2"/>
+      <text x="95" y="143" text-anchor="middle" font-weight="700" font-size="16">Node e</text><text x="95" y="165" text-anchor="middle">Gwen Stefani</text>
+      <rect x="250" y="20" width="200" height="66" rx="10" fill="#dff3f0" stroke="#2a9d8f" stroke-width="2"/>
+      <text x="262" y="42" font-weight="700" fill="#176b61">S – cấu trúc</text><text x="262" y="62" font-size="12">hàng số 3281 trong bảng |E|×d</text><text x="262" y="78" font-size="12">học từ đầu, khởi tạo ngẫu nhiên</text>
+      <rect x="250" y="117" width="200" height="66" rx="10" fill="#ece4f8" stroke="#8e6cc8" stroke-width="2"/>
+      <text x="262" y="139" font-weight="700" fill="#5b3f96">I – ảnh</text><text x="262" y="159" font-size="12">ảnh → CLIP (đóng băng)</text><text x="262" y="175" font-size="12">+ caption do LLaVA sinh → BERT</text>
+      <rect x="250" y="214" width="200" height="66" rx="10" fill="#fdeed5" stroke="#e9a23b" stroke-width="2"/>
+      <text x="262" y="236" font-weight="700" fill="#8d5a0d">T – văn bản</text><text x="262" y="256" font-size="12">"American singer, songwriter…"</text><text x="262" y="272" font-size="12">→ BERT (đóng băng)</text>
+      <line x1="170" y1="130" x2="248" y2="55" stroke="#5c6570" stroke-width="1.4" marker-end="url(#a2)"/><line x1="170" y1="150" x2="248" y2="150" stroke="#5c6570" stroke-width="1.4" marker-end="url(#a2)"/><line x1="170" y1="170" x2="248" y2="245" stroke="#5c6570" stroke-width="1.4" marker-end="url(#a2)"/>
+      <g font-size="12" fill="#5c6570"><line x1="450" y1="53" x2="530" y2="53" stroke="#5c6570" stroke-width="1.4" marker-end="url(#a2)"/><text x="490" y="45" text-anchor="middle">P_S</text>
+      <line x1="450" y1="150" x2="530" y2="150" stroke="#5c6570" stroke-width="1.4" marker-end="url(#a2)"/><text x="490" y="142" text-anchor="middle">P_I (học)</text>
+      <line x1="450" y1="247" x2="530" y2="247" stroke="#5c6570" stroke-width="1.4" marker-end="url(#a2)"/><text x="490" y="239" text-anchor="middle">P_T (học)</text></g>
+      <rect x="535" y="38" width="120" height="30" rx="5" fill="#2a9d8f"/><text x="595" y="58" text-anchor="middle" fill="#fff" font-weight="700">e_S ∈ ℝ^d</text>
+      <rect x="535" y="135" width="120" height="30" rx="5" fill="#8e6cc8"/><text x="595" y="155" text-anchor="middle" fill="#fff" font-weight="700">e_I ∈ ℝ^d</text>
+      <rect x="535" y="232" width="120" height="30" rx="5" fill="#e9a23b"/><text x="595" y="252" text-anchor="middle" fill="#fff" font-weight="700">e_T ∈ ℝ^d</text>
+      <text x="595" y="20" text-anchor="middle" font-size="12" fill="#5c6570">cùng chiều d, cùng không gian</text>
+      <rect x="700" y="117" width="140" height="66" rx="33" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/>
+      <text x="770" y="143" text-anchor="middle" font-weight="700" fill="#2c5361">Quan hệ r</text><text x="770" y="163" text-anchor="middle" font-size="12">1 vector ℝ^d, học</text><text x="770" y="177" text-anchor="middle" font-size="12">không có mô thức</text>
+    </svg>
+    <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+  </figure>
+  <p class="small" style="margin-top:6px">Lưu: 3 vector/node. Tính: trộn lại với tỉ lệ khác nhau tuỳ quan hệ. Số tham số không tăng theo số quan hệ.</p>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Sec. Modality Encoding.</span></div><div class="num">7</div>
+</section>
+
+<!-- 8 STAGE 1 -->
+<section class="slide">
+  <h2>RHF · Tầng 1: trộn bên trong mô thức ảnh</h2>
+  <div class="eq"><span class="no">(1)</span>
+    <span class="k i">e_I</span> = <span class="k g">σ(⟨e_Iv, e_Ic⟩)</span> · <span class="k t">e_Ic</span> + (1 − <span class="k g">σ(⟨e_Iv, e_Ic⟩)</span>) · <span class="k i">e_Iv</span>
+  </div>
+  <div class="cols" style="grid-template-columns:1fr 1.1fr;margin-top:10px">
+    <div class="legend">
+      <span class="k i">e_Iv</span><span>ảnh → CLIP → chiếu: thị giác thô</span>
+      <span class="k t">e_Ic</span><span>ảnh → LLaVA viết caption → BERT → chiếu: ngữ nghĩa</span>
+      <span class="k g">⟨·,·⟩</span><span>tích vô hướng: hai vector "đồng ý" bao nhiêu</span>
+      <span class="k g">σ</span><span>sigmoid → tỉ lệ trong (0,1)</span>
+      <span class="k i">e_I</span><span>một vector ảnh duy nhất đi tiếp</span>
+    </div>
+    <div>
+      <div class="card"><p><b>Đồng ý nhiều</b> → tin caption (đã ở dạng ngôn ngữ, gần KG).<br><b>Đồng ý ít</b> → LLaVA có thể bịa, giữ CLIP.</p>
+      <p class="small">Không có tham số học ở cổng. Cái học được là hai lớp chiếu P_I, P_T, đưa CLIP (512) và BERT (768) về cùng d chiều để tích vô hướng có nghĩa.</p></div>
+      <p class="small" style="margin-top:8px">Caption ví dụ: "A Golden Retriever carrying a stick in its mouth" [1, Fig. 1].</p>
+    </div>
+  </div>
+  <figure style="margin-top:14px">
+    <svg viewBox="0 0 900 150" width="1000" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="15">
+      <defs><marker id="a8" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5c6570"/></marker></defs>
+      <rect x="10" y="20" width="90" height="50" rx="8" fill="#ece4f8" stroke="#8e6cc8" stroke-width="1.6"/><text x="55" y="50" text-anchor="middle" font-weight="700">ảnh</text>
+      <rect x="150" y="5" width="80" height="34" rx="6" fill="#fff" stroke="#8e6cc8"/><text x="190" y="27" text-anchor="middle">CLIP</text>
+      <rect x="150" y="55" width="80" height="34" rx="6" fill="#fff" stroke="#e9a23b"/><text x="190" y="77" text-anchor="middle" font-size="13">LLaVA→BERT</text>
+      <line x1="100" y1="38" x2="148" y2="22" stroke="#5c6570" marker-end="url(#a8)"/><line x1="100" y1="52" x2="148" y2="72" stroke="#5c6570" marker-end="url(#a8)"/>
+      <rect x="280" y="5" width="70" height="34" rx="6" fill="#fff" stroke="#5c6570"/><text x="315" y="27" text-anchor="middle" font-size="13">P_I</text>
+      <rect x="280" y="55" width="70" height="34" rx="6" fill="#fff" stroke="#5c6570"/><text x="315" y="77" text-anchor="middle" font-size="13">P_T</text>
+      <line x1="230" y1="22" x2="278" y2="22" stroke="#5c6570" marker-end="url(#a8)"/><line x1="230" y1="72" x2="278" y2="72" stroke="#5c6570" marker-end="url(#a8)"/>
+      <rect x="390" y="5" width="110" height="34" rx="5" fill="#8e6cc8"/><text x="445" y="27" text-anchor="middle" fill="#fff" font-weight="700">e_Iv</text>
+      <rect x="390" y="55" width="110" height="34" rx="5" fill="#e9a23b"/><text x="445" y="77" text-anchor="middle" fill="#fff" font-weight="700">e_Ic</text>
+      <line x1="350" y1="22" x2="388" y2="22" stroke="#5c6570" marker-end="url(#a8)"/><line x1="350" y1="72" x2="388" y2="72" stroke="#5c6570" marker-end="url(#a8)"/>
+      <circle cx="580" cy="47" r="26" fill="#fff" stroke="#1f2328" stroke-width="1.6"/><text x="580" y="43" text-anchor="middle" font-size="13">⟨·,·⟩</text><text x="580" y="58" text-anchor="middle" font-size="13">σ</text>
+      <line x1="500" y1="22" x2="556" y2="38" stroke="#5c6570" marker-end="url(#a8)"/><line x1="500" y1="72" x2="556" y2="56" stroke="#5c6570" marker-end="url(#a8)"/>
+      <text x="640" y="26" text-anchor="start" font-size="13">× (1 − σ) cho e_Iv</text><text x="640" y="80" text-anchor="start" font-size="13">× σ cho e_Ic</text>
+      <circle cx="720" cy="47" r="16" fill="#fff" stroke="#1f2328" stroke-width="1.5"/><text x="720" y="53" text-anchor="middle" font-weight="700">+</text>
+      <line x1="606" y1="47" x2="702" y2="47" stroke="#5c6570" marker-end="url(#a8)"/>
+      <line x1="736" y1="47" x2="790" y2="47" stroke="#5c6570" marker-end="url(#a8)"/>
+      <rect x="792" y="30" width="100" height="34" rx="5" fill="#8e6cc8"/><text x="842" y="52" text-anchor="middle" fill="#fff" font-weight="700">e_I</text>
+      <text x="450" y="125" text-anchor="middle" font-size="13" fill="#5c6570">đóng băng: CLIP, LLaVA, BERT · học: P_I, P_T · cổng: không tham số</text>
+    </svg>
+    <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+  </figure>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 1. &nbsp; [3] H. Liu et al., "Visual instruction tuning," NeurIPS 2023 (LLaVA).</span></div><div class="num">8</div>
+</section>
+
+<!-- 9 STAGE 2 -->
+<section class="slide">
+  <h2>RHF · Tầng 2: trộn ba mô thức theo quan hệ</h2>
+  <div class="eq" style="font-size:26px;padding:10px 24px"><span class="no">(2)</span>
+    <span class="k g">α_m</span> = <span class="k r">⟨e_m, r⟩</span> + <span class="k a">(1/3) Σ_j ⟨e_m, e_j⟩</span></div>
+  <div class="eq" style="font-size:26px;padding:10px 24px;margin-top:-4px"><span class="no">(3), (4)</span>
+    <span class="k g">w_m</span> = softmax(α_m − ᾱ) &nbsp;&nbsp;&nbsp;&nbsp; <span class="k s">H_joint</span> = Σ_m <span class="k g">w_m</span> · e_m</div>
+  <div class="cols" style="grid-template-columns:1fr 1fr">
+    <div class="legend">
+      <span class="k r">⟨e_m, r⟩</span><span>mô thức m hợp với quan hệ r bao nhiêu → <b>đổi theo r</b></span>
+      <span class="k a">tb ⟨e_m, e_j⟩</span><span>m nhất quán với hai mô thức kia không → lọc mô thức thiếu / bịa</span>
+      <span class="k g">w_m</span><span>ba tỉ lệ, tổng = 1, đổi theo <b>cả node lẫn quan hệ</b></span>
+      <span class="k s">H_joint</span><span>vector node cho câu hỏi này</span>
+    </div>
+    <figure>
+      <svg viewBox="0 0 400 190" width="440" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="14">
+        <text x="200" y="16" text-anchor="middle" font-weight="700">Gwen Stefani, r = voice type</text>
+        <line x1="40" y1="160" x2="360" y2="160" stroke="#1f2328"/>
+        <rect x="70" y="50" width="60" height="110" fill="#e9a23b"/><text x="100" y="180" text-anchor="middle">T  0.55</text>
+        <rect x="170" y="125" width="60" height="35" fill="#8e6cc8"/><text x="200" y="180" text-anchor="middle">I  0.10</text>
+        <rect x="270" y="95" width="60" height="65" fill="#2a9d8f"/><text x="300" y="180" text-anchor="middle">S  0.35</text>
+        <text x="100" y="42" text-anchor="middle" font-size="12">"singer" hợp r</text><text x="200" y="117" text-anchor="middle" font-size="12">chỉ ngoại hình</text>
+      </svg>
+      <figcaption>Tỉ lệ minh hoạ theo [1, Fig. 4]. Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+    </figure>
+  </div>
+  <p class="small">Cùng node, đổi r → ⟨e_m, r⟩ đổi → tỉ lệ đảo. Không có ma trận học riêng: "attention" với query = r, key = e_m trần.</p>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 2–4.</span></div><div class="num">9</div>
+</section>
+
+<!-- 10 MER -->
+<section class="slide">
+  <h2>MER: MLLM đoán đáp án, cổng quyết định tin bao nhiêu</h2>
+  <ol class="steps">
+    <li><b>Prompt</b> = phần cố định (nhiệm vụ, định dạng) + text của h, láng giềng của h (bằng tên), ảnh h, quan hệ r → <b>LLaVA + LoRA</b><sup>a</sup> → một tên: <i>"Mezzo-soprano"</i> &nbsp;<span class="tiny">(5)</span></li>
+    <li>Tên → BERT → chiếu → <span class="k a">T_MLLM</span> (2d số). Chỉ làm <b>một lần</b> mỗi câu hỏi.</li>
+    <li>Cổng: <span class="k g">g</span> = σ(W₂·tanh(W₁·<span class="k a">T_MLLM</span> + b₁) + b₂) ∈ (0,1)^{2d} — MLP 2d → d → 2d, <b>có tham số học</b> &nbsp;<span class="tiny">(7)</span></li>
+    <li>Với <b>mỗi</b> ứng viên t: <span class="k r">T̃(t)</span> = (1 − <span class="k g">g</span>) ∘ <span class="k s">T_joint(t)</span> + <span class="k g">g</span> ∘ <span class="k a">T_MLLM</span>, tách phần thực / ảo &nbsp;<span class="tiny">(8–9)</span></li>
+  </ol>
+  <div class="cols" style="grid-template-columns:1fr 1fr;margin-top:6px">
+    <figure>
+      <svg viewBox="0 0 400 150" width="480" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="13">
+        <defs><marker id="a4" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+        <rect x="10" y="20" width="130" height="44" rx="8" fill="#dff3f0" stroke="#2a9d8f"/><text x="75" y="40" text-anchor="middle">T_joint(t)</text><text x="75" y="55" text-anchor="middle" font-size="11" fill="#5c6570">RHF của ứng viên</text>
+        <rect x="10" y="90" width="130" height="44" rx="8" fill="#fbe9e3" stroke="#c8553d"/><text x="75" y="110" text-anchor="middle">T_MLLM</text><text x="75" y="125" text-anchor="middle" font-size="11" fill="#5c6570">BERT(đáp án LLaVA)</text>
+        <text x="190" y="42" text-anchor="middle" font-size="12">× (1 − g)</text><text x="190" y="128" text-anchor="middle" font-size="12">× g</text>
+        <line x1="140" y1="42" x2="240" y2="72" stroke="#5c6570" marker-end="url(#a4)"/><line x1="140" y1="112" x2="240" y2="82" stroke="#5c6570" marker-end="url(#a4)"/>
+        <circle cx="255" cy="77" r="14" fill="#fff" stroke="#1f2328" stroke-width="1.5"/><text x="255" y="82" text-anchor="middle" font-weight="700">+</text>
+        <line x1="269" y1="77" x2="320" y2="77" stroke="#5c6570" marker-end="url(#a4)"/><text x="330" y="82" font-weight="700">T̃(t)</text>
+        <line x1="75" y1="134" x2="75" y2="145" stroke="#c8553d" stroke-dasharray="3 3"/><text x="200" y="146" text-anchor="middle" font-size="11" fill="#c8553d">g tính từ chính T_MLLM: đáp án lạ → g nhỏ</text>
+      </svg>
+      <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+    </figure>
+    <div class="note" style="margin-top:0"><b>g không nhìn ứng viên.</b> LLaVA sai thì mọi ứng viên bị kéo về cùng chỗ sai; cổng chỉ học "đáp án trông đáng tin không", không học "hợp câu hỏi không".</div>
+  </div>
+  <div class="foot"><span class="src">[1] Eq. 5–9. [3] LLaVA. <sup>a</sup> E. J. Hu et al., "LoRA: Low-rank adaptation of large language models," ICLR 2022.</span></div><div class="num">10</div>
+</section>
+
+<!-- 11 ROTATE -->
+<section class="slide">
+  <h2>Chấm điểm bằng RotatE: quan hệ là phép xoay</h2>
+  <div class="eq"><span class="no">(6), (10)</span>
+    <span class="k r">r_C</span> = cos(r/(γ/π)) + i·sin(r/(γ/π)) &nbsp;&nbsp;&nbsp; score = −‖ <span class="k s">H_joint</span> ∘ <span class="k r">r_C</span> − <span class="k a">T̃</span> ‖
+  </div>
+  <div class="cols" style="grid-template-columns:1fr 1fr">
+    <figure>
+      <svg viewBox="0 0 320 240" width="380" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="14">
+        <defs><marker id="a5" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker></defs>
+        <line x1="20" y1="150" x2="300" y2="150" stroke="#bbb"/><line x1="160" y1="20" x2="160" y2="235" stroke="#bbb"/>
+        <circle cx="160" cy="150" r="100" fill="none" stroke="#ddd" stroke-dasharray="3 3"/>
+        <line x1="160" y1="150" x2="255" y2="118" stroke="#e9a23b" stroke-width="3" marker-end="url(#a5)"/><text x="262" y="112" fill="#8d5a0d" font-weight="700">H</text>
+        <path d="M 222 129 A 66 66 0 0 0 190 62" fill="none" stroke="#4a7c8c" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#a5)"/><text x="232" y="72" fill="#2c5361" font-size="13">xoay θ_r</text>
+        <line x1="160" y1="150" x2="182" y2="55" stroke="#2a9d8f" stroke-width="3" marker-end="url(#a5)"/><text x="186" y="48" fill="#176b61" font-weight="700">H ∘ r_C</text>
+        <line x1="160" y1="150" x2="126" y2="58" stroke="#c8553d" stroke-width="3" marker-end="url(#a5)"/><text x="98" y="52" fill="#c8553d" font-weight="700">T̃</text>
+        <line x1="182" y1="55" x2="126" y2="58" stroke="#1f2328" stroke-width="1.4" stroke-dasharray="2 2"/>
+        <line x1="154" y1="57" x2="70" y2="100" stroke="#5c6570" stroke-width=".8"/><text x="48" y="112" text-anchor="middle" font-size="12">khoảng cách</text><text x="48" y="126" text-anchor="middle" font-size="12">→ điểm</text>
+      </svg>
+      <figcaption>Một mặt phẳng phức trong d mặt phẳng. Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+    </figure>
+    <div class="legend" style="align-content:start">
+      <span class="k r">r_C</span><span>r đổi thành d góc; mô-đun 1 → chỉ xoay, không co giãn</span>
+      <span class="k s">H ∘ r_C</span><span>xoay head trên từng mặt phẳng → điểm neo, tính 1 lần</span>
+      <span class="k a">T̃</span><span>ứng viên sau cổng; đo 15 000 lần</span>
+      <span class="k g">‖·‖</span><span>khoảng cách gộp mọi mặt phẳng; gần → điểm cao</span>
+      <span class="k g">γ</span><span>thang đổi r sang góc</span>
+    </div>
+  </div>
+  <p class="small">Vì sao RotatE [2]: một phép xoay biểu diễn được đối xứng (θ = π), nghịch đảo (−θ), hợp thành (θ₁+θ₂). Cài đặt bằng 2d số thực, không cần kiểu số phức.</p>
+  <div class="foot"><span class="src">[2] Z. Sun et al., "RotatE," ICLR 2019. [1] Eq. 6, 10.</span></div><div class="num">11</div>
+</section>
+
+<!-- 12 MNO -->
+<section class="slide">
+  <h2>MNO: mẫu sai khó và huấn luyện đối kháng</h2>
+  <div class="cols" style="grid-template-columns:1fr 1fr">
+    <div>
+      <div class="card t" style="margin-bottom:10px"><h3>Text giả</h3><p>LLaVA viết lại mô tả: "American singer…" → "US-based vocalist…" → BERT → chiếu.</p></div>
+      <div class="card i"><h3>Ảnh giả &nbsp;<span class="tiny">(11)</span></h3>
+        <div class="eq" style="font-size:24px;padding:8px"><span class="k i">ê_v</span> = ((1−<span class="k g">λ</span>)I + <span class="k g">λ</span><span class="k r">R</span>)·<span class="k i">x_v</span> + <span class="k a">ε</span></div>
+        <div class="legend" style="font-size:16px"><span class="k r">R</span><span>ma trận xoay (QR của ma trận ngẫu nhiên hạng thấp)</span><span class="k g">λ</span><span>0 → 1 tăng theo epoch: dễ trước, khó sau</span><span class="k a">ε</span><span>nhiễu Gauss</span></div>
+      </div>
+    </div>
+    <div>
+      <figure>
+        <svg viewBox="0 0 520 150" width="560" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="13">
+          <defs><marker id="a6" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5c6570"/></marker></defs>
+          <rect x="10" y="30" width="160" height="80" rx="10" fill="#f2f9f7" stroke="#2a9d8f" stroke-width="1.6"/><text x="90" y="58" text-anchor="middle" font-weight="700">Generator</text><text x="90" y="78" text-anchor="middle" font-size="12">bóp méo text, ảnh</text><text x="90" y="94" text-anchor="middle" font-size="12">muốn mẫu giả điểm cao</text>
+          <rect x="350" y="30" width="160" height="80" rx="10" fill="#fbe9e3" stroke="#c8553d" stroke-width="1.6"/><text x="430" y="58" text-anchor="middle" font-weight="700">D = score(·)</text><text x="430" y="78" text-anchor="middle" font-size="12">RHF + MER + RotatE</text><text x="430" y="94" text-anchor="middle" font-size="12">muốn mẫu giả điểm thấp</text>
+          <line x1="170" y1="52" x2="348" y2="52" stroke="#5c6570" stroke-width="1.6" marker-end="url(#a6)"/><text x="260" y="45" text-anchor="middle" font-size="12">(h*,r,t) (h,r,t*) (h*,r,t*)</text>
+          <line x1="348" y1="90" x2="172" y2="90" stroke="#5c6570" stroke-width="1.6" marker-end="url(#a6)"/><text x="260" y="108" text-anchor="middle" font-size="12">L_g = max(0, c − s_k)  (13)</text>
+          <text x="260" y="140" text-anchor="middle" font-size="12" fill="#5c6570">L_D = L_kgc + gradient penalty (14), tối ưu xen kẽ</text>
+        </svg>
+        <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}</figcaption>
+      </figure>
+      <div class="legend" style="font-size:17px;margin-top:4px">
+        <span class="k g">L_kgc</span><span>loss self-adversarial của RotatE [2]: mẫu sai điểm cao bị phạt nặng hơn (12)</span>
+        <span class="k g">c</span><span>ngưỡng: mẫu giả dưới c thì generator bị phạt</span>
+        <span class="k g">GP</span><span>ép ‖∇D‖ ≈ 1 để GAN ổn định<sup>a</sup></span>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:8px">Mẫu "giả" với λ nhỏ gần như vẫn là node thật. Bài không kiểm chứng chúng có sai thật không.</div>
+  <div class="foot"><span class="src">[1] Eq. 11–14. [2] RotatE. <sup>a</sup> I. Gulrajani et al., "Improved training of Wasserstein GANs," NeurIPS 2017.</span></div><div class="num">12</div>
+</section>
+
+<!-- 13 DATA FLOW -->
+<section class="slide">
+  <h2>Luồng dữ liệu cho một truy vấn (h, r, ?)</h2>
+  <figure>
+    <svg viewBox="0 0 960 400" width="1150" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="14">
+      <defs><marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5c6570"/></marker></defs>
+      <style>.bx{stroke-width:1.6}.lbl{font-weight:700}.sm{font-size:12px;fill:#5c6570}</style>
+      <rect x="15" y="20" width="110" height="40" rx="8" fill="#ece4f8" stroke="#8e6cc8" class="bx"/><text x="70" y="45" text-anchor="middle" class="lbl">Ảnh của h</text>
+      <rect x="15" y="120" width="110" height="40" rx="8" fill="#fdeed5" stroke="#e9a23b" class="bx"/><text x="70" y="145" text-anchor="middle" class="lbl">Text của h</text>
+      <rect x="15" y="180" width="110" height="40" rx="8" fill="#dff3f0" stroke="#2a9d8f" class="bx"/><text x="70" y="205" text-anchor="middle" class="lbl">id của h</text>
+      <rect x="15" y="250" width="110" height="40" rx="20" fill="#dbe9ee" stroke="#4a7c8c" class="bx"/><text x="70" y="275" text-anchor="middle" class="lbl">Quan hệ r</text>
+      <rect x="165" y="10" width="90" height="30" rx="6" fill="#fff" stroke="#8e6cc8"/><text x="210" y="30" text-anchor="middle">CLIP</text>
+      <rect x="165" y="48" width="90" height="30" rx="6" fill="#fff" stroke="#8e6cc8"/><text x="210" y="68" text-anchor="middle" font-size="12">LLaVA→BERT</text>
+      <rect x="165" y="125" width="90" height="30" rx="6" fill="#fff" stroke="#e9a23b"/><text x="210" y="145" text-anchor="middle">BERT</text>
+      <rect x="165" y="185" width="90" height="30" rx="6" fill="#fff" stroke="#2a9d8f"/><text x="210" y="205" text-anchor="middle">tra bảng</text>
+      <line x1="125" y1="35" x2="163" y2="25" stroke="#5c6570" marker-end="url(#a3)"/><line x1="125" y1="45" x2="163" y2="63" stroke="#5c6570" marker-end="url(#a3)"/>
+      <line x1="125" y1="140" x2="163" y2="140" stroke="#5c6570" marker-end="url(#a3)"/><line x1="125" y1="200" x2="163" y2="200" stroke="#5c6570" marker-end="url(#a3)"/>
+      <rect x="290" y="15" width="130" height="66" rx="8" fill="#f8f4ff" stroke="#8e6cc8" stroke-dasharray="5 3" class="bx"/><text x="355" y="40" text-anchor="middle" class="lbl">Tầng 1</text><text x="355" y="60" text-anchor="middle" class="sm">cổng theo độ giống</text><text x="355" y="74" text-anchor="middle" class="sm">→ e_I</text>
+      <line x1="255" y1="25" x2="288" y2="35" stroke="#5c6570" marker-end="url(#a3)"/><line x1="255" y1="63" x2="288" y2="58" stroke="#5c6570" marker-end="url(#a3)"/>
+      <rect x="470" y="60" width="150" height="150" rx="8" fill="#eef4f6" stroke="#4a7c8c" class="bx"/><text x="545" y="88" text-anchor="middle" class="lbl">Tầng 2</text><text x="545" y="110" text-anchor="middle" class="sm">w từ ⟨e_m, r⟩</text><text x="545" y="150" text-anchor="middle" class="lbl">H_joint</text><text x="545" y="180" text-anchor="middle" class="sm">trọng số đổi theo r</text>
+      <line x1="420" y1="48" x2="468" y2="90" stroke="#8e6cc8" stroke-width="1.6" marker-end="url(#a3)"/><line x1="255" y1="140" x2="468" y2="140" stroke="#e9a23b" stroke-width="1.6" marker-end="url(#a3)"/><line x1="255" y1="200" x2="468" y2="185" stroke="#2a9d8f" stroke-width="1.6" marker-end="url(#a3)"/>
+      <line x1="125" y1="270" x2="545" y2="270" stroke="#4a7c8c" stroke-width="1.6"/><line x1="545" y1="270" x2="545" y2="212" stroke="#4a7c8c" stroke-width="1.6" marker-end="url(#a3)"/>
+      <rect x="165" y="320" width="150" height="60" rx="8" fill="#fff5ee" stroke="#c8553d" class="bx"/><text x="240" y="343" text-anchor="middle" class="lbl">Prompt</text><text x="240" y="362" text-anchor="middle" class="sm">text, láng giềng, ảnh, r</text>
+      <rect x="345" y="320" width="120" height="60" rx="8" fill="#fff5ee" stroke="#c8553d" class="bx"/><text x="405" y="343" text-anchor="middle" class="lbl">LLaVA (LoRA)</text><text x="405" y="364" text-anchor="middle" class="sm">"Mezzo-soprano"</text>
+      <rect x="495" y="330" width="80" height="40" rx="6" fill="#fff" stroke="#c8553d"/><text x="535" y="355" text-anchor="middle">BERT</text>
+      <line x1="315" y1="350" x2="343" y2="350" stroke="#5c6570" marker-end="url(#a3)"/><line x1="465" y1="350" x2="493" y2="350" stroke="#5c6570" marker-end="url(#a3)"/>
+      <text x="620" y="345" text-anchor="middle" class="lbl">T_MLLM</text><line x1="575" y1="350" x2="700" y2="350" stroke="#5c6570" marker-end="url(#a3)"/>
+      <rect x="660" y="240" width="150" height="50" rx="8" fill="#eef4f6" stroke="#4a7c8c" class="bx"/><text x="735" y="260" text-anchor="middle" class="lbl">Ứng viên t (15 000)</text><text x="735" y="280" text-anchor="middle" class="sm">RHF → T_joint(t)</text>
+      <circle cx="740" cy="350" r="24" fill="#fff" stroke="#c8553d" stroke-width="2"/><text x="740" y="356" text-anchor="middle" class="lbl">G</text>
+      <line x1="735" y1="290" x2="740" y2="324" stroke="#5c6570" marker-end="url(#a3)"/>
+      <line x1="764" y1="350" x2="860" y2="350" stroke="#5c6570" marker-end="url(#a3)"/><text x="812" y="340" text-anchor="middle" class="lbl">T̃(t)</text>
+      <rect x="700" y="90" width="230" height="110" rx="10" fill="#1f2328"/><text x="815" y="122" text-anchor="middle" fill="#fff" class="lbl" font-size="16">RotatE</text><text x="815" y="150" text-anchor="middle" fill="#fff" font-size="15">−‖ H_joint ∘ r_C − T̃(t) ‖</text><text x="815" y="180" text-anchor="middle" style="fill:#cfd6dc" class="sm">xếp hạng 15 000 điểm</text>
+      <line x1="620" y1="135" x2="698" y2="135" stroke="#4a7c8c" stroke-width="1.6" marker-end="url(#a3)"/>
+      <line x1="865" y1="350" x2="865" y2="202" stroke="#5c6570" marker-end="url(#a3)"/>
+      <line x1="545" y1="270" x2="640" y2="270" stroke="#4a7c8c" stroke-width="1.2" stroke-dasharray="4 3"/><line x1="640" y1="270" x2="640" y2="225" stroke="#4a7c8c" stroke-width="1.2" stroke-dasharray="4 3"/><line x1="640" y1="225" x2="720" y2="225" stroke="#4a7c8c" stroke-width="1.2" stroke-dasharray="4 3"/><line x1="720" y1="225" x2="720" y2="202" stroke="#4a7c8c" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#a3)"/><text x="690" y="218" text-anchor="middle" class="sm">r → r_C</text>
+    </svg>
+    <figcaption>Hình tự vẽ, nguồn: {{SRC_SELF}}. Lúc train: thêm mẫu sai (MNO), tính loss, cập nhật E, R, P_m, cổng, LoRA.</figcaption>
+  </figure>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">13</div>
+</section>
+
+<!-- 14 DATA -->
+<section class="slide">
+  <h2>Dữ liệu và độ đo</h2>
+  <table style="font-size:19px">
+    <tr><th>Dataset</th><th>Nguồn</th><th class="n">#Entity</th><th class="n">#Rel</th><th class="n">#Train</th><th class="n">#Valid</th><th class="n">#Test</th><th class="n">có ảnh</th><th class="n">có text</th></tr>
+    <tr><td><b>MKG-W</b></td><td>Wikidata<sup>a</sup></td><td class="n">15 000</td><td class="n">169</td><td class="n">34 196</td><td class="n">4 276</td><td class="n">4 274</td><td class="n">96%</td><td class="n">94%</td></tr>
+    <tr><td><b>MKG-Y</b></td><td>YAGO<sup>a</sup></td><td class="n">15 000</td><td class="n">28</td><td class="n">21 310</td><td class="n">2 665</td><td class="n">2 663</td><td class="n">95%</td><td class="n">82%</td></tr>
+    <tr><td><b>DB15K</b></td><td>DBpedia<sup>b</sup></td><td class="n">12 842</td><td class="n">279</td><td class="n">79 222</td><td class="n">9 902</td><td class="n">9 904</td><td class="n">99.8%</td><td class="n">71%</td></tr>
+  </table>
+  <p class="small">Tỉ lệ có ảnh / text tự tính từ [1, Table 2]. DB15K thiếu text nhiều nhất; MKG-Y chỉ 28 quan hệ nên cấu trúc đã mạnh.</p>
+  <div class="cols" style="margin-top:14px">
+    <div class="card"><h3>MRR</h3><p>Trung bình 1/hạng của đáp án đúng. Hạng 1 → 1.0, hạng 10 → 0.1.</p></div>
+    <div class="card"><h3>Hits@K</h3><p>Tỉ lệ đáp án đúng nằm trong top K. Hits@1 khó nhất, Hits@10 dễ nhất.</p></div>
+  </div>
+  <p class="small" style="margin-top:10px">Mỗi bộ ba test hỏi cả hai chiều (đoán tail, đoán head), lọc các đáp án đúng khác (filtered). 14 baseline được tác giả chạy lại với cùng CLIP/BERT.</p>
+  <div class="foot"><span class="src"><sup>a</sup> D. Xu et al., "Relation-enhanced negative sampling for multimodal KGC," ACM MM 2022. &nbsp; <sup>b</sup> Y. Liu et al., "MMKG: multi-modal knowledge graphs," ESWC 2019.</span></div><div class="num">14</div>
+</section>
+
+<!-- 15 RESULTS -->
+<section class="slide">
+  <h2>Kết quả chính (MRR, %)</h2>
+  <div class="cols" style="grid-template-columns:1.3fr 1fr">
+    <figure>
+      <svg viewBox="0 0 640 260" width="700" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="14">
+        <g stroke="#e4e2dc"><line x1="50" y1="230" x2="630" y2="230"/><line x1="50" y1="140" x2="630" y2="140"/><line x1="50" y1="50" x2="630" y2="50"/></g>
+        <g fill="#5c6570" font-size="12"><text x="42" y="234" text-anchor="end">0</text><text x="42" y="144" text-anchor="end">20</text><text x="42" y="54" text-anchor="end">40</text></g>
+        <g><rect x="70" y="81.9" width="44" height="148.1" fill="#bcc6cc"/><text x="92" y="76" text-anchor="middle">32.92</text><rect x="120" y="64.4" width="44" height="165.6" fill="#7f95a0"/><text x="142" y="59" text-anchor="middle">36.79</text><rect x="170" y="56.2" width="44" height="173.8" fill="#c8553d"/><text x="192" y="51" text-anchor="middle" font-weight="700">38.62</text><text x="142" y="252" text-anchor="middle" font-weight="700">MKG-W</text></g>
+        <g><rect x="270" y="65" width="44" height="165" fill="#bcc6cc"/><text x="292" y="59" text-anchor="middle">36.67</text><rect x="320" y="57.5" width="44" height="172.5" fill="#7f95a0"/><text x="342" y="52" text-anchor="middle">38.34</text><rect x="370" y="54.5" width="44" height="175.5" fill="#c8553d"/><text x="392" y="49" text-anchor="middle" font-weight="700">39.00</text><text x="342" y="252" text-anchor="middle" font-weight="700">MKG-Y</text></g>
+        <g><rect x="470" y="85.7" width="44" height="144.3" fill="#bcc6cc"/><text x="492" y="80" text-anchor="middle">32.07</text><rect x="520" y="78.8" width="44" height="151.2" fill="#7f95a0"/><text x="542" y="73" text-anchor="middle">33.59</text><rect x="570" y="71.6" width="44" height="158.4" fill="#c8553d"/><text x="592" y="66" text-anchor="middle" font-weight="700">35.20</text><text x="542" y="252" text-anchor="middle" font-weight="700">DB15K</text></g>
+        <g font-size="13"><rect x="330" y="6" width="12" height="12" fill="#bcc6cc"/><text x="346" y="17">RotatE</text><rect x="410" y="6" width="12" height="12" fill="#7f95a0"/><text x="426" y="17">NativE (a)</text><rect x="510" y="6" width="12" height="12" fill="#c8553d"/><text x="526" y="17">HFR-MKGC</text></g>
+      </svg>
+      <figcaption>Vẽ lại từ [1, Table 1]. Nguồn hình: {{SRC_SELF}}</figcaption>
+    </figure>
+    <div>
+      <p>Hơn baseline tốt nhất (NativE): <b>+1.83</b> MKG-W, <b>+0.66</b> MKG-Y, <b>+1.61</b> DB15K.</p>
+      <p>Đứng đầu <b>11/12</b> ô (MRR, Hits@1/3/10 × 3 tập).</p>
+      <div class="note" style="font-size:18px"><b>Ngoại lệ bài không nhấn:</b> Hits@1 trên DB15K 23.04 thua RSME 24.45, APKGC 24.39, MyGO 24.19.</div>
+      <p class="small">LLaVA thuần (prompt, không hàm điểm): Hits@10 chỉ 26% trên MKG-W, 3.6% trên MKG-Y.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">[1] Table 1. <sup>a</sup> Y. Zhang et al., "NativE: Multi-modal KGC in the wild," SIGIR 2024.</span></div><div class="num">15</div>
+</section>
+
+<!-- 16 ABLATION -->
+<section class="slide">
+  <h2>Ablation trên MKG-W: mô-đun nào đáng tiền?</h2>
+  <div class="cols" style="grid-template-columns:1.2fr 1fr">
+    <div>
+      <div class="bar"><span>Full</span><div class="tr"><div class="fi" style="width:100%;background:var(--acc)"></div></div><span class="v">38.62</span></div>
+      <div class="bar"><span>w/o PTI</span><div class="tr"><div class="fi" style="width:89.6%;background:#7f95a0"></div></div><span class="v">34.59</span></div>
+      <div class="bar"><span>w/o MNO</span><div class="tr"><div class="fi" style="width:88.1%;background:#7f95a0"></div></div><span class="v">34.01</span></div>
+      <div class="bar"><span>w/o MER</span><div class="tr"><div class="fi" style="width:86.8%;background:#7f95a0"></div></div><span class="v">33.52</span></div>
+      <div class="bar"><span>w/o RHF</span><div class="tr"><div class="fi" style="width:82.8%;background:#7f95a0"></div></div><span class="v">31.98</span></div>
+      <div class="bar"><span>w/o caption</span><div class="tr"><div class="fi" style="width:82.3%;background:var(--i)"></div></div><span class="v">31.78</span></div>
+      <div class="bar"><span>w/o ảnh</span><div class="tr"><div class="fi" style="width:80.7%;background:var(--i)"></div></div><span class="v">31.16</span></div>
+      <div class="bar"><span>w/o text</span><div class="tr"><div class="fi" style="width:76.8%;background:var(--t)"></div></div><span class="v">29.67</span></div>
+      <div class="bar"><span>w/o cấu trúc</span><div class="tr"><div class="fi" style="width:66.5%;background:var(--s)"></div></div><span class="v">25.67</span></div>
+      <p class="tiny">MRR. Vẽ lại từ [1, Table 3]. Nguồn hình: {{SRC_SELF}}</p>
+    </div>
+    <div>
+      <p><b>RHF</b> đóng góp lớn nhất trong 4 mô-đun: Hits@1 rớt 31.4 → 20.8 nhưng Hits@10 gần giữ nguyên → trộn theo quan hệ chủ yếu giúp <b>xếp đúng hạng 1</b>.</p>
+      <p><b>Cấu trúc</b> vẫn là mô thức quan trọng nhất (−13). Text (−9) hơn ảnh (−7.5).</p>
+      <p><b>Caption</b> do LLaVA sinh có ích thật (−6.8 khi bỏ).</p>
+      <p class="small">Ablation chỉ làm trên MKG-W, không kiểm tra hai tập kia.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Table 3.</span></div><div class="num">16</div>
+</section>
+
+<!-- 17 CASE -->
+<section class="slide">
+  <h2>Case study: trọng số đổi theo quan hệ</h2>
+  <div class="cols" style="grid-template-columns:1.35fr 1fr">
+    <figure><img src="{{FIG4}}" style="max-height:440px"><figcaption>Nguồn: [1], Fig. 4</figcaption></figure>
+    <div>
+      <p><b>Không có RHF</b> (trọng số ngẫu nhiên): ảnh được nghe nhiều nhất dù chỉ có ngoại hình → Mezzo-soprano <b>hạng 2</b>.</p>
+      <p><b>Có RHF</b>: text lên, ảnh xuống → <b>hạng 1</b>.</p>
+      <p class="small">Đây là ví dụ input–output ở slide 3, khép lại vòng: cùng ba vector, khác tỉ lệ pha, khác kết quả.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">17</div>
+</section>
+
+<!-- 18 LIMITATIONS -->
+<section class="slide">
+  <h2>Nhận xét và hạn chế</h2>
+  <div class="cols3" style="margin-top:10px">
+    <div class="card"><h3>Chi phí</h3><p>LLaVA-7B chạy cho mỗi ảnh (caption), mỗi truy vấn (đoán), mỗi text (viết lại). Không báo cáo thời gian.</p></div>
+    <div class="card"><h3>Tái lập</h3><p>Không công khai code. Nhiều baseline do tác giả tự chạy lại.</p></div>
+    <div class="card"><h3>Cải thiện không đều</h3><p>MKG-Y chỉ +0.66. Thua Hits@1 trên DB15K. Ablation một tập.</p></div>
+    <div class="card"><h3>Cổng G mù ngữ cảnh</h3><p>g chỉ nhìn đáp án LLaVA, không nhìn câu hỏi. Không phân tích g hay tỉ lệ LLaVA đoán đúng.</p></div>
+    <div class="card"><h3>Mẫu giả có sai thật?</h3><p>Paraphrase "cùng nghĩa" và ảnh xoay nhẹ vẫn là node thật. Ngược hướng contrastive của MDBGF.</p></div>
+    <div class="card"><h3>Căn chỉnh gián tiếp</h3><p>Tích vô hướng giữa CLIP và BERT chỉ có nghĩa nhờ lớp chiếu học qua loss KGC; không có loss căn chỉnh riêng.</p></div>
+  </div>
+  <p class="small" style="margin-top:14px">Thiếu chi tiết: prompt, epoch LoRA, cách chọn láng giềng, γ, c, τ, μ₁, có chuẩn hoá vector trước tích vô hướng hay không.</p>
+  <div class="foot"><span class="src">Nhận xét của nhóm dựa trên [1].</span></div><div class="num">18</div>
+</section>
+
+<!-- 19 CONCLUSION -->
+<section class="slide">
+  <h2>Kết luận</h2>
+  <ul style="margin-top:20px">
+    <li><b>Ý chính:</b> trọng số trộn mô thức phải phụ thuộc quan hệ đang hỏi. Cùng node, khác câu hỏi, khác vector.</li>
+    <li><b>Cách làm:</b> giữ RotatE làm hàm điểm, thay vector đầu vào bằng vector đã trộn ba mô thức theo r, cộng gợi ý của MLLM qua cổng, và train với mẫu sai khó.</li>
+    <li><b>Bằng chứng:</b> +1.8 MRR trên MKG-W; RHF là mô-đun đóng góp nhiều nhất; cấu trúc vẫn là mô thức quan trọng nhất.</li>
+    <li><b>Còn mở:</b> chi phí MLLM, cổng không nhìn câu hỏi, mẫu giả chưa chắc sai, không có code.</li>
+  </ul>
+  <div class="note ok" style="margin-top:30px">Một câu: <b>HFR-MKGC = RotatE + trộn mô thức có dẫn hướng bởi quan hệ + LLaVA làm cố vấn có kiểm soát + GAN nhỏ tạo mẫu sai.</b></div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">19</div>
+</section>
+
+<!-- 20 REFERENCES -->
+<section class="slide refs">
+  <h2>Tài liệu tham khảo</h2>
+  <p>[1] D. Wang, J. Du, Z. Xue, M. Liang, G. Ye, Y. Shao, and H. Li, "HFR-MKGC: Hierarchical Fusion Reasoning with MLLMs for Multi-modal Knowledge Graph Completion," in <i>Proc. AAAI Conf. Artif. Intell.</i>, vol. 40, no. 18, 2026, pp. 15815–15823.</p>
+  <p>[2] Z. Sun, Z.-H. Deng, J.-Y. Nie, and J. Tang, "RotatE: Knowledge graph embedding by relational rotation in complex space," in <i>Proc. Int. Conf. Learn. Represent. (ICLR)</i>, 2019.</p>
+  <p>[3] H. Liu, C. Li, Q. Wu, and Y. J. Lee, "Visual instruction tuning," in <i>Adv. Neural Inf. Process. Syst. (NeurIPS)</i>, vol. 36, 2023, pp. 34892–34916.</p>
+  <h3 style="margin-top:18px">Nguồn dùng một lần (đã ghi footnote tại slide)</h3>
+  <p>A. Radford et al., "Learning transferable visual models from natural language supervision," ICML 2021 · J. Devlin et al., "BERT: Pre-training of deep bidirectional transformers," NAACL 2019 · E. J. Hu et al., "LoRA," ICLR 2022 · I. Gulrajani et al., "Improved training of Wasserstein GANs," NeurIPS 2017 · D. Xu et al., "Relation-enhanced negative sampling for multimodal KGC," ACM MM 2022 · Y. Liu et al., "MMKG," ESWC 2019 · Y. Zhang et al., "NativE," SIGIR 2024.</p>
+  <h3 style="margin-top:18px">Nguồn hình</h3>
+  <p>Fig. 1, 2, 4: cắt từ PDF của [1]. Các hình còn lại do nhóm vẽ với sự hỗ trợ của AI (Claude), nguồn: {{SRC_SELF}}</p>
+  <div class="num">20</div>
+</section>
+
+</div>
+
+<div id="notes"></div>
+
+<script>
+const NOTES = {{NOTES_JSON}};
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+function fit(){const sc=Math.min(innerWidth/1280,innerHeight/720);document.documentElement.style.setProperty('--sc',sc)}
+function show(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,k)=>s.classList.toggle('active',k===cur));location.hash=cur+1;const n=document.getElementById('notes');n.innerHTML='<b>Slide '+(cur+1)+'</b> — '+(NOTES[cur]||'')}
+addEventListener('resize',fit);fit();
+show((parseInt(location.hash.slice(1))||1)-1);
+addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){show(cur+1);e.preventDefault()}
+ else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){show(cur-1);e.preventDefault()}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+ else if(e.key.toLowerCase()==='n')document.getElementById('notes').classList.toggle('on');
+ else if(e.key.toLowerCase()==='p')print()});
+addEventListener('click',e=>{if(e.target.closest('#notes'))return;show(e.clientX>innerWidth/2?cur+1:cur-1)});
+</script>
+</body>
+</html>
