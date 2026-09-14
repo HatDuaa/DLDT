@@ -8,12 +8,16 @@
         --s:#1f8f7f;--i:#7c5cc4;--t:#d98f1f;--r:#3f6f84;--acc:#b5452f;
         --sbg:#dff3f0;--ibg:#ece4f8;--tbg:#fdeed5;--rbg:#dbe9ee;--accbg:#fbe9e3}
   *{box-sizing:border-box}
-  html,body{margin:0;height:100%;background:#e9edf1;font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;color:var(--ink)}
+  html,body{margin:0;height:100%;background:#e9edf1;font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;color:var(--ink)}
+  .slide{--sec:var(--navy)}
   #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
-  .slide{position:absolute;left:50%;top:50%;width:1280px;height:720px;background:var(--paper);transform:translate(-50%,-50%) scale(var(--sc,1));transform-origin:center;display:none;padding:40px 64px 46px;overflow:hidden;flex-direction:column}
+  .slide{position:absolute;left:50%;top:50%;width:1280px;height:720px;background:var(--paper);transform:translate(-50%,-50%) scale(var(--sc,1));transform-origin:center;display:none;padding:52px 64px 46px;overflow:hidden;flex-direction:column;border-top:10px solid var(--sec)}
+  .slide::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--s) 0 33.3%,var(--i) 33.3% 66.6%,var(--t) 66.6% 100%);opacity:.85}
+  .kicker{position:absolute;top:16px;left:64px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--sec);font-weight:700}
   .slide.active{display:flex}
-  .slide h1{font-size:44px;margin:0 0 6px;line-height:1.15}
-  .slide h2{font-size:32px;margin:0 0 18px;padding-bottom:8px;border-bottom:2px solid var(--navy);color:var(--navy);font-weight:700;letter-spacing:-.01em}
+  .slide h1{font-family:"Iowan Old Style","Charter","Georgia","Times New Roman",serif;font-size:44px;margin:0 0 6px;line-height:1.15;font-weight:700}
+  .slide h2{font-family:"Iowan Old Style","Charter","Georgia","Times New Roman",serif;font-size:34px;margin:0 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line);color:var(--ink);font-weight:700;letter-spacing:-.005em;position:relative}
+  .slide h2::after{content:"";position:absolute;left:0;bottom:-1px;width:72px;height:3px;background:var(--sec)}
   .slide h3{font-size:23px;margin:12px 0 6px}
   .body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:12px}
   .slide p,.slide li{font-size:23px;line-height:1.45;margin:6px 0}
@@ -22,20 +26,20 @@
   .tiny{font-size:14px!important;color:var(--muted)}
   .foot{position:absolute;left:64px;right:64px;bottom:14px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px;display:flex;justify-content:space-between;gap:20px}
   .foot .src{flex:1}
-  .num{position:absolute;right:26px;bottom:14px;font-size:13px;color:var(--muted)}
+  .num{position:absolute;right:24px;bottom:14px;font-size:12px;font-weight:700;color:#fff;background:var(--sec);min-width:24px;height:24px;line-height:24px;border-radius:12px;text-align:center;padding:0 6px}
   .cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
   .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
   .card{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:16px 20px}
-  .card h3{margin:0 0 6px;font-size:23px}
+  .card h3{margin:0 0 6px;font-size:23px;font-family:"Iowan Old Style","Charter","Georgia",serif}
   .card p{font-size:20px}
   .card.s{border-top:5px solid var(--s)}.card.i{border-top:5px solid var(--i)}.card.t{border-top:5px solid var(--t)}.card.r{border-top:5px solid var(--r)}.card.a{border-top:5px solid var(--acc)}
   .tag{display:inline-block;padding:2px 12px;border-radius:999px;font-weight:700;font-size:18px}
   .tag.s{background:var(--sbg);color:#176b61}.tag.i{background:var(--ibg);color:#5b3f96}.tag.t{background:var(--tbg);color:#8d5a0d}.tag.r{background:var(--rbg);color:#2c5361}.tag.a{background:var(--accbg);color:#a33f2b}
-  .eq{font-family:"STIX Two Math","STIX Two Text","Cambria Math","Times New Roman",serif;font-size:31px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--navy);border-radius:6px;padding:14px 26px;margin:6px 0;text-align:center;white-space:nowrap}
+  .eq{font-family:"STIX Two Math","STIX Two Text","Cambria Math","Times New Roman",serif;font-size:31px;background:#f3f6fa;border:none;border-left:5px solid var(--sec);border-radius:6px;padding:14px 26px;margin:6px 0;text-align:center;white-space:nowrap}
   .eq i,.legend i,.steps i.v{font-style:italic}
   sub,sup{font-size:.62em;line-height:0}
   .m{font-family:"STIX Two Math","STIX Two Text","Cambria Math","Times New Roman",serif;font-size:1.08em}
-  .eq .no{float:right;font-size:16px;color:var(--muted);font-family:inherit}
+  .eq .no{float:right;font-size:14px;color:#fff;background:var(--sec);border-radius:4px;padding:2px 9px;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;margin-top:6px}
   .k{padding:1px 6px;border-radius:5px}
   .k.s{background:var(--sbg)}.k.i{background:var(--ibg)}.k.t{background:var(--tbg)}.k.r{background:var(--rbg)}.k.a{background:var(--accbg)}.k.g{background:#e3e8ec}
   .legend{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:20px;margin-top:6px;align-content:center}
@@ -48,26 +52,28 @@
   .note.ok{background:var(--sbg);border-left-color:var(--s)}
   table{border-collapse:collapse;width:100%;font-size:19px}
   th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left}
-  th{background:#fff;border-top:2px solid var(--navy);border-bottom:1px solid var(--navy);font-weight:700;color:var(--navy)}
-  tr:last-child td{border-bottom:2px solid var(--navy)}
+  th{background:#fff;border-top:2px solid var(--sec);border-bottom:1px solid var(--sec);font-weight:700;color:var(--sec)}
+  tr:last-child td{border-bottom:2px solid var(--sec)}
   td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   .best{color:var(--acc);font-weight:700}
   .bar{display:grid;grid-template-columns:180px 1fr 76px;align-items:center;gap:12px;font-size:19px;margin:6px 0}
   .bar .tr{height:20px;background:var(--soft);border-radius:4px;overflow:hidden}
   .bar .fi{height:100%;border-radius:4px}
   .bar .v{text-align:right;font-variant-numeric:tabular-nums}
-  .title-slide{background:#fff;color:var(--navy);justify-content:center;border-top:14px solid var(--navy)}
-  .title-slide h1{font-size:40px;color:var(--navy);line-height:1.2}
-  .title-slide .sub{font-size:24px;color:var(--muted);margin-top:10px}
-  .title-slide .meta{position:absolute;bottom:60px;left:64px;right:64px;font-size:20px;color:var(--ink);border-top:1px solid var(--line);padding-top:14px}
+  .title-slide{background:radial-gradient(1200px 600px at 85% 10%,#1f4e79 0%,#14365d 45%,#0e2540 100%);color:#fff;justify-content:center;border-top:none}
+  .title-slide::before{content:"";position:absolute;left:64px;top:64px;width:110px;height:8px;background:linear-gradient(90deg,var(--s) 0 33.3%,var(--i) 33.3% 66.6%,var(--t) 66.6% 100%);border-radius:4px}
+  .title-slide::after{opacity:1;height:8px}
+  .title-slide h1{font-size:42px;color:#fff;line-height:1.2}
+  .title-slide .sub{font-size:23px;color:#c9d6e3;margin-top:10px}
+  .title-slide .meta{position:absolute;bottom:60px;left:64px;right:64px;font-size:20px;color:#e6edf4;border-top:1px solid rgba(255,255,255,.25);padding-top:14px}
   .refs p{font-size:16px;margin:5px 0;padding-left:34px;text-indent:-34px;line-height:1.35}
   .steps{counter-reset:st;list-style:none;padding:0;margin:0}
   .steps li{position:relative;padding-left:46px;margin:8px 0;font-size:22px}
-  .steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:3px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:3px;width:30px;height:30px;border-radius:50%;background:var(--sec);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .qa{display:grid;grid-template-columns:1fr 1fr;gap:14px 26px}
   .qa div{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:18px;line-height:1.4}
   .qa b{display:block;color:var(--navy);margin-bottom:4px}
-  .appx{position:absolute;top:14px;right:64px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .appx{position:absolute;top:16px;right:64px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
   #notes{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;background:#111;color:#eee;padding:12px 20px;font-size:15px;display:none;border-top:2px solid #555}
   #notes.on{display:block}
   #help{position:fixed;top:8px;right:12px;font-size:12px;color:#999}
@@ -87,9 +93,9 @@
 <!-- 1 TITLE -->
 <section class="slide title-slide">
   <div style="margin-top:110px">
-    <div class="sub" style="letter-spacing:.12em;text-transform:uppercase;font-size:17px;color:var(--acc);font-weight:700">Seminar · Học máy với dữ liệu đồ thị</div>
+    <div class="sub" style="letter-spacing:.16em;text-transform:uppercase;font-size:15px;color:#9fd8ce;font-weight:700;margin-top:0">Seminar · Học máy với dữ liệu đồ thị</div>
     <h1>HFR-MKGC: Hierarchical Fusion Reasoning with MLLMs<br>for Multi-modal Knowledge Graph Completion</h1>
-    <div class="sub" style="font-size:21px;font-style:italic;margin-top:4px">Suy luận hợp nhất phân cấp với MLLM cho hoàn thiện đồ thị tri thức đa phương thức</div>
+    <div class="sub" style="font-size:21px;font-style:italic;margin-top:4px;color:#dbe4ee">Suy luận hợp nhất phân cấp với MLLM cho hoàn thiện đồ thị tri thức đa phương thức</div>
     <div class="sub">D. Wang, J. Du, Z. Xue, M. Liang, G. Ye, Y. Shao, H. Li — AAAI 2026 [1]</div>
   </div>
   <div class="meta">Trình bày: Nguyễn Đình Lộc (25C11050) · Ngô Trương Minh Đạt (25C15003)</div>
@@ -97,7 +103,8 @@
 </section>
 
 <!-- 2 PROBLEM -->
-<section class="slide">
+<section class="slide" style="--sec:#14365d">
+  <div class="kicker">Bài toán</div>
   <h2>Bài toán: nối cạnh còn thiếu trong đồ thị tri thức</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1.25fr 1fr">
@@ -126,7 +133,8 @@
 </section>
 
 <!-- 3 INPUT OUTPUT -->
-<section class="slide">
+<section class="slide" style="--sec:#14365d">
+  <div class="kicker">Bài toán · Ví dụ</div>
   <h2>Ví dụ input → output</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1fr 1fr">
@@ -155,7 +163,8 @@
 </section>
 
 <!-- 4 CHALLENGES -->
-<section class="slide">
+<section class="slide" style="--sec:#14365d">
+  <div class="kicker">Bài toán · Động lực</div>
   <h2>Hai điểm yếu của MMKGC hiện có</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1fr 1.1fr">
@@ -170,7 +179,8 @@
 </section>
 
 <!-- 5 IDEA -->
-<section class="slide">
+<section class="slide" style="--sec:#14365d">
+  <div class="kicker">Bài toán · Ý tưởng</div>
   <h2>HFR-MKGC = RotatE + ba mô-đun</h2>
 <div class="body">
   <div class="cols3" style="margin-top:20px">
@@ -185,7 +195,8 @@
 </section>
 
 <!-- 6 ARCH -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · Kiến trúc</div>
   <h2>Kiến trúc tổng thể</h2>
 <div class="body">
   <figure><img src="{{FIG2}}" style="max-height:520px"><figcaption>Nguồn: [1], Fig. 2</figcaption></figure>
@@ -194,7 +205,8 @@
 </section>
 
 <!-- 7 NODE = 3 MODALITIES -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · Mã hoá</div>
   <h2>Một node = ba vector, một quan hệ = một vector</h2>
 <div class="body">
   <figure>
@@ -227,7 +239,8 @@
 </section>
 
 <!-- 8 STAGE 1 -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · RHF · Tầng 1</div>
   <h2>RHF · Tầng 1: trộn bên trong mô thức ảnh</h2>
 <div class="body">
   <div class="eq"><span class="no">(1)</span>
@@ -276,7 +289,8 @@
 </section>
 
 <!-- 9 STAGE 2 -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · RHF · Tầng 2</div>
   <h2>RHF · Tầng 2: trộn ba mô thức theo quan hệ</h2>
 <div class="body">
   <div class="eq" style="font-size:26px;padding:10px 24px"><span class="no">(2)</span>
@@ -308,7 +322,8 @@
 </section>
 
 <!-- 10 MER -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · MER</div>
   <h2>MER: MLLM đoán đáp án, cổng quyết định tin bao nhiêu</h2>
 <div class="body">
   <ol class="steps">
@@ -338,7 +353,8 @@
 </section>
 
 <!-- 11 ROTATE -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · Chấm điểm</div>
   <h2>Chấm điểm bằng RotatE: quan hệ là phép xoay</h2>
 <div class="body">
   <div class="eq"><span class="no">(6), (10)</span>
@@ -373,7 +389,8 @@
 </section>
 
 <!-- 12 MNO -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · MNO</div>
   <h2>MNO: mẫu sai khó và huấn luyện đối kháng</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1fr 1fr">
@@ -409,7 +426,8 @@
 </section>
 
 <!-- 13 DATA FLOW -->
-<section class="slide">
+<section class="slide" style="--sec:#1f8f7f">
+  <div class="kicker">Phương pháp · Luồng dữ liệu</div>
   <h2>Luồng dữ liệu cho một truy vấn (h, r, ?)</h2>
 <div class="body">
   <figure>
@@ -452,7 +470,8 @@
 </section>
 
 <!-- 14 DATA -->
-<section class="slide">
+<section class="slide" style="--sec:#c97a12">
+  <div class="kicker">Thực nghiệm · Dữ liệu</div>
   <h2>Dữ liệu và độ đo</h2>
 <div class="body">
   <table style="font-size:19px">
@@ -472,7 +491,8 @@
 </section>
 
 <!-- 15 RESULTS -->
-<section class="slide">
+<section class="slide" style="--sec:#c97a12">
+  <div class="kicker">Thực nghiệm · Kết quả</div>
   <h2>Kết quả chính (MRR, %)</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1.3fr 1fr">
@@ -499,7 +519,8 @@
 </section>
 
 <!-- 16 ABLATION -->
-<section class="slide">
+<section class="slide" style="--sec:#c97a12">
+  <div class="kicker">Thực nghiệm · Ablation</div>
   <h2>Ablation trên MKG-W</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1.2fr 1fr">
@@ -527,7 +548,8 @@
 </section>
 
 <!-- 17 CASE -->
-<section class="slide">
+<section class="slide" style="--sec:#c97a12">
+  <div class="kicker">Thực nghiệm · Case study</div>
   <h2>Case study: trọng số đổi theo quan hệ</h2>
 <div class="body">
   <div class="cols" style="grid-template-columns:1.35fr 1fr">
@@ -543,7 +565,8 @@
 </section>
 
 <!-- 18 LIMITATIONS -->
-<section class="slide">
+<section class="slide" style="--sec:#b5452f">
+  <div class="kicker">Kết luận · Nhận xét</div>
   <h2>Nhận xét và hạn chế</h2>
 <div class="body">
   <div class="cols3" style="margin-top:10px">
@@ -560,7 +583,8 @@
 </section>
 
 <!-- 19 CONCLUSION -->
-<section class="slide">
+<section class="slide" style="--sec:#b5452f">
+  <div class="kicker">Kết luận</div>
   <h2>Kết luận</h2>
 <div class="body">
   <ul style="margin-top:20px">
@@ -575,7 +599,8 @@
 </section>
 
 <!-- 20 REFERENCES -->
-<section class="slide refs">
+<section class="slide refs" style="--sec:#5b6672">
+  <div class="kicker">Tài liệu tham khảo</div>
   <h2>Tài liệu tham khảo</h2>
   <p>[1] D. Wang, J. Du, Z. Xue, M. Liang, G. Ye, Y. Shao, and H. Li, "HFR-MKGC: Hierarchical Fusion Reasoning with MLLMs for Multi-modal Knowledge Graph Completion," in <i>Proc. AAAI Conf. Artif. Intell.</i>, vol. 40, no. 18, 2026, pp. 15815–15823.</p>
   <p>[2] Z. Sun, Z.-H. Deng, J.-Y. Nie, and J. Tang, "RotatE: Knowledge graph embedding by relational rotation in complex space," in <i>Proc. Int. Conf. Learn. Represent. (ICLR)</i>, 2019.</p>
@@ -588,7 +613,7 @@
 </section>
 
 <!-- 21 APPENDIX A: TABLE 1 -->
-<section class="slide">
+<section class="slide" style="--sec:#5b6672">
   <div class="appx">Phụ lục A</div>
   <h2>Kết quả đầy đủ trên ba benchmark (%)</h2>
 <div class="body">
@@ -610,7 +635,7 @@
 </section>
 
 <!-- 22 APPENDIX B: SENSITIVITY -->
-<section class="slide">
+<section class="slide" style="--sec:#5b6672">
   <div class="appx">Phụ lục B</div>
   <h2>Độ nhạy siêu tham số trên MKG-W</h2>
 <div class="body">
