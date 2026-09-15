@@ -149,39 +149,13 @@
     <div>
       <p><b>KGC</b>: cho (h, r, ?), xếp hạng <b>mọi</b> thực thể, đáp án đúng phải đứng đầu.</p>
       <p><b>MMKGC</b>: mỗi thực thể có thêm <span class="tag i">ảnh</span> và <span class="tag t">văn bản</span>, ngoài <span class="tag s">cấu trúc</span>.</p>
+      <div class="note ok" style="margin-top:26px;font-size:19px"><b>Ảnh không chứa thông tin về giọng hát</b>; văn bản chứa từ khoá "singer". Với quan hệ voice type, mô hình cần <b>ưu tiên văn bản hơn ảnh</b>.</div>
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
 </section>
 
-<!-- 3 INPUT OUTPUT -->
-<section class="slide">
-  <h2>Ví dụ input → output</h2>
-  <div class="cols" style="grid-template-columns:1fr 1fr">
-    <div class="card" style="background:var(--tbg)">
-      <h3>Input: (Gwen Stefani, voice type, ?)</h3>
-      <p><span class="tag s">S</span> láng giềng: No Doubt (member of), music (field of work)</p>
-      <p><span class="tag t">T</span> "Gwen Renée Stefani (born 1969) is an American singer, songwriter, actress…"</p>
-      <p><span class="tag i">I</span> ảnh chân dung</p>
-      <p><span class="tag r">r</span> voice type</p>
-    </div>
-    <div class="card" style="background:var(--sbg)">
-      <h3>Output: bảng xếp hạng 15 000 thực thể</h3>
-      <table>
-        <tr><th>Hạng</th><th>Ứng viên</th><th class="n">score</th></tr>
-        <tr><td class="best">1</td><td class="best">Mezzo-soprano</td><td class="n">−1.07</td></tr>
-        <tr><td>2</td><td>Double bass</td><td class="n">−1.35</td></tr>
-        <tr><td>3</td><td>Soprano Home Movies</td><td class="n">−1.52</td></tr>
-        <tr><td>…</td><td>…</td><td class="n">…</td></tr>
-      </table>
-      <p class="small">Điểm minh hoạ. Thứ hạng lấy từ case study của bài [1, Fig. 4].</p>
-    </div>
-  </div>
-  <div class="note ok" style="margin-top:22px"><b>Ảnh không chứa thông tin về giọng hát</b>; văn bản chứa từ khoá "singer". Với quan hệ voice type, mô hình cần <b>ưu tiên văn bản hơn ảnh</b>.</div>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">3</div>
-</section>
-
-<!-- 4 CHALLENGES -->
+<!-- 3 CHALLENGES -->
 <section class="slide">
   <h2>Hai điểm yếu của MMKGC hiện có</h2>
   <div class="cols" style="grid-template-columns:1fr 1.1fr">
@@ -191,10 +165,10 @@
     </div>
     <figure><img src="{{FIG1}}" style="max-height:470px"><figcaption>Nguồn: [1], Fig. 1</figcaption></figure>
   </div>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">4</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">3</div>
 </section>
 
-<!-- 5 IDEA -->
+<!-- 4 IDEA -->
 <section class="slide">
   <h2>HFR-MKGC = RotatE + ba mô-đun</h2>
   <div class="cols3" style="margin-top:20px">
@@ -204,14 +178,14 @@
   </div>
   <p style="margin-top:26px">Nền: hàm điểm <b>RotatE</b> [2], encoder <b>CLIP</b><sup>a</sup> và <b>BERT</b><sup>b</sup> đóng băng, <b>LLaVA-1.5-7B</b> [3].</p>
   <p class="small">Không dùng GNN. Mỗi node là một hàng trong bảng embedding; cấu trúc đồ thị đi vào mô hình qua hàm loss, không qua truyền tin.</p>
-  <div class="foot"><span class="src"><sup>a</sup> A. Radford et al., "Learning transferable visual models from natural language supervision," ICML 2021. &nbsp; <sup>b</sup> J. Devlin et al., "BERT," NAACL 2019.</span></div><div class="num">5</div>
+  <div class="foot"><span class="src"><sup>a</sup> A. Radford et al., "Learning transferable visual models from natural language supervision," ICML 2021. &nbsp; <sup>b</sup> J. Devlin et al., "BERT," NAACL 2019.</span></div><div class="num">4</div>
 </section>
 
-<!-- 6 ARCH -->
+<!-- 5 ARCH -->
 <section class="slide">
   <h2>Kiến trúc tổng thể</h2>
   <figure><img src="{{FIG2}}" style="max-height:520px"><figcaption>Nguồn: [1], Fig. 2</figcaption></figure>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">6</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">5</div>
 </section>
 
 <!-- 7 NODE = 3 MODALITIES -->
@@ -242,7 +216,7 @@
     <figcaption>Hình do AI tạo (Claude), nguồn: {{SRC_SELF}}</figcaption>
   </figure>
   <p class="small" style="margin-top:6px">Lưu: 3 vector/node. Tính: trộn lại với tỉ lệ khác nhau tuỳ quan hệ. Số tham số không tăng theo số quan hệ.</p>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Sec. Modality Encoding.</span></div><div class="num">7</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Sec. Modality Encoding.</span></div><div class="num">6</div>
 </section>
 
 <!-- 8 STAGE 1 -->
@@ -289,7 +263,7 @@
     </svg>
     <figcaption>Hình do AI tạo (Claude), nguồn: {{SRC_SELF}}</figcaption>
   </figure>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 1. &nbsp; [3] H. Liu et al., "Visual instruction tuning," NeurIPS 2023 (LLaVA).</span></div><div class="num">8</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 1. &nbsp; [3] H. Liu et al., "Visual instruction tuning," NeurIPS 2023 (LLaVA).</span></div><div class="num">7</div>
 </section>
 
 <!-- 9 STAGE 2 -->
@@ -319,10 +293,10 @@
     </figure>
   </div>
   <p class="small">Cùng node, quan hệ khác → ⟨e_m, r⟩ khác → trọng số khác. Không có ma trận học riêng: tương đương attention với query = r, key = e_m.</p>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 2–4.</span></div><div class="num">9</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Eq. 2–4.</span></div><div class="num">8</div>
 </section>
 
-<!-- 10 MER -->
+<!-- 9 MER -->
 <section class="slide">
   <h2>MER: MLLM đoán đáp án, cổng quyết định tin bao nhiêu</h2>
   <ol class="steps">
@@ -347,10 +321,10 @@
     </figure>
     <div class="note" style="margin-top:0"><b>g không phụ thuộc ứng viên và câu hỏi.</b> Nếu LLaVA sai, mọi ứng viên bị kéo về cùng một điểm sai. Cổng chỉ đánh giá độ tin cậy của đáp án, không đánh giá mức phù hợp với câu hỏi.</div>
   </div>
-  <div class="foot"><span class="src">[1] Eq. 5–9. [3] LLaVA. <sup>a</sup> E. J. Hu et al., "LoRA: Low-rank adaptation of large language models," ICLR 2022.</span></div><div class="num">10</div>
+  <div class="foot"><span class="src">[1] Eq. 5–9. [3] LLaVA. <sup>a</sup> E. J. Hu et al., "LoRA: Low-rank adaptation of large language models," ICLR 2022.</span></div><div class="num">9</div>
 </section>
 
-<!-- 11 ROTATE -->
+<!-- 10 ROTATE -->
 <section class="slide">
   <h2>Chấm điểm bằng RotatE: quan hệ là phép xoay</h2>
   <div class="eq"><span class="no">(6), (10)</span>
@@ -380,10 +354,10 @@
     </div>
   </div>
   <p class="small">Vì sao RotatE [2]: một phép xoay biểu diễn được đối xứng (θ = π), nghịch đảo (−θ), hợp thành (θ₁+θ₂). Cài đặt bằng 2d số thực, không cần kiểu số phức.</p>
-  <div class="foot"><span class="src">[2] Z. Sun et al., "RotatE," ICLR 2019. [1] Eq. 6, 10.</span></div><div class="num">11</div>
+  <div class="foot"><span class="src">[2] Z. Sun et al., "RotatE," ICLR 2019. [1] Eq. 6, 10.</span></div><div class="num">10</div>
 </section>
 
-<!-- 12 MNO -->
+<!-- 11 MNO -->
 <section class="slide">
   <h2>MNO: mẫu sai khó và huấn luyện đối kháng</h2>
   <div class="cols" style="grid-template-columns:1fr 1fr">
@@ -414,10 +388,10 @@
     </div>
   </div>
   <div class="note" style="margin-top:8px">Với λ nhỏ, mẫu giả gần như trùng node gốc. Bài không kiểm chứng các mẫu này có thực sự sai.</div>
-  <div class="foot"><span class="src">[1] Eq. 11–14. [2] RotatE. <sup>a</sup> I. Gulrajani et al., "Improved training of Wasserstein GANs," NeurIPS 2017.</span></div><div class="num">12</div>
+  <div class="foot"><span class="src">[1] Eq. 11–14. [2] RotatE. <sup>a</sup> I. Gulrajani et al., "Improved training of Wasserstein GANs," NeurIPS 2017.</span></div><div class="num">11</div>
 </section>
 
-<!-- 13 DATA FLOW -->
+<!-- 12 DATA FLOW -->
 <section class="slide">
   <h2>Luồng dữ liệu cho một truy vấn (h, r, ?)</h2>
   <figure>
@@ -455,10 +429,10 @@
     </svg>
     <figcaption>Hình do AI tạo (Claude), nguồn: {{SRC_SELF}}. Lúc train: thêm mẫu sai (MNO), tính loss, cập nhật E, R, P_m, cổng, LoRA.</figcaption>
   </figure>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">13</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">12</div>
 </section>
 
-<!-- 14 DATA -->
+<!-- 13 DATA -->
 <section class="slide">
   <h2>Dữ liệu và độ đo</h2>
   <table style="font-size:19px">
@@ -473,10 +447,10 @@
     <div class="card"><h3>Hits@K</h3><p>Tỉ lệ đáp án đúng nằm trong top K. Hits@1 khó nhất, Hits@10 dễ nhất.</p></div>
   </div>
   <p class="small" style="margin-top:10px">Mỗi bộ ba test hỏi cả hai chiều (đoán tail, đoán head), lọc các đáp án đúng khác (filtered). 14 baseline được tác giả chạy lại với cùng CLIP/BERT.</p>
-  <div class="foot"><span class="src"><sup>a</sup> D. Xu et al., "Relation-enhanced negative sampling for multimodal KGC," ACM MM 2022. &nbsp; <sup>b</sup> Y. Liu et al., "MMKG: multi-modal knowledge graphs," ESWC 2019.</span></div><div class="num">14</div>
+  <div class="foot"><span class="src"><sup>a</sup> D. Xu et al., "Relation-enhanced negative sampling for multimodal KGC," ACM MM 2022. &nbsp; <sup>b</sup> Y. Liu et al., "MMKG: multi-modal knowledge graphs," ESWC 2019.</span></div><div class="num">13</div>
 </section>
 
-<!-- 15 RESULTS -->
+<!-- 14 RESULTS -->
 <section class="slide">
   <h2>Kết quả chính (MRR, %)</h2>
   <div class="cols" style="grid-template-columns:1.3fr 1fr">
@@ -498,10 +472,10 @@
       <p class="small">LLaVA thuần (prompt, không hàm điểm): Hits@10 chỉ 26% trên MKG-W, 3.6% trên MKG-Y.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">[1] Table 1. <sup>a</sup> Y. Zhang et al., "NativE: Multi-modal KGC in the wild," SIGIR 2024.</span></div><div class="num">15</div>
+  <div class="foot"><span class="src">[1] Table 1. <sup>a</sup> Y. Zhang et al., "NativE: Multi-modal KGC in the wild," SIGIR 2024.</span></div><div class="num">14</div>
 </section>
 
-<!-- 16 ABLATION -->
+<!-- 15 ABLATION -->
 <section class="slide">
   <h2>Ablation trên MKG-W</h2>
   <div class="cols" style="grid-template-columns:1.2fr 1fr">
@@ -524,10 +498,10 @@
       <p class="small">Ablation chỉ làm trên MKG-W, không kiểm tra hai tập kia.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Table 3.</span></div><div class="num">16</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Table 3.</span></div><div class="num">15</div>
 </section>
 
-<!-- 17 CASE -->
+<!-- 16 CASE -->
 <section class="slide">
   <h2>Case study: trọng số đổi theo quan hệ</h2>
   <div class="cols" style="grid-template-columns:1.35fr 1fr">
@@ -535,13 +509,13 @@
     <div>
       <p><b>Không có RHF</b> (trọng số ngẫu nhiên): ảnh có trọng số cao nhất dù chỉ chứa ngoại hình → Mezzo-soprano <b>hạng 2</b>.</p>
       <p><b>Có RHF</b>: trọng số text tăng, ảnh giảm → <b>hạng 1</b>.</p>
-      <p class="small">Cùng ví dụ input–output ở slide 3: cùng ba vector, trọng số khác, kết quả khác.</p>
+      <p class="small">Cùng ví dụ ở slide 2: cùng ba vector, trọng số khác, kết quả khác.</p>
     </div>
   </div>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">17</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026, Fig. 4.</span></div><div class="num">16</div>
 </section>
 
-<!-- 18 LIMITATIONS -->
+<!-- 17 LIMITATIONS -->
 <section class="slide">
   <h2>Nhận xét và hạn chế</h2>
   <div class="cols3" style="margin-top:10px">
@@ -553,10 +527,10 @@
     <div class="card"><h3>Căn chỉnh gián tiếp</h3><p>Tích vô hướng giữa CLIP và BERT chỉ có nghĩa nhờ lớp chiếu học qua loss KGC; không có loss căn chỉnh riêng.</p></div>
   </div>
   <p class="small" style="margin-top:14px">Thiếu chi tiết: prompt, epoch LoRA, cách chọn láng giềng, γ, c, τ, μ₁, có chuẩn hoá vector trước tích vô hướng hay không.</p>
-  <div class="foot"><span class="src">Nhận xét của nhóm dựa trên [1].</span></div><div class="num">18</div>
+  <div class="foot"><span class="src">Nhận xét của nhóm dựa trên [1].</span></div><div class="num">17</div>
 </section>
 
-<!-- 19 CONCLUSION -->
+<!-- 18 CONCLUSION -->
 <section class="slide">
   <h2>Kết luận</h2>
   <ul style="margin-top:20px">
@@ -566,10 +540,10 @@
     <li><b>Hạn chế:</b> chi phí MLLM, cổng không dùng ngữ cảnh câu hỏi, mẫu giả chưa được kiểm chứng, không có code.</li>
   </ul>
   <div class="note ok" style="margin-top:30px"><b>HFR-MKGC = RotatE + trộn mô thức có dẫn hướng bởi quan hệ + dự đoán MLLM qua cổng có kiểm soát + huấn luyện đối kháng với mẫu sai đa mô thức.</b></div>
-  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">19</div>
+  <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">18</div>
 </section>
 
-<!-- 20 REFERENCES -->
+<!-- 19 REFERENCES -->
 <section class="slide refs">
   <h2>Tài liệu tham khảo</h2>
   <p>[1] D. Wang, J. Du, Z. Xue, M. Liang, G. Ye, Y. Shao, and H. Li, "HFR-MKGC: Hierarchical Fusion Reasoning with MLLMs for Multi-modal Knowledge Graph Completion," in <i>Proc. AAAI Conf. Artif. Intell.</i>, vol. 40, no. 18, 2026, pp. 15815–15823.</p>
@@ -579,7 +553,7 @@
   <p>A. Radford et al., "Learning transferable visual models from natural language supervision," ICML 2021 · J. Devlin et al., "BERT: Pre-training of deep bidirectional transformers," NAACL 2019 · E. J. Hu et al., "LoRA," ICLR 2022 · I. Gulrajani et al., "Improved training of Wasserstein GANs," NeurIPS 2017 · D. Xu et al., "Relation-enhanced negative sampling for multimodal KGC," ACM MM 2022 · Y. Liu et al., "MMKG," ESWC 2019 · Y. Zhang et al., "NativE," SIGIR 2024.</p>
   <h3 style="margin-top:18px">Nguồn hình</h3>
   <p>Fig. 1, 2, 4: cắt từ PDF của [1]. Các hình còn lại do AI tạo (Claude) theo hướng dẫn của nhóm, nguồn: {{SRC_SELF}}</p>
-  <div class="num">20</div>
+  <div class="num">19</div>
 </section>
 
 </div>

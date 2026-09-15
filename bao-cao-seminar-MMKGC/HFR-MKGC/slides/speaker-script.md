@@ -1,6 +1,6 @@
 # Script nói — Seminar HFR-MKGC
 
-Tổng thời gian mục tiêu: **14 phút** (trần 15). Lộc nói slide 1–13 (~8 phút), Đạt nói slide 14–20 (~6 phút).
+Tổng thời gian mục tiêu: **14 phút** (trần 15). Lộc nói slide 1–12 (~8 phút), Đạt nói slide 13–19 (~6 phút).
 Chữ in nghiêng trong ngoặc là hành động (chỉ hình, chuyển slide). Không đọc nguyên văn chữ trên slide; slide chỉ là điểm neo.
 
 Nguyên tắc khi nói:
@@ -17,19 +17,15 @@ Chào thầy và các bạn. Nhóm em gồm Lộc và Đạt, trình bày bài *
 
 *(chuyển slide)*
 
-## Slide 2 — Bài toán (0:40)
+## Slide 2 — Bài toán và ví dụ (1:10)
 
 Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. *(chỉ khung ứng viên)* Đáp án không được sinh ra mà phải chọn trong **toàn bộ** 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Double bass, Soprano Home Movies, và mọi node khác đều là ứng viên. Soprano Home Movies là một tập phim truyền hình, lọt vào top chỉ vì tên có chữ Soprano, đó là kiểu nhiễu do trùng từ. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.
 
+Điểm mấu chốt nằm ở ô xanh: ảnh chân dung **không chứa thông tin gì về giọng hát**, còn văn bản có từ "singer". Một mô hình tốt phải biết với câu hỏi này thì ưu tiên văn bản hơn ảnh. Toàn bộ bài báo xoay quanh ý đó. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.)
+
 Điểm khác với KGC thường: ở đây mỗi node còn có **ảnh** và **đoạn mô tả văn bản**, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.
 
-## Slide 3 — Ví dụ input → output (0:45)
-
-Đây là ví dụ nhóm dùng xuyên suốt. *(chỉ bên trái)* Input gồm ba loại thông tin của Gwen: láng giềng trong đồ thị, đoạn văn bản, ảnh chân dung, cộng tên quan hệ voice type. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.) *(chỉ bên phải)* Output là bảng xếp hạng toàn bộ thực thể, mong Mezzo-soprano đứng hạng 1. Hạng 3 trong bài là "Soprano Home Movies", một tập phim truyền hình, lọt vào chỉ vì tên có chữ Soprano; đó là kiểu nhiễu do trùng từ mà mô hình phải vượt qua.
-
-Điểm mấu chốt nằm ở dòng cuối: ảnh chân dung **không chứa thông tin gì về giọng hát**, còn văn bản có từ "singer". Một mô hình tốt phải biết với câu hỏi này thì ưu tiên văn bản hơn ảnh. Toàn bộ bài báo xoay quanh ý đó.
-
-## Slide 4 — Hai điểm yếu (0:45)
+## Slide 3 — Hai điểm yếu (0:45)
 
 Tác giả chỉ ra hai điểm yếu của các phương pháp trước.
 
@@ -39,7 +35,7 @@ Hai: *(chỉ thẻ dưới)* các phương pháp dùng LLM thì chỉ đưa văn
 
 *(chỉ hình phải)* Hình 1 của bài so ba mô hình: (a) truyền thống encoder rồi fusion rồi score; (b) dựa trên LLM, biến đồ thị thành prompt; (c) HFR-MKGC gộp cả hai, và thêm hai thứ: fusion có dẫn hướng bởi quan hệ, và cổng G nối đáp án LLM vào hàm điểm.
 
-## Slide 5 — Ba mô-đun (0:40)
+## Slide 4 — Ba mô-đun (0:40)
 
 Giải pháp là ba mô-đun đặt lên nền RotatE.
 
@@ -49,13 +45,13 @@ Nền là RotatE làm hàm điểm, CLIP và BERT đóng băng làm encoder, LLa
 
 Một điều cần nói rõ để tránh nhầm với các bài trong môn: bài này **không dùng GNN**. Mỗi node là một hàng trong bảng embedding, cấu trúc đồ thị đi vào mô hình qua hàm loss chứ không qua truyền tin giữa các node.
 
-## Slide 6 — Kiến trúc tổng thể (0:35)
+## Slide 5 — Kiến trúc tổng thể (0:35)
 
 Đây là hình 2 của bài. *(chỉ trái)* Bên trái là mã hoá ba mô thức và tầng 1 của RHF. *(chỉ phải trên)* Phải trên là tầng 2 và MER: thấy prompt đi vào MLLM, ra "reference answers", gặp cổng G rồi mới tới score function. *(chỉ phải dưới)* Phải dưới là MNO sinh mẫu sai.
 
 Hình này khá dày, nên em sẽ đi từng khối một, bắt đầu từ chuyện mỗi node được biểu diễn thế nào.
 
-## Slide 7 — Một node = ba vector (0:45)
+## Slide 6 — Một node = ba vector (0:45)
 
 Chốt ký hiệu trước để phần sau đỡ rối.
 
@@ -65,7 +61,7 @@ Chốt ký hiệu trước để phần sau đỡ rối.
 
 Điều quan trọng: cái được **lưu** là ba vector cố định. Cái được **tính** là tổ hợp của ba vector đó với tỉ lệ đổi theo quan hệ. Nên node có nhiều biểu diễn nhưng số tham số không tăng.
 
-## Slide 8 — RHF tầng 1 (0:50)
+## Slide 7 — RHF tầng 1 (0:50)
 
 Tầng 1 chỉ xử lý **ảnh**. Lý do: ảnh được mã hoá hai cách. *(chỉ hình dưới)* Nhánh trên CLIP ra vector thị giác thô. Nhánh dưới LLaVA viết caption, ví dụ "a woman singing on stage", rồi BERT ra vector ngữ nghĩa. Hai vector nói về cùng một tấm ảnh, cần gộp thành một.
 
@@ -73,7 +69,7 @@ Tầng 1 chỉ xử lý **ảnh**. Lý do: ảnh được mã hoá hai cách. *(
 
 Lưu ý cổng này **không có tham số**. Cái học được là hai lớp chiếu đưa CLIP 512 chiều và BERT 768 chiều về cùng không gian, và chúng học gián tiếp qua loss cuối cùng.
 
-## Slide 9 — RHF tầng 2 (1:00)
+## Slide 8 — RHF tầng 2 (1:00)
 
 Tầng 2 là phần quan trọng nhất của bài, cũng là chỗ "relation-guided" trong tên.
 
@@ -85,7 +81,7 @@ Tầng 2 là phần quan trọng nhất của bài, cũng là chỗ "relation-gu
 
 Về bản chất đây là attention, nhưng không có ma trận W: query là chính r, key là chính vector mô thức.
 
-## Slide 10 — MER (1:00)
+## Slide 9 — MER (1:00)
 
 Mô-đun MER cho LLaVA tham gia.
 
@@ -99,7 +95,7 @@ Mô-đun MER cho LLaVA tham gia.
 
 *(chỉ ô đỏ)* Hạn chế nhóm thấy: g chỉ nhìn đáp án, không nhìn câu hỏi. Nếu LLaVA đoán một tên có thật nhưng sai, cổng khó nhận ra.
 
-## Slide 11 — RotatE (0:45)
+## Slide 10 — RotatE (0:45)
 
 Hàm điểm là RotatE, chắc các bạn đã học. Em chỉ nhắc cách nó ghép vào đây.
 
@@ -109,7 +105,7 @@ Xoay chỉ làm một lần, đo thì 15 nghìn lần, một lần cho mỗi ứ
 
 Chọn RotatE vì một phép xoay biểu diễn được cả ba kiểu quan hệ: đối xứng, nghịch đảo, hợp thành. Và cài đặt hoàn toàn bằng số thực, không cần kiểu số phức.
 
-## Slide 12 — MNO (0:55)
+## Slide 11 — MNO (0:55)
 
 Mô-đun cuối là về mẫu sai lúc train.
 
@@ -119,7 +115,7 @@ Mẫu sai thông thường là thay tail bằng node ngẫu nhiên, quá dễ ph
 
 *(chỉ ô đỏ)* Nhóm lưu ý: paraphrase "cùng nghĩa" và ảnh xoay nhẹ về bản chất vẫn là node gốc. Bài coi chúng là sai nhưng không kiểm chứng.
 
-## Slide 13 — Luồng dữ liệu (0:50)
+## Slide 12 — Luồng dữ liệu (0:50)
 
 Gom lại toàn bộ cho một truy vấn.
 
@@ -137,7 +133,7 @@ Phần thực nghiệm xin mời bạn Đạt.
 
 ---
 
-## Slide 14 — Dữ liệu và độ đo (0:50) — Đạt
+## Slide 13 — Dữ liệu và độ đo (0:50) — Đạt
 
 Cảm ơn Lộc. Bài chạy trên ba benchmark chuẩn của MMKGC. *(chỉ bảng)* MKG-W từ Wikidata, 15 nghìn thực thể, 169 quan hệ. MKG-Y từ YAGO, cùng số thực thể nhưng chỉ 28 quan hệ, nên cấu trúc đã rất mạnh. DB15K từ DBpedia, nhiều bộ ba nhất.
 
@@ -145,7 +141,7 @@ Hai cột cuối nhóm tự tính: không phải node nào cũng đủ ảnh và
 
 Độ đo là MRR và Hits@K. Mỗi bộ ba test hỏi cả hai chiều, lọc các đáp án đúng khác. Tác giả chạy lại 14 baseline với cùng CLIP và BERT để so cho công bằng.
 
-## Slide 15 — Kết quả chính (1:00)
+## Slide 14 — Kết quả chính (1:00)
 
 *(chỉ biểu đồ)* Ba cụm cột là ba tập, mỗi cụm: RotatE thuần, NativE là baseline mạnh nhất, và HFR-MKGC.
 
@@ -155,7 +151,7 @@ Tổng cộng đứng đầu 11 trên 12 ô. *(chỉ ô đỏ)* Ngoại lệ là
 
 Dòng cuối: LLaVA dùng một mình, không có hàm điểm, Hits@10 chỉ 26% trên MKG-W và 3.6% trên MKG-Y. Tức LLM không thay được hàm điểm có cấu trúc, chỉ bổ trợ.
 
-## Slide 16 — Ablation (0:55)
+## Slide 15 — Ablation (0:55)
 
 Ablation chỉ làm trên MKG-W. *(chỉ thanh)* Thanh đỏ là mô hình đầy đủ, 38.62.
 
@@ -163,13 +159,13 @@ Bốn thanh xám là bỏ từng mô-đun. Bỏ RHF mất nhiều nhất, xuốn
 
 Bốn thanh màu là bỏ từng mô thức. Bỏ cấu trúc mất 13 điểm, vẫn là mô thức quan trọng nhất. Văn bản hơn ảnh. Bỏ riêng caption do LLaVA sinh mất gần 7 điểm, nên tầng 1 có ích thật.
 
-## Slide 17 — Case study (0:35)
+## Slide 16 — Case study (0:35)
 
 Quay lại ví dụ Gwen Stefani, đây là hình 4 của bài.
 
-*(chỉ trái dưới)* Không có RHF, trọng số ngẫu nhiên: ảnh có trọng số cao nhất dù chỉ có ngoại hình, Mezzo-soprano đứng hạng 2. *(chỉ phải dưới)* Có RHF: trọng số văn bản tăng, ảnh giảm, Mezzo-soprano lên hạng 1. Đúng như ý ở slide 3.
+*(chỉ trái dưới)* Không có RHF, trọng số ngẫu nhiên: ảnh có trọng số cao nhất dù chỉ có ngoại hình, Mezzo-soprano đứng hạng 2. *(chỉ phải dưới)* Có RHF: trọng số văn bản tăng, ảnh giảm, Mezzo-soprano lên hạng 1. Đúng như ý ở slide 2.
 
-## Slide 18 — Nhận xét và hạn chế (1:00)
+## Slide 17 — Nhận xét và hạn chế (1:00)
 
 Nhóm có sáu nhận xét.
 
@@ -177,7 +173,7 @@ Nhóm có sáu nhận xét.
 
 Ngoài ra nhiều siêu tham số không được nêu: prompt, epoch LoRA, cách chọn láng giềng, γ, c, τ.
 
-## Slide 19 — Kết luận (0:35)
+## Slide 18 — Kết luận (0:35)
 
 Kết luận. Ý chính của bài: trọng số trộn mô thức phải phụ thuộc quan hệ đang xét. Phương pháp: giữ RotatE, thay đầu vào bằng vector đã trộn theo r, thêm dự đoán MLLM qua cổng, train với mẫu sai khó. Bằng chứng: +1.8 MRR trên MKG-W, RHF đóng góp nhiều nhất, cấu trúc vẫn quan trọng nhất.
 
@@ -185,7 +181,7 @@ Kết luận. Ý chính của bài: trọng số trộn mô thức phải phụ 
 
 Cảm ơn thầy và các bạn. Nhóm sẵn sàng nhận câu hỏi.
 
-## Slide 20 — Tài liệu tham khảo
+## Slide 19 — Tài liệu tham khảo
 
 *(để trên màn hình khi Q&A, không đọc)*
 

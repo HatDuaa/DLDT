@@ -36,7 +36,7 @@ def main() -> None:
     src = SLIDES.read_text(encoding="utf-8")
     style = re.search(r"<style>(.*?)</style>", src, re.S).group(1)
     sections = re.findall(r"<section class=\"slide[^\"]*\">.*?</section>", src, re.S)
-    assert len(sections) == 20, len(sections)
+    assert len(sections) == 19, len(sections)
 
     script = SCRIPT.read_text(encoding="utf-8")
     intro, rest = script.split("---", 1)
@@ -61,7 +61,7 @@ def main() -> None:
             f"</div>"
         )
 
-    toc = "".join(f'<a href="#s{n}">{n}. {md_inline(notes[n][0].split(" (")[0])}</a>' for n in range(1, 21))
+    toc = "".join(f'<a href="#s{n}">{n}. {md_inline(notes[n][0].split(" (")[0])}</a>' for n in range(1, 20))
 
     page = f"""<!DOCTYPE html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
