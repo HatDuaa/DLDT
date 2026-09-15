@@ -19,7 +19,7 @@ Chào thầy và các bạn. Nhóm em gồm Lộc và Đạt, trình bày bài *
 
 ## Slide 2 — Bài toán (0:40)
 
-Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có node Gwen Stefani, đúng như trong data MKG-W: bên trái là ảnh và đoạn mô tả của cô ấy, ở giữa là node, và trong tập train cô ấy chỉ có **một cạnh duy nhất**: field of work → music. Câu hỏi là quan hệ voice type nối tới node nào, và bộ ba này nằm trong tập test. Mô hình phải xếp hạng **toàn bộ** 15 nghìn node trong tập, đáp án đúng nằm càng cao càng tốt.
+Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. Mô hình phải xếp hạng **toàn bộ** 15 nghìn node trong tập, đáp án đúng nằm càng cao càng tốt.
 
 Điểm khác với KGC thường: ở đây mỗi node còn có **ảnh** và **đoạn mô tả văn bản**, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.
 
@@ -27,7 +27,7 @@ Lưu ý: không có node mới. Mọi node đã nằm trong bảng, chỉ thiế
 
 ## Slide 3 — Ví dụ input → output (0:45)
 
-Đây là ví dụ nhóm dùng xuyên suốt. *(chỉ bên trái)* Input gồm ba loại thông tin của Gwen: láng giềng trong đồ thị (chỉ một node music), đoạn văn bản, ảnh chân dung, cộng tên quan hệ voice type. Vì cấu trúc gần như trống, ví dụ này cho thấy rõ vai trò của văn bản và ảnh. *(chỉ bên phải)* Output là bảng xếp hạng toàn bộ thực thể, mong Mezzo-soprano đứng hạng 1.
+Đây là ví dụ nhóm dùng xuyên suốt. *(chỉ bên trái)* Input gồm ba loại thông tin của Gwen: láng giềng trong đồ thị, đoạn văn bản, ảnh chân dung, cộng tên quan hệ voice type. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.) *(chỉ bên phải)* Output là bảng xếp hạng toàn bộ thực thể, mong Mezzo-soprano đứng hạng 1.
 
 Điểm mấu chốt nằm ở dòng cuối: ảnh chân dung **không chứa thông tin gì về giọng hát**, còn văn bản có từ "singer". Một mô hình tốt phải biết với câu hỏi này thì ưu tiên văn bản hơn ảnh. Toàn bộ bài báo xoay quanh ý đó.
 
