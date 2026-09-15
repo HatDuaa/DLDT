@@ -153,10 +153,18 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
         <circle cx="610" cy="245" r="46" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="610" y="251" text-anchor="middle" font-size="18">music</text>
         <line x1="356" y1="240" x2="562" y2="245" stroke="#1f2328" stroke-width="2.2" marker-end="url(#ah)"/>
         <text x="455" y="232" text-anchor="middle" font-size="15">field of work</text>
-        <!-- missing edge -->
-        <circle cx="610" cy="430" r="50" fill="#fff" stroke="#c8553d" stroke-width="3" stroke-dasharray="7 5"/><text x="610" y="442" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="34">?</text>
-        <line x1="356" y1="350" x2="560" y2="412" stroke="#c8553d" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ahr)"/>
-        <text x="445" y="360" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="18">voice type = ?</text>
+        <!-- missing edge: candidate set -->
+        <rect x="480" y="318" width="210" height="202" rx="14" fill="#fff" stroke="#c8553d" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <text x="585" y="344" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="15">15 000 thực thể ứng viên</text>
+        <g font-size="14">
+          <rect x="496" y="356" width="178" height="26" rx="13" fill="#fdeed5" stroke="#e9a23b"/><text x="585" y="374" text-anchor="middle">Mezzo-soprano</text>
+          <rect x="496" y="388" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="406" text-anchor="middle">Soprano</text>
+          <rect x="496" y="420" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="438" text-anchor="middle">Double bass</text>
+          <rect x="496" y="452" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="470" text-anchor="middle">Anaheim</text>
+          <text x="585" y="500" text-anchor="middle" font-size="20" fill="#5c6570">…</text>
+        </g>
+        <line x1="356" y1="350" x2="474" y2="400" stroke="#c8553d" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ahr)"/>
+        <text x="405" y="355" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="18">voice type = ?</text>
       </svg>
       <figcaption>Ví dụ minh hoạ theo case study [1, Fig. 4]; ảnh và mô tả từ [1, Fig. 4]. Sơ đồ do AI tạo (Claude), nguồn: https://claude.ai/code/artifact/79ab1978-2487-4ea1-9077-c9996e7cbef2</figcaption>
     </figure>
@@ -166,7 +174,7 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
-</section></div><div class="talk"><h3>Slide 2 — Bài toán (0:40)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. Mô hình phải xếp hạng <b>toàn bộ</b> 15 nghìn node trong tập, đáp án đúng nằm càng cao càng tốt.</p>
+</section></div><div class="talk"><h3>Slide 2 — Bài toán (0:40)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. <span class="act">(chỉ khung ứng viên)</span> Đáp án không được sinh ra mà phải chọn trong <b>toàn bộ</b> 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Soprano, Double bass, Anaheim, và mọi node khác đều là ứng viên. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.</p>
 <p>Điểm khác với KGC thường: ở đây mỗi node còn có <b>ảnh</b> và <b>đoạn mô tả văn bản</b>, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.</p></div></div><div class="row" id="s3"><div class="frame"><section class="slide">
   <h2>Ví dụ input → output</h2>
   <div class="cols" style="grid-template-columns:1fr 1fr">
