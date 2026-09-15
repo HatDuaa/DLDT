@@ -101,48 +101,48 @@
   <h2>Bài toán: nối cạnh còn thiếu trong đồ thị tri thức</h2>
   <div class="cols" style="grid-template-columns:1.35fr 1fr">
     <figure>
-      <svg viewBox="0 0 700 530" width="690" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="17">
+      <svg viewBox="0 0 720 530" width="700" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,system-ui,sans-serif" font-size="17">
         <defs><marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
         <marker id="ahr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c8553d"/></marker></defs>
-        <!-- node card -->
-        <rect x="14" y="10" width="340" height="510" rx="18" fill="#fffaf2" stroke="#e9a23b" stroke-width="3"/>
-        <text x="184" y="44" text-anchor="middle" font-weight="700" font-size="22">Node: Gwen Stefani</text>
+        <!-- node card (narrower) -->
+        <rect x="14" y="10" width="290" height="510" rx="18" fill="#fffaf2" stroke="#e9a23b" stroke-width="3"/>
+        <text x="159" y="44" text-anchor="middle" font-weight="700" font-size="22">Node: Gwen Stefani</text>
         <!-- box 1: structure -->
-        <rect x="30" y="62" width="308" height="130" rx="10" fill="#dff3f0" stroke="#2a9d8f" stroke-width="2"/>
+        <rect x="30" y="62" width="258" height="130" rx="10" fill="#dff3f0" stroke="#2a9d8f" stroke-width="2"/>
         <text x="44" y="90" font-size="18" fill="#176b61" font-weight="700">cấu trúc</text>
         <g stroke="#176b61" stroke-width="2" fill="#fff">
-          <line x1="210" y1="100" x2="170" y2="165"/><line x1="210" y1="100" x2="250" y2="165"/><line x1="210" y1="100" x2="290" y2="118"/>
-          <circle cx="210" cy="100" r="12" fill="#2a9d8f"/><circle cx="170" cy="165" r="9"/><circle cx="250" cy="165" r="9"/><circle cx="290" cy="118" r="9"/>
+          <line x1="190" y1="100" x2="150" y2="165"/><line x1="190" y1="100" x2="230" y2="165"/><line x1="190" y1="100" x2="262" y2="118"/>
+          <circle cx="190" cy="100" r="12" fill="#2a9d8f"/><circle cx="150" cy="165" r="9"/><circle cx="230" cy="165" r="9"/><circle cx="262" cy="118" r="9"/>
         </g>
         <!-- box 2: image -->
-        <rect x="30" y="204" width="308" height="130" rx="10" fill="#ece4f8" stroke="#8e6cc8" stroke-width="2"/>
+        <rect x="30" y="204" width="258" height="130" rx="10" fill="#ece4f8" stroke="#8e6cc8" stroke-width="2"/>
         <text x="44" y="232" font-size="18" fill="#5b3f96" font-weight="700">ảnh</text>
-        <image href="{{GWEN}}" x="190" y="212" width="140" height="114" preserveAspectRatio="xMidYMid slice"/>
+        <image href="{{GWEN}}" x="150" y="212" width="130" height="114" preserveAspectRatio="xMidYMid slice"/>
         <!-- box 3: text -->
-        <rect x="30" y="346" width="308" height="158" rx="10" fill="#fdeed5" stroke="#e9a23b" stroke-width="2"/>
+        <rect x="30" y="346" width="258" height="158" rx="10" fill="#fdeed5" stroke="#e9a23b" stroke-width="2"/>
         <text x="44" y="374" font-size="18" fill="#8d5a0d" font-weight="700">văn bản</text>
-        <text x="44" y="404" font-size="15">"Gwen Renée Stefani (born</text>
-        <text x="44" y="428" font-size="15">October 3, 1969) is an American</text>
-        <text x="44" y="452" font-size="15"><tspan font-weight="700">singer</tspan>, songwriter, actress,</text>
-        <text x="44" y="476" font-size="15">and …"</text>
+        <text x="44" y="402" font-size="14">"Gwen Renée Stefani (born</text>
+        <text x="44" y="424" font-size="14">October 3, 1969) is an</text>
+        <text x="44" y="446" font-size="14">American <tspan font-weight="700">singer</tspan>, songwriter,</text>
+        <text x="44" y="468" font-size="14">actress, and …"</text>
         <!-- known edges -->
-        <circle cx="610" cy="75" r="46" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="610" y="81" text-anchor="middle" font-size="17">No Doubt</text>
-        <line x1="356" y1="150" x2="566" y2="92" stroke="#1f2328" stroke-width="2.2" marker-end="url(#ah)"/>
-        <text x="450" y="106" text-anchor="middle" font-size="15">member of</text>
-        <circle cx="610" cy="245" r="46" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="610" y="251" text-anchor="middle" font-size="18">music</text>
-        <line x1="356" y1="240" x2="562" y2="245" stroke="#1f2328" stroke-width="2.2" marker-end="url(#ah)"/>
-        <text x="455" y="232" text-anchor="middle" font-size="15">field of work</text>
+        <circle cx="640" cy="75" r="46" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="640" y="81" text-anchor="middle" font-size="17">No Doubt</text>
+        <line x1="306" y1="140" x2="596" y2="88" stroke="#1f2328" stroke-width="2.2" marker-end="url(#ah)"/>
+        <text x="450" y="100" text-anchor="middle" font-size="15">member of</text>
+        <circle cx="640" cy="245" r="46" fill="#dbe9ee" stroke="#4a7c8c" stroke-width="2"/><text x="640" y="251" text-anchor="middle" font-size="18">music</text>
+        <line x1="306" y1="245" x2="592" y2="245" stroke="#1f2328" stroke-width="2.2" marker-end="url(#ah)"/>
+        <text x="450" y="236" text-anchor="middle" font-size="15">field of work</text>
         <!-- missing edge: candidate set -->
-        <rect x="480" y="318" width="210" height="202" rx="14" fill="#fff" stroke="#c8553d" stroke-width="2.5" stroke-dasharray="7 5"/>
-        <text x="585" y="344" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="15">15 000 thực thể ứng viên</text>
+        <rect x="500" y="352" width="205" height="168" rx="14" fill="#fff" stroke="#c8553d" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <text x="602" y="377" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="14">15 000 thực thể ứng viên</text>
         <g font-size="14">
-          <rect x="496" y="356" width="178" height="26" rx="13" fill="#fdeed5" stroke="#e9a23b"/><text x="585" y="374" text-anchor="middle">Mezzo-soprano</text>
-          <rect x="496" y="388" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="406" text-anchor="middle">Double bass</text>
-          <rect x="496" y="420" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="438" text-anchor="middle" font-size="13">Soprano Home Movies</text>
-          <text x="585" y="478" text-anchor="middle" font-size="22" fill="#5c6570">…</text>
+          <rect x="514" y="388" width="177" height="26" rx="13" fill="#fdeed5" stroke="#e9a23b"/><text x="602" y="406" text-anchor="middle">Mezzo-soprano</text>
+          <rect x="514" y="420" width="177" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="602" y="438" text-anchor="middle">Double bass</text>
+          <rect x="514" y="452" width="177" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="602" y="470" text-anchor="middle" font-size="13">Soprano Home Movies</text>
+          <text x="602" y="504" text-anchor="middle" font-size="22" fill="#5c6570">…</text>
         </g>
-        <line x1="356" y1="350" x2="474" y2="400" stroke="#c8553d" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ahr)"/>
-        <text x="405" y="355" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="18">voice type = ?</text>
+        <line x1="306" y1="436" x2="494" y2="436" stroke="#c8553d" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ahr)"/>
+        <text x="400" y="426" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="18">voice type = ?</text>
       </svg>
       <figcaption>Ví dụ minh hoạ theo case study [1, Fig. 4]; ảnh và mô tả từ [1, Fig. 4]. Sơ đồ do AI tạo (Claude), nguồn: {{SRC_SELF}}</figcaption>
     </figure>
