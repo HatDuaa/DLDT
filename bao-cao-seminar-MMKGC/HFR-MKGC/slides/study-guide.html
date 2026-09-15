@@ -163,13 +163,11 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
     <div>
       <p><b>KGC</b>: cho (h, r, ?), xếp hạng <b>mọi</b> thực thể, đáp án đúng phải đứng đầu.</p>
       <p><b>MMKGC</b>: mỗi thực thể có thêm <span class="tag i">ảnh</span> và <span class="tag t">văn bản</span>, ngoài <span class="tag s">cấu trúc</span>.</p>
-      <p class="small">Không phải bài toán thêm node mới: mọi node đã có trong bảng, chỉ thiếu cạnh (transductive).</p>
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
 </section></div><div class="talk"><h3>Slide 2 — Bài toán (0:40)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. Mô hình phải xếp hạng <b>toàn bộ</b> 15 nghìn node trong tập, đáp án đúng nằm càng cao càng tốt.</p>
-<p>Điểm khác với KGC thường: ở đây mỗi node còn có <b>ảnh</b> và <b>đoạn mô tả văn bản</b>, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.</p>
-<p>Lưu ý: không có node mới. Mọi node đã nằm trong bảng, chỉ thiếu cạnh.</p></div></div><div class="row" id="s3"><div class="frame"><section class="slide">
+<p>Điểm khác với KGC thường: ở đây mỗi node còn có <b>ảnh</b> và <b>đoạn mô tả văn bản</b>, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.</p></div></div><div class="row" id="s3"><div class="frame"><section class="slide">
   <h2>Ví dụ input → output</h2>
   <div class="cols" style="grid-template-columns:1fr 1fr">
     <div class="card" style="background:var(--tbg)">

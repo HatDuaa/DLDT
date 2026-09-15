@@ -23,8 +23,6 @@ Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có
 
 Điểm khác với KGC thường: ở đây mỗi node còn có **ảnh** và **đoạn mô tả văn bản**, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.
 
-Lưu ý: không có node mới. Mọi node đã nằm trong bảng, chỉ thiếu cạnh.
-
 ## Slide 3 — Ví dụ input → output (0:45)
 
 Đây là ví dụ nhóm dùng xuyên suốt. *(chỉ bên trái)* Input gồm ba loại thông tin của Gwen: láng giềng trong đồ thị, đoạn văn bản, ảnh chân dung, cộng tên quan hệ voice type. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.) *(chỉ bên phải)* Output là bảng xếp hạng toàn bộ thực thể, mong Mezzo-soprano đứng hạng 1.
