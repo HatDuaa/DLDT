@@ -4,6 +4,7 @@ Tổng thời gian mục tiêu: **14 phút** (trần 15). Lộc nói slide 1–1
 Chữ in nghiêng trong ngoặc là hành động (chỉ hình, chuyển slide). Không đọc nguyên văn chữ trên slide; slide chỉ là điểm neo.
 
 Nguyên tắc khi nói:
+
 - Mỗi slide mở đầu bằng **một câu nói ý chính**, rồi mới đi vào hình.
 - Luôn kéo về ví dụ Gwen Stefani / voice type để người nghe có một sợi chỉ xuyên suốt.
 - Không đọc công thức từng ký hiệu. Nói "phần này là gì, làm gì", rồi chỉ vào màu tương ứng.
