@@ -147,13 +147,7 @@
       <figcaption>Ví dụ minh hoạ theo case study [1, Fig. 4]; ảnh và mô tả từ [1, Fig. 4]. Sơ đồ do AI tạo (Claude), nguồn: https://claude.ai/code/artifact/79ab1978-2487-4ea1-9077-c9996e7cbef2</figcaption>
     </figure>
     <div>
-      <p><b>KGC</b>: che một thành phần của bộ ba rồi đoán lại:</p>
-      <table style="font-size:18px;margin:4px 0 8px">
-        <tr><td><b>(h, r, ?)</b></td><td>che tail, xếp hạng mọi thực thể</td></tr>
-        <tr><td><b>(?, r, t)</b></td><td>che head, xếp hạng mọi thực thể</td></tr>
-        <tr><td><b>(h, ?, t)</b></td><td>che quan hệ, xếp hạng mọi quan hệ</td></tr>
-      </table>
-      <p class="small">Bài này làm hai dạng đầu, đánh giá cả hai chiều. Ví dụ bên trái là (h, r, ?).</p>
+      <p><b>KGC</b>: cho (h, r, ?) hoặc (?, r, t), xếp hạng <b>mọi</b> thực thể, đáp án đúng phải đứng đầu.</p>
       <p><b>MMKGC</b>: mỗi thực thể có thêm <span class="tag i">ảnh</span> và <span class="tag t">văn bản</span>, ngoài <span class="tag s">cấu trúc</span>.</p>
       <div class="note ok" style="margin-top:26px;font-size:19px">Chỉ với <b>cấu trúc</b> (hai cạnh đã biết) thì khó đoán được voice type. Có thêm <b>văn bản</b> ("singer") và <b>ảnh</b>, mô hình có thêm căn cứ để chọn đúng ứng viên.</div>
     </div>
