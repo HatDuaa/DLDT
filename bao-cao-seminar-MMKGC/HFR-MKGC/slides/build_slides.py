@@ -67,6 +67,7 @@ def main() -> None:
     html = (HERE / "seminar-slides-template.html").read_text(encoding="utf-8")
     for i in (1, 2, 4):
         html = html.replace("{{FIG%d}}" % i, embed(f"fig{i}"))
+    html = html.replace("{{GWEN}}", embed("gwen-photo"))
     html = html.replace("{{SRC_SELF}}", SRC_SELF)
     html = html.replace("{{NOTES_JSON}}", json.dumps(NOTES, ensure_ascii=False))
     assert "{{" not in html, "unfilled placeholder"
