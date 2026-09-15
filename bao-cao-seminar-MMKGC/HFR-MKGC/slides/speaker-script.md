@@ -25,7 +25,7 @@ Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có
 
 ## Slide 3 — Ví dụ input → output (0:45)
 
-Đây là ví dụ nhóm dùng xuyên suốt. *(chỉ bên trái)* Input gồm ba loại thông tin của Gwen: láng giềng trong đồ thị, đoạn văn bản, ảnh chân dung, cộng tên quan hệ voice type. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.) *(chỉ bên phải)* Output là bảng xếp hạng toàn bộ thực thể, mong Mezzo-soprano đứng hạng 1.
+Đây là ví dụ nhóm dùng xuyên suốt. *(chỉ bên trái)* Input gồm ba loại thông tin của Gwen: láng giềng trong đồ thị, đoạn văn bản, ảnh chân dung, cộng tên quan hệ voice type. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.) *(chỉ bên phải)* Output là bảng xếp hạng toàn bộ thực thể, mong Mezzo-soprano đứng hạng 1. Hạng 3 trong bài là "Soprano Home Movies", một tập phim truyền hình, lọt vào chỉ vì tên có chữ Soprano; đó là kiểu nhiễu do trùng từ mà mô hình phải vượt qua.
 
 Điểm mấu chốt nằm ở dòng cuối: ảnh chân dung **không chứa thông tin gì về giọng hát**, còn văn bản có từ "singer". Một mô hình tốt phải biết với câu hỏi này thì ưu tiên văn bản hơn ảnh. Toàn bộ bài báo xoay quanh ý đó.
 
