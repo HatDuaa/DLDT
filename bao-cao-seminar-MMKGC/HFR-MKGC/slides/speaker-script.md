@@ -21,7 +21,7 @@ Chào thầy và các bạn. Nhóm em gồm Lộc và Đạt, trình bày bài *
 
 Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. *(chỉ khung ứng viên)* Đáp án không được sinh ra mà phải chọn trong **toàn bộ** 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Double bass, Soprano Home Movies, và mọi node khác đều là ứng viên. Soprano Home Movies là một tập phim truyền hình, lọt vào top chỉ vì tên có chữ Soprano, đó là kiểu nhiễu do trùng từ. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.
 
-Điểm mấu chốt nằm ở ô xanh: ảnh chân dung **không chứa thông tin gì về giọng hát**, còn văn bản có từ "singer". Một mô hình tốt phải biết với câu hỏi này thì ưu tiên văn bản hơn ảnh. Toàn bộ bài báo xoay quanh ý đó. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.)
+Ô xanh là lý do cần đa mô thức: nếu chỉ nhìn cấu trúc, tức hai cạnh đã biết, gần như không có căn cứ để đoán loại giọng. Có thêm đoạn mô tả với chữ "singer" và ảnh chân dung thì mô hình có thêm thông tin để chọn đúng ứng viên. Còn dùng hai nguồn đó thế nào cho đúng là phần bài báo giải quyết, nói ở các slide sau. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.)
 
 Điểm khác với KGC thường: ở đây mỗi node còn có **ảnh** và **đoạn mô tả văn bản**, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.
 

@@ -14,7 +14,7 @@ NOTES = [
     # 1
     "Chào thầy và các bạn. Nhóm trình bày bài HFR-MKGC, AAAI 2026, về hoàn thiện đồ thị tri thức đa phương thức. Tôi (Lộc) nói phần bài toán và kiến trúc, Đạt nói phần thực nghiệm và nhận xét.",
     # 2
-    "Bài toán là link prediction trên KG: biết head và quan hệ, tìm tail. Không có node mới, chỉ thiếu cạnh. Khác KGC thường ở chỗ mỗi node còn có ảnh và văn bản. Câu hỏi của bài: dùng ảnh và văn bản thế nào để không bị nhiễu. Đáp án phải chọn trong toàn bộ 15 nghìn thực thể của tập. Điểm mấu chốt: ảnh chỉ có ngoại hình, không nói gì về giọng; văn bản có chữ singer. Mô hình phải biết nghe văn bản nhiều hơn với câu hỏi này.",
+    "Bài toán là link prediction trên KG: biết head và quan hệ, tìm tail. Không có node mới, chỉ thiếu cạnh. Khác KGC thường ở chỗ mỗi node còn có ảnh và văn bản. Câu hỏi của bài: dùng ảnh và văn bản thế nào để không bị nhiễu. Đáp án phải chọn trong toàn bộ 15 nghìn thực thể của tập. Chỉ với cấu trúc thì gần như không đoán được voice type; có thêm văn bản và ảnh thì có thêm căn cứ. Dùng chúng thế nào cho đúng là phần bài giải quyết ở các slide sau.",
     # 3
     "Hai điểm yếu tác giả chỉ ra. Một: các phương pháp trước trộn ba mô thức với trọng số cố định, không tuỳ quan hệ. Hai: các phương pháp dùng LLM chỉ dùng text và cấu trúc, chưa dùng ảnh và không thích nghi. Hình 1 của bài so sánh ba mô hình: truyền thống, LLM-based, và HFR-MKGC gộp cả hai.",
     # 4
