@@ -19,7 +19,7 @@ Chào thầy và các bạn. Nhóm em gồm Lộc và Đạt, trình bày bài *
 
 ## Slide 2 — Bài toán (0:40)
 
-Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. *(chỉ khung ứng viên)* Đáp án không được sinh ra mà phải chọn trong **toàn bộ** 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Soprano, Double bass, Anaheim, và mọi node khác đều là ứng viên. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.
+Bài toán là **link prediction trên knowledge graph**. *(chỉ hình)* Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. *(chỉ khung ứng viên)* Đáp án không được sinh ra mà phải chọn trong **toàn bộ** 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Double bass, Soprano Home Movies, và mọi node khác đều là ứng viên. Soprano Home Movies là một tập phim truyền hình, lọt vào top chỉ vì tên có chữ Soprano, đó là kiểu nhiễu do trùng từ. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.
 
 Điểm khác với KGC thường: ở đây mỗi node còn có **ảnh** và **đoạn mô tả văn bản**, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.
 

@@ -158,10 +158,10 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
         <text x="585" y="344" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="15">15 000 thực thể ứng viên</text>
         <g font-size="14">
           <rect x="496" y="356" width="178" height="26" rx="13" fill="#fdeed5" stroke="#e9a23b"/><text x="585" y="374" text-anchor="middle">Mezzo-soprano</text>
-          <rect x="496" y="388" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="406" text-anchor="middle">Soprano</text>
-          <rect x="496" y="420" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="438" text-anchor="middle">Double bass</text>
-          <rect x="496" y="452" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="470" text-anchor="middle">Anaheim</text>
-          <text x="585" y="500" text-anchor="middle" font-size="20" fill="#5c6570">…</text>
+          <rect x="496" y="388" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="406" text-anchor="middle">Double bass</text>
+          <rect x="496" y="420" width="178" height="26" rx="13" fill="#f3f1ec" stroke="#bbb"/><text x="585" y="438" text-anchor="middle" font-size="13">Soprano Home Movies</text>
+          <text x="585" y="478" text-anchor="middle" font-size="22" fill="#5c6570">…</text>
+          <text x="585" y="504" text-anchor="middle" font-size="12" fill="#5c6570">mọi thực thể khác trong tập</text>
         </g>
         <line x1="356" y1="350" x2="474" y2="400" stroke="#c8553d" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ahr)"/>
         <text x="405" y="355" text-anchor="middle" fill="#c8553d" font-weight="700" font-size="18">voice type = ?</text>
@@ -174,7 +174,7 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
-</section></div><div class="talk"><h3>Slide 2 — Bài toán (0:40)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. <span class="act">(chỉ khung ứng viên)</span> Đáp án không được sinh ra mà phải chọn trong <b>toàn bộ</b> 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Soprano, Double bass, Anaheim, và mọi node khác đều là ứng viên. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.</p>
+</section></div><div class="talk"><h3>Slide 2 — Bài toán (0:40)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. <span class="act">(chỉ khung ứng viên)</span> Đáp án không được sinh ra mà phải chọn trong <b>toàn bộ</b> 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Double bass, Soprano Home Movies, và mọi node khác đều là ứng viên. Soprano Home Movies là một tập phim truyền hình, lọt vào top chỉ vì tên có chữ Soprano, đó là kiểu nhiễu do trùng từ. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.</p>
 <p>Điểm khác với KGC thường: ở đây mỗi node còn có <b>ảnh</b> và <b>đoạn mô tả văn bản</b>, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.</p></div></div><div class="row" id="s3"><div class="frame"><section class="slide">
   <h2>Ví dụ input → output</h2>
   <div class="cols" style="grid-template-columns:1fr 1fr">
@@ -191,7 +191,7 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
         <tr><th>Hạng</th><th>Ứng viên</th><th class="n">score</th></tr>
         <tr><td class="best">1</td><td class="best">Mezzo-soprano</td><td class="n">−1.07</td></tr>
         <tr><td>2</td><td>Double bass</td><td class="n">−1.35</td></tr>
-        <tr><td>3</td><td>Soprano Home Movies <span class="tiny">(tập phim, trùng chữ "Soprano")</span></td><td class="n">−1.52</td></tr>
+        <tr><td>3</td><td>Soprano Home Movies</td><td class="n">−1.52</td></tr>
         <tr><td>…</td><td>…</td><td class="n">…</td></tr>
       </table>
       <p class="small">Điểm minh hoạ. Thứ hạng lấy từ case study của bài [1, Fig. 4].</p>
