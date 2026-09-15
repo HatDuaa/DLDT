@@ -168,13 +168,19 @@ html,body{background:#f4f2ee;height:auto;overflow:auto}
       <figcaption>Ví dụ minh hoạ theo case study [1, Fig. 4]; ảnh và mô tả từ [1, Fig. 4]. Sơ đồ do AI tạo (Claude), nguồn: https://claude.ai/code/artifact/79ab1978-2487-4ea1-9077-c9996e7cbef2</figcaption>
     </figure>
     <div>
-      <p><b>KGC</b>: cho (h, r, ?), xếp hạng <b>mọi</b> thực thể, đáp án đúng phải đứng đầu.</p>
+      <p><b>KGC</b>: che một thành phần của bộ ba rồi đoán lại:</p>
+      <table style="font-size:18px;margin:4px 0 8px">
+        <tr><td><b>(h, r, ?)</b></td><td>che tail, xếp hạng mọi thực thể</td></tr>
+        <tr><td><b>(?, r, t)</b></td><td>che head, xếp hạng mọi thực thể</td></tr>
+        <tr><td><b>(h, ?, t)</b></td><td>che quan hệ, xếp hạng mọi quan hệ</td></tr>
+      </table>
+      <p class="small">Bài này làm hai dạng đầu, đánh giá cả hai chiều. Ví dụ bên trái là (h, r, ?).</p>
       <p><b>MMKGC</b>: mỗi thực thể có thêm <span class="tag i">ảnh</span> và <span class="tag t">văn bản</span>, ngoài <span class="tag s">cấu trúc</span>.</p>
       <div class="note ok" style="margin-top:26px;font-size:19px">Chỉ với <b>cấu trúc</b> (hai cạnh đã biết) thì khó đoán được voice type. Có thêm <b>văn bản</b> ("singer") và <b>ảnh</b>, mô hình có thêm căn cứ để chọn đúng ứng viên.</div>
     </div>
   </div>
   <div class="foot"><span class="src">[1] D. Wang et al., AAAI 2026.</span></div><div class="num">2</div>
-</section></div><div class="talk"><h3>Slide 2 — Bài toán và ví dụ (1:10)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. <span class="act">(chỉ khung ứng viên)</span> Đáp án không được sinh ra mà phải chọn trong <b>toàn bộ</b> 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Double bass, Soprano Home Movies, và mọi node khác đều là ứng viên. Soprano Home Movies là một tập phim truyền hình, lọt vào top chỉ vì tên có chữ Soprano, đó là kiểu nhiễu do trùng từ. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.</p>
+</section></div><div class="talk"><h3>Slide 2 — Bài toán và ví dụ (1:10)</h3><p>Bài toán là <b>link prediction trên knowledge graph</b>: che một thành phần của bộ ba rồi đoán lại. Che tail là (h, r, ?), che head là (?, r, t), che quan hệ là (h, ?, t). Bài này làm hai dạng đầu và đánh giá cả hai chiều; ví dụ bên trái là che tail. <span class="act">(chỉ hình)</span> Ta có thực thể Gwen Stefani, gồm ảnh, đoạn mô tả và vị trí trong đồ thị. Đã biết cô ấy là thành viên của No Doubt và làm trong lĩnh vực âm nhạc. Câu hỏi là quan hệ voice type nối tới node nào. <span class="act">(chỉ khung ứng viên)</span> Đáp án không được sinh ra mà phải chọn trong <b>toàn bộ</b> 15 nghìn thực thể của tập dữ liệu: Mezzo-soprano, Double bass, Soprano Home Movies, và mọi node khác đều là ứng viên. Soprano Home Movies là một tập phim truyền hình, lọt vào top chỉ vì tên có chữ Soprano, đó là kiểu nhiễu do trùng từ. Mô hình cho điểm từng ứng viên rồi xếp hạng, đáp án đúng nằm càng cao càng tốt.</p>
 <p>Ô xanh là lý do cần đa mô thức: nếu chỉ nhìn cấu trúc, tức hai cạnh đã biết, gần như không có căn cứ để đoán loại giọng. Có thêm đoạn mô tả với chữ "singer" và ảnh chân dung thì mô hình có thêm thông tin để chọn đúng ứng viên. Còn dùng hai nguồn đó thế nào cho đúng là phần bài báo giải quyết, nói ở các slide sau. (Nếu bị hỏi: trong MKG-W, Gwen chỉ có một cạnh train là field of work → music, cạnh voice type nằm trong tập test.)</p>
 <p>Điểm khác với KGC thường: ở đây mỗi node còn có <b>ảnh</b> và <b>đoạn mô tả văn bản</b>, gọi là multi-modal. Câu hỏi của bài báo là: dùng hai nguồn đó thế nào để giúp chứ không gây nhiễu.</p></div></div><div class="row" id="s3"><div class="frame"><section class="slide">
   <h2>Hai điểm yếu của MMKGC hiện có</h2>
