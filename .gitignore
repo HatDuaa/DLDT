@@ -19,6 +19,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# large data downloaded for final project (keep scripts + README only)
-final-project/data/raw/
-final-project/data/features/
+# final project lives in its own repository (HatDuaa/multimodal-graph-retrieval-xai), cloned here
+multimodal-graph-retrieval-xai/
+
+# Office lock files
+~$*
