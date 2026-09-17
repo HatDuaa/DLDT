@@ -35,7 +35,7 @@ Lưu ý khi làm:
 - 25C11050 Nguyễn Đình Lộc
 - 25C15003 Ngô Trương Minh Đạt
 
-Trần Đắc Khoa **không** thuộc nhóm seminar (chỉ ở nhóm project cuối kì trong `../final-project/`). Không ghi tên Khoa vào slide hay báo cáo seminar.
+Trần Đắc Khoa **không** thuộc nhóm seminar (chỉ ở nhóm project cuối kì, repo riêng `HatDuaa/multimodal-graph-retrieval-xai`). Không ghi tên Khoa vào slide hay báo cáo seminar.
 
 ## Quy tắc chung
 
