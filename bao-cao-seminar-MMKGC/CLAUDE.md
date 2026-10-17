@@ -12,7 +12,7 @@ Sản phẩm cần có:
 - **Báo cáo viết** kèm theo.
 - Có thể thêm script/ghi chú nói cho từng slide nếu được yêu cầu.
 
-**Bắt buộc đọc `HFR-MKGC/RULES-SEMINAR.md`** (yêu cầu chi tiết từ giảng viên: trích dẫn IEEE, ví dụ input-output, nguồn hình ảnh, tối đa 15 phút) trước khi soạn slide.
+**Bắt buộc đọc `HFR-MKGC/RULES-SEMINAR.md`** (slide) và **`RULES-REPORT.md`** (báo cáo chung hai bài) (yêu cầu chi tiết từ giảng viên: trích dẫn IEEE, ví dụ input-output, nguồn hình ảnh, tối đa 15 phút) trước khi soạn slide.
 
 Lưu ý khi làm:
 - Slide phải dễ trình bày miệng: ít chữ, nhiều hình/sơ đồ kiến trúc, mỗi slide một ý.

@@ -24,3 +24,5 @@ multimodal-graph-retrieval-xai/
 
 # Office lock files
 ~$*
+*.bbl
+*.blg
