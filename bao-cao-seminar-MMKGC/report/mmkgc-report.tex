@@ -132,65 +132,75 @@ Tên bài gói ba ý này thành ba mô-đun: RHF (Relation-guided Hierarchical 
 \begin{figure*}[t]
 \centering
 \begin{tikzpicture}[
-  font=\footnotesize,
-  box/.style={draw, rounded corners=2pt, minimum height=7mm, inner sep=3pt, align=center},
-  enc/.style={box, fill=gray!10},
+  font=\small,
+  box/.style={draw, rounded corners=2pt, minimum height=8mm, inner sep=3pt, align=center},
+  inp/.style={box, minimum width=22mm},
+  enc/.style={box, fill=gray!10, minimum width=30mm},
   fuse/.style={box, fill=cR!35},
   mllm/.style={box, fill=cG!25},
-  score/.style={box, fill=black!80, text=white},
-  arr/.style={-{Stealth[length=2mm]}, thick, cGray},
-  node distance=4mm and 7mm
+  score/.style={box, fill=black!80, text=white, minimum width=30mm, minimum height=12mm},
+  arr/.style={-{Stealth[length=2.2mm]}, thick, cGray},
+  lane/.style={draw, dashed, rounded corners=3pt, inner sep=4pt},
+  lanelabel/.style={anchor=south west, font=\footnotesize\bfseries, inner sep=1pt}
 ]
-% ---- head
-\node[box, fill=cI!20] (img) {ảnh của $h$};
-\node[box, fill=cT!20, below=of img] (txt) {mô tả của $h$};
-\node[box, fill=cS!20, below=of txt] (id) {id của $h$};
-\node[enc, right=of img] (clip) {CLIP $\to P_I$};
-\node[enc, below=2mm of clip] (cap) {LLaVA caption\\$\to$ BERT $\to P_T$};
-\node[enc, right=of txt, xshift=1.2mm, yshift=-5mm] (bert) {BERT $\to P_T$};
-\node[enc, right=of id, xshift=1.2mm] (tab) {tra bảng $\mathbf{E}$};
-\node[fuse, right=of clip, yshift=-3mm] (s1) {Tầng 1\\sigmoid$\langle\cdot,\cdot\rangle$};
-\node[fuse, right=of s1, xshift=4mm, yshift=-7mm] (s2) {Tầng 2\\softmax theo $r$};
-\node[box, fill=cR!60, below=6mm of s2] (rel) {vector $r$};
-\node[box, right=of s2, xshift=2mm] (hj) {$\Hj$};
-% ---- MLLM
-\node[mllm, anchor=north west] (prompt) at ($(img.west |- id.south)+(0,-13mm)$) {prompt: mô tả $h$ + láng giềng\\+ ảnh $h$ + tên quan hệ};
-\node[mllm, right=of prompt] (llava) {LLaVA (LoRA)};
-\node[mllm, right=of llava] (ans) {tên đáp án\\$\to$ BERT $\to \Tm$};
-\node[mllm, right=of ans] (gate) {cổng $g$\\MLP 2 lớp};
-% ---- candidates
-\node[box, dashed, right=of hj, xshift=10mm, yshift=4mm] (cand) {mỗi ứng viên $t$\\(toàn bộ $\sim$15k node)};
-\node[fuse, below=of cand] (candrhf) {RHF tầng 1+2\\(cùng $r$) $\to \Tj(t)$};
-\node[box, fill=cG!25, below=of candrhf] (interp) {$\Tt = (1-g)\Tj + g\,\Tm$};
-\node[score, below=of interp] (rot) {RotatE: xoay $\Hj$ theo $r$,\\đo khoảng cách tới $\Tt(t)$};
-\node[box, below=of rot] (rank) {điểm $= -$khoảng cách\\$\to$ xếp hạng 15k ứng viên};
-% ---- arrows
-\draw[arr] (img) -- (clip);
-\draw[arr] (img.east) -- ++(3mm,0) |- (cap.west);
+% ===== Làn 1: thực thể đầu
+\node[inp, fill=cI!20] (img) at (1.2, 0.0) {ảnh của $h$};
+\node[inp, fill=cT!20] (txt) at (1.2,-1.75) {mô tả của $h$};
+\node[inp, fill=cS!20] (id)  at (1.2,-2.85) {id của $h$};
+\node[enc] (clip) at (4.6, 0.5)  {CLIP $\to P_I$};
+\node[enc] (cap)  at (4.6,-0.55) {LLaVA viết caption\\$\to$ BERT $\to P_T$};
+\node[enc] (bert) at (4.6,-1.75) {BERT $\to P_T$};
+\node[enc] (tab)  at (4.6,-2.85) {tra bảng $\mathbf{E}$};
+\node[fuse, minimum width=24mm] (s1) at (8.3, 0.0) {Tầng 1: gộp hai\\vector ảnh (sigmoid)};
+\node[fuse, minimum width=24mm] (s2) at (11.4,-1.3) {Tầng 2: trộn $S,I,T$\\(softmax theo $r$)};
+\node[box, fill=cR!60] (rel) at (11.4, 0.55) {vector quan hệ $r$};
+\node[box, minimum width=14mm, minimum height=9mm] (hj) at (14.1,-1.3) {$\Hj$};
+% ===== Làn 2: MER
+\node[mllm] (prompt) at (1.85,-4.75) {prompt: mô tả, láng giềng,\\ảnh của $h$, tên quan hệ};
+\node[mllm] (llava)  at (5.45,-4.75) {LLaVA-1.5-7B\\(LoRA)};
+\node[mllm] (ans)    at (8.6,-4.75) {tên đáp án\\$\to$ BERT $\to \Tm$};
+\node[mllm] (gate)   at (11.9,-4.75) {cổng $g$ = MLP\\hai lớp trên $\Tm$};
+% ===== Làn 3: ứng viên đuôi
+\node[box, dashed] (cand)  at (1.85,-6.85) {mỗi ứng viên $t$\\(toàn bộ $\sim$15k node)};
+\node[fuse] (candrhf) at (5.45,-6.85) {Tầng 1 + 2 như trên\\(cùng $r$) $\to \Tj(t)$};
+\node[box, fill=cG!25] (interp) at (11.9,-6.85) {$\Tt(t) = (1-g)\,\Tj(t)$\\$+\; g\,\Tm$};
+% ===== Chấm điểm
+\node[score] (rot)  at (16.2,-4.0) {RotatE: xoay $\Hj$\\theo $r$, đo khoảng\\cách tới $\Tt(t)$};
+\node[box, minimum width=30mm] (rank) at (16.2,-6.85) {điểm $= -$khoảng cách\\$\to$ xếp hạng ứng viên};
+% ===== Mũi tên làn 1
+\draw[arr] (img.east) -- (clip.west);
+\draw[arr] (img.east) -- (cap.west);
 \draw[arr] (txt) -- (bert);
 \draw[arr] (id) -- (tab);
-\draw[arr] (clip.east) -- (s1.west |- clip.east);
-\draw[arr] (cap.east) -- (s1.west |- cap.east);
-\draw[arr] (s1) -- (s2);
-\draw[arr] (bert.east) -| ($(s2.west)+(-3mm,0)$) -- (s2.west);
-\draw[arr] (tab.east) -| ($(s2.west)+(-3mm,-2mm)$) -- ($(s2.west)+(0,-2mm)$);
+\draw[arr] (clip.east) -- (s1.west);
+\draw[arr] (cap.east) -- (s1.west);
+\draw[arr] (s1.east) -- ($(s2.west)+(0,0.18)$);
+\draw[arr] (bert.east) -- (s2.west);
+\draw[arr] (tab.east) -- ($(s2.west)+(0,-0.18)$);
 \draw[arr] (rel) -- (s2);
 \draw[arr] (s2) -- (hj);
+% ===== Mũi tên làn 2, 3
 \draw[arr] (prompt) -- (llava);
 \draw[arr] (llava) -- (ans);
 \draw[arr] (ans) -- (gate);
+\draw[arr] (gate) -- (interp);
+\draw[arr] (ans.south) -- ++(0,-0.75) -| ($(interp.north west)+(0.45,0)$);
 \draw[arr] (cand) -- (candrhf);
 \draw[arr] (candrhf) -- (interp);
-\draw[arr] (gate.east) -| (interp.west);
-\draw[arr] (ans.north) |- ($(interp.west)+(-2mm,-2mm)$) -- ($(interp.west)+(0,-2mm)$);
-\draw[arr] (interp) -- (rot);
-\draw[arr] (hj.east) -| (rot.north west);
-\draw[arr] (rel.east) -| ($(rot.north west)+(3mm,0)$);
+% ===== Vào RotatE
+\draw[arr] (hj.east) -| ($(rot.north)+(-0.8,0)$);
+\draw[arr] (rel.east) -| ($(rot.north)+(0.8,0)$);
+\draw[arr] (interp.east) -- ++(0.55,0) |- (rot.west);
 \draw[arr] (rot) -- (rank);
+% ===== Khung làn
 \begin{scope}[on background layer]
-\node[fit=(prompt)(gate), draw=cG, dashed, rounded corners, inner sep=3pt, label={[cG]below:MER}] {};
-\node[fit=(img)(id)(clip)(cap)(tab)(s1)(s2)(rel)(hj), draw=cR!80!black, dashed, rounded corners, inner sep=3pt, label={[cR!60!black]above:mã hoá + RHF cho thực thể đầu}] {};
+\node[lane, draw=cR!80!black, fit=(img)(id)(clip)(tab)(s1)(s2)(rel)(hj)] (L1) {};
+\node[lane, draw=cG, fit=(prompt)(gate)] (L2) {};
+\node[lane, draw=gray, fit=(cand)(interp)] (L3) {};
 \end{scope}
+\node[lanelabel, text=cR!60!black] at (L1.north west) {Mã hoá và RHF cho thực thể đầu $h$};
+\node[lanelabel, text=cG] at (L2.north west) {MER: LLaVA đưa ra gợi ý};
+\node[lanelabel, text=gray!70!black] at (L3.north west) {Chấm từng ứng viên đuôi};
 \end{tikzpicture}
 \caption{Luồng dữ liệu của một truy vấn $(h, r, ?)$ trong HFR-MKGC, nhóm vẽ lại từ mô tả trong~\cite{hfrmkgc}. Mỗi ứng viên đuôi đi qua cùng hàm RHF rồi được kéo về phía gợi ý của LLaVA theo tỉ lệ $g$; RotatE chỉ xoay thực thể đầu một lần và đo khoảng cách tới từng ứng viên. Khi huấn luyện, luồng này giữ nguyên và thêm nhánh MNO sinh mẫu âm (Mục~\ref{sec:hfr-mno}).}
 \label{fig:pipeline}
