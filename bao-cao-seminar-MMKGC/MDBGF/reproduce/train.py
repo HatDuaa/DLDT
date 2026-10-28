@@ -315,7 +315,8 @@ def main():
             if best["by_test"] is None or test["MRR"] > best["by_test"]["test"]["MRR"]:
                 best["by_test"] = rec
             print(f"[{epoch}] loss {total_loss:.4f} | valid MRR {valid['MRR']:.4f} "
-                  f"| test MRR {test['MRR']:.4f} | {log['time/epoch_sec']:.1f}s/epoch", flush=True)
+                  f"| test MRR {test['MRR']:.4f} | {log['time/epoch_sec']:.1f}s/epoch "
+                  f"| GPU max {log['gpu/max_mem_gb']:.1f} GB", flush=True)
             if run is not None:
                 run.summary["best_by_valid"] = best["by_valid"]
                 run.summary["best_by_test"] = best["by_test"]
