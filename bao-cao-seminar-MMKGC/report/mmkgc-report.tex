@@ -389,12 +389,13 @@ tức bị phạt khi mẫu giả bị nhận ra quá dễ (điểm thấp hơn 
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[font=\footnotesize, node distance=4mm and 6mm,
-  box/.style={draw, rounded corners=2pt, align=center, inner sep=2.5pt, minimum height=7mm, text width=29mm},
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=2.5pt, minimum height=7mm, text width=27mm},
   arr/.style={-{Stealth[length=2mm]}, thick, cGray}]
 \node[box, fill=cT!20] (pos) {bộ ba đúng $(h,r,t)$\\+ mẫu âm thường (thay $t$ ngẫu nhiên)};
 \node[box, fill=cG!25, right=5mm of pos] (gen) {Bộ sinh $G$: paraphrase văn bản (LLaVA), xoay + nhiễu ảnh~\eqref{eq:perturb}};
 \node[box, fill=gray!10, below=of gen] (fake) {bộ giả $(h^*,r,t)$, $(h,r,t^*)$, $(h^*,r,t^*)$};
-\node[box, fill=black!80, text=white, below=of pos, yshift=-11mm, text width=66mm] (dis) {Bộ phân biệt $D$ = chính mô hình KGC (RHF + MER + RotatE), chấm điểm mọi bộ ba bằng~\eqref{eq:score}};
+\path let \p1 = (pos.west), \p2 = (gen.east) in coordinate (dleft) at ($(pos.south west)+(0,-15mm)$)
+  node[box, fill=black!80, text=white, anchor=north west, text width={\x2-\x1-5pt}] (dis) at (dleft) {Bộ phân biệt $D$ = chính mô hình KGC (RHF + MER + RotatE), chấm điểm mọi bộ ba bằng~(\ref*{eq:score})};
 \node[box, fill=cR!35, below=of dis.south west, anchor=north west] (ld) {$\mathcal{L}_D$~\eqref{eq:ld}: điểm thật cao, điểm giả và âm thấp, + phạt gradient};
 \node[box, fill=cR!35, below=of dis.south east, anchor=north east] (lg) {$\mathcal{L}_G$~\eqref{eq:lg}: phạt $G$ khi điểm giả thấp hơn ngưỡng $c$};
 \draw[arr] (pos.south) -- (pos.south |- dis.north);
@@ -402,7 +403,8 @@ tức bị phạt khi mẫu giả bị nhận ra quá dễ (điểm thấp hơn 
 \draw[arr] (fake.south) -- (fake.south |- dis.north);
 \draw[arr] (dis.south -| ld.north) -- (ld.north);
 \draw[arr] (dis.south -| lg.north) -- (lg.north);
-\draw[arr, dashed, cG] (lg.east) -- ++(3mm,0) |- (gen.east);
+\coordinate (gright) at ($(gen.east)+(3mm,0)$);
+\draw[arr, dashed, cG] (lg.east) -- (lg.east -| gright) -- (gright) -- (gen.east);
 \draw[arr, dashed] (ld.west) -- ++(-3mm,0) |- (dis.west);
 \end{tikzpicture}
 \caption{Vòng huấn luyện đối kháng của MNO. Bộ phân biệt chính là mô hình KGC; hai hàm mất mát được tối ưu xen kẽ. Mũi tên đứt nét tím: cập nhật bộ sinh $G$; đứt nét xám: cập nhật $D$. Hình do nhóm vẽ.}
