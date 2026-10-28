@@ -22,7 +22,7 @@ Mã gốc của tác giả ([ferryman-ship/MDBGF](https://github.com/ferryman-sh
 1. Mở `mdbgf_colab.ipynb` trên Colab, chọn GPU A100 hoặc L4.
 2. Thêm WandB API key vào Colab Secrets với tên `WANDB_API_KEY`.
 3. Chạy lần lượt các ô 1 đến 6. Ô 6 chạy thử 10 epoch để đo thời gian và bộ nhớ.
-4. Ở ô 7, chọn `RUN` rồi chạy. Mỗi lượt dừng sau 11 giờ và lưu checkpoint vào Drive. Khi phiên Colab bị ngắt hoặc hết giờ, chạy lại các ô 1–5 rồi ô 7 với cùng `RUN`; script tự chạy tiếp từ checkpoint cuối và ghi tiếp vào cùng run trên WandB.
+4. Ở ô 7, chọn `RUN` rồi chạy. Mỗi lượt dừng sau 11 giờ và lưu checkpoint vào Drive. Khi phiên Colab bị ngắt hoặc hết giờ, chạy lại các ô 1–5 rồi ô 7 với cùng `RUN` và `EPOCHS`; script tự chạy tiếp từ checkpoint cuối và ghi tiếp vào cùng run trên WandB.
 
 ## Chạy bằng dòng lệnh
 
@@ -32,12 +32,12 @@ git clone https://github.com/ferryman-ship/MDBGF.git && git -C MDBGF checkout c5
 pip install -r requirements.txt
 python prepare_data.py --src MDBGF --data MKG-W
 wandb login
-python train.py --src MDBGF --out runs/main_code --md code
+python train.py --src MDBGF --out runs/main_code --md code --num_epoch 1550
 ```
 
 ## Các lần chạy
 
-Mọi lần chạy dùng siêu tham số của tác giả cho MKG-W (`run.sh`): 5000 epoch, batch 2048, `lr 6e-4`, `dim 256`, 16 token ảnh, 24 token văn bản, hạt giống 2024.
+Mọi lần chạy dùng siêu tham số của tác giả cho MKG-W (`run.sh`): batch 2048, `lr 6e-4`, `dim 256`, 16 token ảnh, 24 token văn bản, hạt giống 2024. Riêng số epoch, nhóm chạy **1550** thay vì 5000 của bài (`--num_epoch 1550`, đã đặt sẵn trong notebook); muốn chạy đúng như bài thì bỏ tham số này.
 
 | `RUN` | Tham số thêm | Ứng với |
 |---|---|---|
@@ -53,6 +53,7 @@ Mọi lần chạy dùng siêu tham số của tác giả cho MKG-W (`run.sh`): 
 |---|---|---|
 | `--src` | (bắt buộc) | Thư mục mã nguồn của tác giả |
 | `--out` | (bắt buộc) | Thư mục lưu checkpoint; nếu đã có `last.ckpt` thì chạy tiếp |
+| `--num_epoch` | `5000` | Tổng số epoch; nhóm dùng `1550` |
 | `--md` | `code` | Cách rụng mô thức: `code`, `paper` hoặc `none` |
 | `--alpha` | `0.3` | Xác suất rụng tối đa |
 | `--no_bgf` | tắt | Bỏ hai cổng hợp nhất |
@@ -67,5 +68,6 @@ Các siêu tham số còn lại giữ tên và giá trị như script của tác
 
 - **WandB:** project `mdbgf-reproduce`, mỗi `RUN` là một run. Mỗi epoch ghi loss, thời gian và bộ nhớ GPU; mỗi 50 epoch ghi MRR, Hits@1/3/10 trên tập kiểm định và kiểm thử. Phần *summary* của run có hai mục: `best_by_valid` (epoch có MRR kiểm định cao nhất) và `best_by_test` (epoch có MRR kiểm thử cao nhất, cách chọn trong mã tác giả).
 - **Drive:** `mdbgf-runs/<RUN>/last.ckpt`.
+- **Phiên bản thư viện và phần cứng:** WandB tự ghi phiên bản Python, danh sách gói (`requirements.txt` của môi trường) và loại GPU vào tab *Overview* và *Files* của mỗi run.
 
 Để giảng viên xem được, chuyển project trên WandB sang chế độ **Public** (Project → Settings → Visibility).
