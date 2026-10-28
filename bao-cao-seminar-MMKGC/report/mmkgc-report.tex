@@ -856,11 +856,11 @@ Chọn kết quả & không nêu & đánh giá mỗi 50 epoch; báo cáo lần c
 
 Thực nghiệm chạy trên một GPU NVIDIA L4 24 GB của Google Colab Pro. Đỉnh bộ nhớ đo được là 16{,}5 GB, thấp hơn mức khoảng 21 GB ở Bảng 6 của bài. Mỗi epoch mất 17{,}4 giây, nên chạy đủ 5000 epoch như bài sẽ tốn khoảng 24 giờ GPU cho \emph{mỗi} cấu hình, vượt ngân sách của nhóm. Vì vậy nhóm chạy 1550 epoch. Con số này không tuỳ tiện: lịch tốc độ học của tác giả giảm theo hàm cos rồi khởi động lại với chu kỳ dài gấp đôi sau mỗi lần (50, 100, 200, 400, 800 epoch), và epoch 1550 là điểm kết thúc một chu kỳ, lúc tốc độ học về gần 0. Các siêu tham số khác giữ đúng như kịch bản chạy của tác giả cho MKG-W. Rụng mô thức dùng đúng như mã công khai (xác suất cố định 0{,}3). Với $N = 1550$, tỉ lệ mẫu âm khó của AHNS vẫn tăng tuyến tính tới $\beta = 0{,}8$, chỉ là tăng nhanh hơn theo số epoch.
 
-\paragraph{Kết quả} Bảng~\ref{tab:mdbgf-repro} so kết quả của nhóm với số trong bài. Quá trình huấn luyện của từng dòng được ghi tại: kết quả chính \href{https://wandb.ai/minhdatngo-forwork-ho-chi-minh-city-university-of-science/mdbgf-reproduce/runs/xxejayyu}{WandB, run \texttt{main\_code}}; bỏ MD \todo{link WandB run no\_md}.
+\paragraph{Kết quả} Bảng~\ref{tab:mdbgf-repro} so kết quả của nhóm với số trong bài. Toàn bộ quá trình huấn luyện (loss, MRR và Hits@k trên hai tập theo từng mốc 50 epoch) được ghi tại \href{https://wandb.ai/minhdatngo-forwork-ho-chi-minh-city-university-of-science/mdbgf-reproduce/runs/xxejayyu}{WandB, run \texttt{main\_code}}.
 
 \begin{table}[t]
 \centering
-\caption{Kết quả nhóm chạy lại MDBGF trên MKG-W (\%). Dòng đầu lấy từ Bảng 1 của~\cite{mdbgf}; các dòng còn lại do nhóm chạy, 1550 epoch, chọn mô hình theo MRR kiểm định trừ dòng có dấu $^{*}$ (chọn theo kiểm thử như mã gốc).}
+\caption{Kết quả nhóm chạy lại MDBGF trên MKG-W (\%). Dòng đầu lấy từ Bảng 1 của~\cite{mdbgf}; hai dòng sau lấy từ cùng một lần chạy 1550 epoch của nhóm, chọn mô hình theo MRR kiểm định hoặc theo MRR kiểm thử (dấu $^{*}$, như mã gốc).}
 \label{tab:mdbgf-repro}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
@@ -870,14 +870,17 @@ Thiết lập & MRR & H@10 & H@3 & H@1 & Epoch\\
 \midrule
 Bài báo (5000 epoch)        & 40{,}10 & 52{,}35 & 42{,}83 & 33{,}42 & ---\\
 \midrule
-Nhóm, chọn theo kiểm định   & \tbd & \tbd & \tbd & \tbd & \tbd\\
-Nhóm, chọn theo kiểm thử$^{*}$ & \tbd & \tbd & \tbd & \tbd & \tbd\\
-Nhóm, bỏ MD                 & \tbd & \tbd & \tbd & \tbd & \tbd\\
+Nhóm, chọn theo kiểm định   & 38{,}54 & 50{,}91 & 40{,}84 & 31{,}97 & 1500\\
+Nhóm, chọn theo kiểm thử$^{*}$ & 38{,}54 & 50{,}91 & 40{,}84 & 31{,}97 & 1500\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\todo{Nhận xét khi có số liệu: (1) khoảng cách với bài báo và phần nào do chạy ít epoch hơn (xem đường MRR kiểm định trên WandB còn tăng hay đã bão hoà); (2) chênh lệch giữa hai cách chọn mô hình; (3) ở 1550 epoch, MD có còn giúp như Bảng~\ref{tab:mdbgf-ablation} hay không.}
+Sau 1550 epoch (7{,}5 giờ trên L4), mô hình của nhóm đạt MRR 38{,}54, thấp hơn số trong bài 1{,}56 điểm; ba chỉ số Hits@k cũng thấp hơn từ 1{,}4 đến 2{,}0 điểm. Kết quả này vẫn cao hơn mọi mô hình cơ sở trong Bảng~\ref{tab:mdbgf-main} trên MKG-W, kể cả MyGO (36{,}10), nhưng chưa đạt tới con số bài báo công bố. Nhóm chưa thể kết luận toàn bộ khoảng cách là do chạy ít epoch hơn. Ở cuối chu kỳ tốc độ học thứ năm (epoch 1350 đến 1550), MRR kiểm định gần như đứng yên quanh 37{,}1--37{,}3. Tuy vậy, sau mỗi lần tốc độ học khởi động lại, MRR vẫn còn tăng: từ 35{,}46 ở cuối chu kỳ thứ tư (epoch 750) lên 37{,}29 ở epoch 1500. Vì vậy chạy thêm nhiều khả năng còn cải thiện được, nhưng nhóm không đủ ngân sách để kiểm chứng. Ngoài ra, nhóm chỉ chạy một lần với một hạt giống, nên chưa biết độ lệch giữa các lần chạy lớn đến đâu so với khoảng 1{,}5 điểm này.
+
+Trong lần chạy này, hai cách chọn mô hình cho cùng một kết quả: MRR kiểm định và MRR kiểm thử cùng cao nhất ở epoch 1500, nên hai dòng của Bảng~\ref{tab:mdbgf-repro} trùng nhau. Lý do là cả hai đường MRR tăng gần như đơn điệu và cùng đạt đỉnh ở cuối quá trình huấn luyện. Như vậy, ít nhất ở 1550 epoch, việc mã gốc chọn mô hình theo tập kiểm thử không làm kết quả đẹp lên. Điều này không bảo đảm cho lần chạy 5000 epoch của tác giả, vì khi chạy dài hơn qua nhiều chu kỳ, hai đường có thể đạt đỉnh ở các epoch khác nhau.
+
+Do giới hạn ngân sách GPU (mỗi cấu hình tốn khoảng 7{,}5 giờ trên L4), nhóm chỉ chạy lại cấu hình đầy đủ, không chạy lại các thí nghiệm loại bỏ ở Bảng~\ref{tab:mdbgf-ablation}. Vì vậy báo cáo này chưa tự kiểm chứng được đóng góp riêng của từng mô-đun.
 
 \subsection{Nhận xét và hạn chế}
 \label{sec:mdbgf-limits}

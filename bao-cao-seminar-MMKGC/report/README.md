@@ -24,7 +24,7 @@ Cần MiKTeX hoặc TeX Live có XeLaTeX, font Times New Roman, các gói IEEEtr
 |---|---|
 | I. Giới thiệu chung (bài toán, đánh giá, dữ liệu) | xong |
 | II. Phần A: HFR-MKGC | xong bản đầu |
-| III. Phần B: MDBGF | xong; mục tái lập (III-I) chờ số liệu và link WandB |
+| III. Phần B: MDBGF | xong (mục tái lập III-I đã có số liệu và link WandB) |
 | IV. Đối chiếu và kết luận | xong |
 
 Chỗ còn trống được đánh dấu màu đỏ trong PDF bằng lệnh `\todo{}`. Trước khi nộp phải xoá hết các chỗ đó.
