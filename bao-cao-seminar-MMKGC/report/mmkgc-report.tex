@@ -6,9 +6,10 @@
 \usepackage{amsmath,amssymb}
 \usepackage{newtxmath} % công thức kiểu Times cho khớp chữ
 \usepackage[no-math]{fontspec}
-% Máy không có Times New Roman (Linux) thì dùng TeX Gyre Termes, bản sao của Times.
-\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
-   ItalicFont=*-italic, BoldItalicFont=*-bolditalic]}
+% Ưu tiên TeX Gyre Termes (bản sao của Times, có chữ in hoa nhỏ đủ dấu tiếng Việt) để mọi máy build ra giống nhau.
+% Times New Roman của Windows không có chữ in hoa nhỏ nên tiêu đề mục bị lỗi dấu; chỉ dùng khi thiếu Termes.
+\IfFontExistsTF{texgyretermes-regular.otf}{\setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+   ItalicFont=*-italic, BoldItalicFont=*-bolditalic]}{\setmainfont{Times New Roman}}
 \usepackage{polyglossia}
 \setdefaultlanguage{vietnamese}
 \usepackage{graphicx}
@@ -854,7 +855,7 @@ Chọn kết quả & không nêu & đánh giá mỗi 50 epoch; báo cáo lần c
 
 \paragraph{Thiết lập} Nhóm dùng nguyên mô hình trong mã của tác giả (commit \texttt{c512d79}) và viết thêm một script huấn luyện, công khai tại \url{https://github.com/HatDuaa/DLDT/tree/main/bao-cao-seminar-MMKGC/MDBGF/reproduce}. So với script gốc, script của nhóm ghi toàn bộ quá trình lên Weights \& Biases, lưu checkpoint để chạy tiếp khi phiên làm việc bị ngắt, và đánh giá theo lô thay vì từng bộ ba. Nhóm đã kiểm tra trên dữ liệu giả rằng cách đánh giá theo lô cho ra đúng thứ hạng như hàm của tác giả, kể cả khi có điểm hoà. Mỗi lần đánh giá, script ghi kết quả trên cả tập kiểm định lẫn tập kiểm thử, nhờ vậy báo được cả hai cách chọn mô hình: theo MRR kiểm định (cách đúng) và theo MRR kiểm thử (cách trong mã gốc, Mục~\ref{sec:mdbgf-code}).
 
-Thực nghiệm chạy trên một GPU NVIDIA L4 24 GB của Google Colab Pro. Đỉnh bộ nhớ đo được là 16{,}5 GB, thấp hơn mức khoảng 21 GB ở Bảng 6 của bài. Mỗi epoch mất 17{,}4 giây, nên chạy đủ 5000 epoch như bài sẽ tốn khoảng 24 giờ GPU cho \emph{mỗi} cấu hình, vượt ngân sách của nhóm. Vì vậy nhóm chạy 1550 epoch. Con số này không tuỳ tiện: lịch tốc độ học của tác giả giảm theo hàm cos rồi khởi động lại với chu kỳ dài gấp đôi sau mỗi lần (50, 100, 200, 400, 800 epoch), và epoch 1550 là điểm kết thúc một chu kỳ, lúc tốc độ học về gần 0. Các siêu tham số khác giữ đúng như kịch bản chạy của tác giả cho MKG-W. Rụng mô thức dùng đúng như mã công khai (xác suất cố định 0{,}3). Với $N = 1550$, tỉ lệ mẫu âm khó của AHNS vẫn tăng tuyến tính tới $\beta = 0{,}8$, chỉ là tăng nhanh hơn theo số epoch.
+Thực nghiệm chạy trên một GPU NVIDIA L4 24 GB của Google Colab Pro. Đỉnh bộ nhớ đo được là 16{,}5 GB, thấp hơn mức khoảng 21 GB ở Bảng 6 của bài. Chênh lệch này đến từ một thay đổi nhỏ trong script: script gốc gọi \texttt{loss.backward(retain\_graph=True)}, tức giữ lại toàn bộ đồ thị tính toán sau mỗi bước dù không dùng lại; script của nhóm bỏ cờ này nên tốn ít bộ nhớ hơn mà gradient không đổi. Mỗi epoch mất 17{,}4 giây, nên chạy đủ 5000 epoch như bài sẽ tốn khoảng 24 giờ GPU cho \emph{mỗi} cấu hình, vượt ngân sách của nhóm. Vì vậy nhóm chạy 1550 epoch. Con số này không tuỳ tiện: lịch tốc độ học của tác giả giảm theo hàm cos rồi khởi động lại với chu kỳ dài gấp đôi sau mỗi lần (50, 100, 200, 400, 800 epoch), và epoch 1550 là điểm kết thúc một chu kỳ, lúc tốc độ học về gần 0. Các siêu tham số khác giữ đúng như kịch bản chạy của tác giả cho MKG-W. Rụng mô thức dùng đúng như mã công khai (xác suất cố định 0{,}3). Với $N = 1550$, tỉ lệ mẫu âm khó của AHNS vẫn tăng tuyến tính tới $\beta = 0{,}8$, chỉ là tăng nhanh hơn theo số epoch.
 
 \paragraph{Kết quả} Bảng~\ref{tab:mdbgf-repro} so kết quả của nhóm với số trong bài. Toàn bộ quá trình huấn luyện (loss, MRR và Hits@k trên hai tập theo từng mốc 50 epoch) được ghi tại \href{https://wandb.ai/minhdatngo-forwork-ho-chi-minh-city-university-of-science/mdbgf-reproduce/runs/xxejayyu}{WandB, run \texttt{main\_code}}.
 

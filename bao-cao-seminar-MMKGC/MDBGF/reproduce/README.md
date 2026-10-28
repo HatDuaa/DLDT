@@ -70,4 +70,3 @@ Các siêu tham số còn lại giữ tên và giá trị như script của tác
 - **Drive:** `mdbgf-runs/<RUN>/last.ckpt`.
 - **Phiên bản thư viện và phần cứng:** WandB tự ghi phiên bản Python, danh sách gói (`requirements.txt` của môi trường) và loại GPU vào tab *Overview* và *Files* của mỗi run.
 
-Để giảng viên xem được, chuyển project trên WandB sang chế độ **Public** (Project → Settings → Visibility).

@@ -16,18 +16,18 @@ Một báo cáo chung cho cả hai bài báo theo yêu cầu trong [`../RULES-RE
 bash build.sh
 ```
 
-Cần MiKTeX hoặc TeX Live có XeLaTeX, font Times New Roman, các gói IEEEtran, polyglossia, tikz, pgfplots, booktabs.
+Cần MiKTeX hoặc TeX Live có XeLaTeX, font TeX Gyre Termes (có sẵn trong cả hai bản; thiếu thì dùng Times New Roman), các gói IEEEtran, polyglossia, tikz, pgfplots, booktabs.
 
 ## Trạng thái
 
 | Phần | Trạng thái |
 |---|---|
 | I. Giới thiệu chung (bài toán, đánh giá, dữ liệu) | xong |
-| II. Phần A: HFR-MKGC | xong bản đầu |
+| II. Phần A: HFR-MKGC | xong |
 | III. Phần B: MDBGF | xong (mục tái lập III-I đã có số liệu và link WandB) |
 | IV. Đối chiếu và kết luận | xong |
 
-Chỗ còn trống được đánh dấu màu đỏ trong PDF bằng lệnh `\todo{}`. Trước khi nộp phải xoá hết các chỗ đó.
+Không còn chỗ trống nào. Nếu thêm nội dung chưa xong, đánh dấu bằng lệnh `\todo{}` (hiện màu đỏ trong PDF) và xoá trước khi nộp.
 
 ## Lưu ý khi viết tiếp
 
