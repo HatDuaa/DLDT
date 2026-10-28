@@ -22,7 +22,7 @@
 \pgfplotsset{compat=1.18, /pgf/number format/use comma, /pgf/number format/1000 sep={}}
 \usepackage{enumitem}
 \setlist{nosep,leftmargin=*}
-\usepackage{url}
+\usepackage[hyphens]{url}
 \usepackage[hidelinks]{hyperref}
 \usepackage{etoolbox}
 \gappto\captionsvietnamese{\renewcommand{\refname}{Tài liệu tham khảo}}
@@ -45,6 +45,7 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 \newcommand{\todo}[1]{\textcolor{red}{[#1]}}
+\newcommand{\tbd}{\textcolor{red}{??}}
 
 \begin{document}
 
@@ -60,7 +61,7 @@ Học phần: Học máy với dữ liệu đồ thị \quad Giảng viên: TS. 
 \maketitle
 
 \begin{abstract}
-Báo cáo này trình bày cách hiểu của nhóm về hai công trình gần đây trong bài toán hoàn thiện đồ thị tri thức đa phương thức (Multi-modal Knowledge Graph Completion, MMKGC). Phần thứ nhất phân tích HFR-MKGC (AAAI 2026), một khung kết hợp ba ý tưởng trên nền hàm điểm RotatE: trộn ba mô thức của thực thể với trọng số phụ thuộc quan hệ đang xét, đưa dự đoán của một mô hình ngôn ngữ lớn đa phương thức vào hàm điểm thông qua một cổng học được, và huấn luyện đối kháng với mẫu âm sinh bằng cách bóp méo đặc trưng ảnh và văn bản. Nhóm diễn giải lại từng mô-đun bằng một ví dụ chạy tay xuyên suốt, tổng hợp kết quả thực nghiệm trên ba bộ dữ liệu chuẩn và chỉ ra các điểm chưa thuyết phục của bài báo. Phần thứ hai phân tích MDBGF (Findings of ACL 2026), tiếp cận bài toán theo hướng ngược lại: chủ động làm rụng ảnh hoặc văn bản khi huấn luyện, dùng hai cổng để ảnh và văn bản điều chỉnh lẫn nhau, và bổ sung mẫu âm khó theo lịch tăng dần. Nhóm đối chiếu bài báo với mã nguồn công khai của tác giả và chỉ ra một số điểm không khớp. Phần cuối đối chiếu hai hướng tiếp cận và rút ra bài học chung.
+Báo cáo này trình bày cách hiểu của nhóm về hai công trình gần đây trong bài toán hoàn thiện đồ thị tri thức đa phương thức (Multi-modal Knowledge Graph Completion, MMKGC). Phần thứ nhất phân tích HFR-MKGC (AAAI 2026), một khung kết hợp ba ý tưởng trên nền hàm điểm RotatE: trộn ba mô thức của thực thể với trọng số phụ thuộc quan hệ đang xét, đưa dự đoán của một mô hình ngôn ngữ lớn đa phương thức vào hàm điểm thông qua một cổng học được, và huấn luyện đối kháng với mẫu âm sinh bằng cách bóp méo đặc trưng ảnh và văn bản. Nhóm diễn giải lại từng mô-đun bằng một ví dụ chạy tay xuyên suốt, tổng hợp kết quả thực nghiệm trên ba bộ dữ liệu chuẩn và chỉ ra các điểm chưa thuyết phục của bài báo. Phần thứ hai phân tích MDBGF (Findings of ACL 2026), tiếp cận bài toán theo hướng ngược lại: chủ động làm rụng ảnh hoặc văn bản khi huấn luyện, dùng hai cổng để ảnh và văn bản điều chỉnh lẫn nhau, và bổ sung mẫu âm khó theo lịch tăng dần. Nhóm đối chiếu bài báo với mã nguồn công khai của tác giả, chỉ ra một số điểm không khớp, và tự chạy lại MDBGF trên MKG-W. Phần cuối đối chiếu hai hướng tiếp cận và rút ra bài học chung.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -104,7 +105,7 @@ DB15K & 12842 & 279 & 79222 & 9902 & 9904 & 99{,}8\% & 70{,}7\%\\
 
 \subsection{Cấu trúc báo cáo}
 
-Phần~\ref{sec:hfr} dành cho HFR-MKGC~\cite{hfrmkgc}, bài nhóm đã trình bày seminar. Phần~\ref{sec:mdbgf} dành cho MDBGF~\cite{mdbgf}. Phần~\ref{sec:compare} đối chiếu hai bài và kết luận. Mọi số liệu thực nghiệm được lấy từ bài báo gốc và ghi rõ nguồn; nhóm không chạy lại thực nghiệm của HFR-MKGC vì tác giả không công khai mã nguồn.
+Phần~\ref{sec:hfr} dành cho HFR-MKGC~\cite{hfrmkgc}, bài nhóm đã trình bày seminar. Phần~\ref{sec:mdbgf} dành cho MDBGF~\cite{mdbgf}. Phần~\ref{sec:compare} đối chiếu hai bài và kết luận. Số liệu thực nghiệm lấy từ bài báo gốc đều ghi rõ nguồn. Riêng MDBGF, nhóm tự chạy lại bằng mã nguồn của tác giả (Mục~\ref{sec:mdbgf-repro}); HFR-MKGC thì không chạy lại được vì tác giả không công khai mã nguồn.
 
 % =====================================================================
 \section{Phần A: HFR-MKGC}
@@ -113,18 +114,18 @@ Phần~\ref{sec:hfr} dành cho HFR-MKGC~\cite{hfrmkgc}, bài nhóm đã trình b
 \subsection{Động lực và ý tưởng chính}
 \label{sec:hfr-motivation}
 
-Để thấy vì sao cần đa mô thức, hãy lấy truy vấn xuyên suốt của báo cáo: (Gwen Stefani, voice type, ?). Trong MKG-W, thực thể này chỉ có một cạnh huấn luyện là field of work $\to$ music. Nếu chỉ nhìn cấu trúc, gần như không có căn cứ để chọn giữa Mezzo-soprano, Soprano hay hàng nghìn node khác. Đoạn mô tả có chữ ``singer'' và ảnh chân dung mới là thứ gợi ý rằng đáp án phải là một loại giọng hát.
+Để thấy vì sao cần đa mô thức, hãy lấy truy vấn xuyên suốt của báo cáo: (Gwen Stefani, voice type, ?). Nhóm đếm trong tập huấn luyện của MKG-W: thực thể này (Wikidata Q483379) chỉ có đúng một cạnh, nối tới music (Q638), còn cạnh voice type $\to$ Mezzo-soprano nằm trong tập kiểm thử. Bộ dữ liệu chỉ lưu mã số của quan hệ nên nhóm không xác định được tên của cạnh này; nhiều khả năng đó là field of work. Nếu chỉ nhìn cấu trúc, gần như không có căn cứ để chọn giữa Mezzo-soprano, Soprano hay hàng nghìn node khác. Đoạn mô tả có chữ ``singer'' và ảnh chân dung mới là thứ gợi ý rằng đáp án phải là một loại giọng hát.
 
 Từ góc nhìn của nhóm, bài báo chỉ ra hai điểm yếu của các phương pháp trước và đề xuất một cách sửa cho mỗi điểm:
 
 \begin{enumerate}
 \item \textbf{Trọng số trộn mô thức không phụ thuộc câu hỏi.} Các mô hình như RSME~\cite{rsme} hay NativE~\cite{native} trộn cấu trúc, ảnh, văn bản bằng cổng hoặc chú ý, nhưng tỉ lệ trộn của một thực thể là cố định hoặc chỉ phụ thuộc chính thực thể đó. Với Gwen Stefani, ảnh hữu ích khi hỏi giới tính nhưng vô ích khi hỏi loại giọng; một bộ trọng số không thể đúng cho cả hai câu hỏi. HFR-MKGC đưa vector quan hệ vào công thức tính trọng số, nên cùng một thực thể có tỉ lệ trộn khác nhau tuỳ quan hệ đang xét.
-\item \textbf{Mô hình ngôn ngữ lớn (LLM) được dùng thô.} Các phương pháp dựa trên LLM biến đồ thị thành prompt rồi để LLM trả lời, nhưng LLM không biết ranh giới tập thực thể, hay bịa tên, và không chấm điểm được toàn bộ ứng viên. Bảng~\ref{tab:main} xác nhận điều đó: LLaVA chạy một mình chỉ đạt Hits@10 bằng 26{,}42\% trên MKG-W và 3{,}58\% trên MKG-Y. HFR-MKGC không cho LLM làm bộ chấm điểm mà coi câu trả lời của nó là một gợi ý, đưa vào hàm điểm RotatE qua một cổng có thể học mức tin cậy.
+\item \textbf{Mô hình ngôn ngữ lớn (LLM) được dùng thô.} Các phương pháp dựa trên LLM biến đồ thị thành prompt (câu lệnh văn bản đưa vào mô hình) rồi để LLM trả lời, nhưng LLM không biết ranh giới tập thực thể, hay bịa tên, và không chấm điểm được toàn bộ ứng viên. Bảng~\ref{tab:main} xác nhận điều đó: LLaVA chạy một mình chỉ đạt Hits@10 bằng 26{,}42\% trên MKG-W và 3{,}58\% trên MKG-Y. HFR-MKGC không cho LLM làm bộ chấm điểm mà coi câu trả lời của nó là một gợi ý, đưa vào hàm điểm RotatE qua một cổng có thể học mức tin cậy.
 \end{enumerate}
 
-Ý thứ ba của bài là về huấn luyện: mẫu âm thay ngẫu nhiên thực thể đuôi quá dễ phân biệt, nên tác giả sinh thêm mẫu âm ``khó'' bằng cách giữ nguyên thực thể nhưng bóp méo đặc trưng ảnh và văn bản, rồi huấn luyện theo kiểu đối kháng.
+Ý thứ ba của bài là về huấn luyện. Mô hình KGE học bằng cách so bộ ba đúng với các \emph{mẫu âm}, tức bộ ba sai mà mô hình phải chấm điểm thấp. Mẫu âm tạo bằng cách thay ngẫu nhiên thực thể đuôi thì quá dễ phân biệt, nên tác giả sinh thêm mẫu âm ``khó'' bằng cách giữ nguyên thực thể nhưng bóp méo đặc trưng ảnh và văn bản, rồi huấn luyện theo kiểu đối kháng.
 
-Tên bài gói ba ý này thành ba mô-đun: RHF (Relation-guided Hierarchical Fusion, hợp nhất phân cấp có dẫn hướng bởi quan hệ), MER (MLLM-Enhanced Reasoning, suy luận tăng cường bằng MLLM) và MNO (Multi-modal Noise Optimization, tối ưu nhiễu đa mô thức). Hình~\ref{fig:arch} là sơ đồ của tác giả; Hình~\ref{fig:pipeline} là sơ đồ nhóm vẽ lại theo luồng dữ liệu của một truy vấn, dùng làm xương sống cho các mục sau.
+Tên bài gói ba ý này thành ba mô-đun: RHF (Relation-guided Hierarchical Fusion, hợp nhất phân cấp có dẫn hướng bởi quan hệ), MER (MLLM-Enhanced Reasoning, suy luận tăng cường bằng MLLM) và MNO (Multi-modal Negative Sample Optimization, tối ưu mẫu âm đa mô thức). Hình~\ref{fig:arch} là sơ đồ của tác giả; Hình~\ref{fig:pipeline} là sơ đồ nhóm vẽ lại theo luồng dữ liệu của một truy vấn, dùng làm xương sống cho các mục sau.
 
 \begin{figure*}[t]
 \centering
@@ -259,7 +260,7 @@ w_m = \frac{\exp(\alpha_m)}{\sum_j \exp(\alpha_j)}, \qquad
 \end{equation}
 Softmax ở đây chạy trên \emph{ba con số}, không phải trên ba vector; mỗi mô thức nhận đúng một trọng số dùng chung cho mọi chiều.
 
-\paragraph{Ví dụ chạy tay.}
+\paragraph{Ví dụ chạy tay}
 Để thấy cơ chế, nhóm chọn $d = 3$ với các số tự đặt (không phải số của bài báo):
 $\mathbf{e}_S = [0{,}5;\,0{,}1;\,-0{,}3]$,
 $\mathbf{e}_I = [0{,}8;\,0{,}7;\,0{,}1]$,
@@ -298,7 +299,7 @@ Mô-đun MER đưa mô hình ngôn ngữ lớn đa phương thức LLaVA-1.5-7B 
 
 \textbf{Bước 1, hỏi.} Với mỗi truy vấn $(h, r, ?)$, ghép một prompt gồm phần hướng dẫn cố định, đoạn mô tả của $h$, tên các láng giềng của $h$ trong đồ thị, ảnh của $h$ và tên quan hệ $r$ dạng chữ. LLaVA được tinh chỉnh bằng LoRA~\cite{lora} cho đúng nhiệm vụ này; phần nối CLIP với mô hình ngôn ngữ bên trong LLaVA là có sẵn từ dự án LLaVA, tác giả chỉ thêm các ma trận hạng thấp. Đầu ra là \emph{một chuỗi tên}, ví dụ ``Mezzo-soprano''.
 
-\textbf{Bước 2, mã hoá.} Chuỗi đó qua BERT và lớp chiếu thành vector $\Tm \in \mathbb{R}^{2d}$ (chiều $2d$ vì hàm điểm RotatE làm việc với $d$ số phức, xem Mục~\ref{sec:hfr-rotate}). Mỗi truy vấn chỉ tính $\Tm$ một lần.
+\textbf{Bước 2, mã hoá.} Chuỗi đó qua BERT và lớp chiếu thành vector $\Tm \in \mathbb{R}^{2d}$ (bài ghi $2d$ chiều để khớp với $d$ số phức của RotatE; xem lưu ý về số chiều ở Mục~\ref{sec:hfr-rotate}). Mỗi truy vấn chỉ tính $\Tm$ một lần.
 
 \textbf{Bước 3, cổng.} Một mạng hai lớp đọc $\Tm$ và xuất ra mức tin cậy theo từng chiều:
 \begin{equation}
@@ -319,7 +320,7 @@ Chỗ nhóm thấy chưa ổn là $\mathbf{g}$ chỉ nhìn $\Tm$, không nhìn $
 \subsection{Hàm điểm RotatE}
 \label{sec:hfr-rotate}
 
-HFR-MKGC không đề xuất hàm điểm mới mà dùng RotatE~\cite{rotate}, chỉ thay đầu vào bằng các vector đã trộn. Trong RotatE, mỗi thực thể là một vector $d$ số phức, lưu bằng $2d$ số thực (nửa đầu phần thực, nửa sau phần ảo), tức $d$ điểm trên $d$ mặt phẳng độc lập. Quan hệ là $d$ góc xoay $\theta_k$, lấy từ vector $\mathbf{r}$ bằng cách chia cho một hằng số $\gamma$ và nhân $\pi$, rồi đổi thành số phức mô-đun 1:
+HFR-MKGC không đề xuất hàm điểm mới mà dùng RotatE~\cite{rotate}, chỉ thay đầu vào bằng các vector đã trộn. Trong RotatE, mỗi thực thể là một vector $d$ số phức, lưu bằng $2d$ số thực (nửa đầu phần thực, nửa sau phần ảo), tức $d$ điểm trên $d$ mặt phẳng độc lập. Quan hệ là $d$ góc xoay $\theta_k$, lấy từ vector $\mathbf{r}$ bằng cách chia cho một hằng số $\gamma$ và nhân $\pi$, rồi đổi thành số phức mô-đun 1. Ở đây bài báo dùng ký hiệu không nhất quán: trong RHF, vector thực thể và vector quan hệ đều thuộc $\mathbb{R}^d$ để lấy được tích vô hướng ở~\eqref{eq:alpha}; nhưng ở bước này quan hệ lại thành $d$ số phức và cổng $\mathbf{g}$ có $2d$ chiều, nghĩa là thực thể phải có $2d$ số thực. Hai cách viết không thể cùng đúng. Nhóm giữ ký hiệu của bài. Một cách hiểu khớp được cả hai chỗ là thực thể và quan hệ cùng có $2d$ số thực khi trộn, còn góc xoay chỉ lấy $d$ số của quan hệ, nhưng bài không nói rõ điều này. Công thức góc xoay:
 \begin{equation}
 \theta_k = \pi\,\frac{r_k}{\gamma}, \qquad r^{\mathbb{C}}_k = \cos\theta_k + i\sin\theta_k .
 \end{equation}
@@ -382,7 +383,7 @@ trong đó $\mathcal{L}_{\mathrm{kgc}}$ là hàm mất mát tự đối kháng c
 \mathcal{L}_G = \sum_{k} \max\big(0,\; c - f(\text{bộ giả}_k)\big),
 \label{eq:lg}
 \end{equation}
-tức bị phạt khi mẫu giả bị nhận ra quá dễ (điểm thấp hơn ngưỡng $c$). Hai bên cập nhật xen kẽ. Khung đối kháng này kế thừa từ AdaMF-MAT~\cite{adamf}; phần mới của bài là cách sinh mẫu giả bằng LLM và ma trận xoay.
+tức bị phạt khi mẫu giả bị nhận ra quá dễ (điểm thấp hơn ngưỡng $c$). Hai bên cập nhật xen kẽ. Theo nhóm, khung đối kháng này khá giống AdaMF-MAT~\cite{adamf}, vốn cũng sinh mẫu âm đa mô thức và huấn luyện đối kháng. Bài không nói rõ phần nào kế thừa; điểm khác dễ thấy là cách sinh mẫu giả bằng LLM và ma trận xoay.
 
 \begin{figure}[t]
 \centering
@@ -435,19 +436,19 @@ CLIP, BERT, phần còn lại của LLaVA & đóng băng\\
 \subsection{Thực nghiệm}
 \label{sec:hfr-exp}
 
-\paragraph{Thiết lập.} Tác giả huấn luyện 250 epoch bằng Adam trên hai GPU RTX A6000, chọn chiều $d \in \{128, 256, 512\}$, số mẫu âm mỗi bộ ba trong $\{32, 64, 128\}$, tốc độ học trong $\{10^{-5}, 10^{-4}, 10^{-3}\}$ và kích thước batch (số bộ ba xử lý trong một bước cập nhật) trong $\{128, 256, 1024\}$. Vì nhiều mô hình cơ sở không công khai đủ mã hay dữ liệu, tác giả tự chạy lại chúng với cùng bộ mã hoá CLIP và BERT. Nhóm \emph{không} tái lập được HFR-MKGC vì mã nguồn không công khai, nên mọi số liệu dưới đây là của bài báo.
+\paragraph{Thiết lập} Tác giả huấn luyện 250 epoch bằng Adam trên hai GPU RTX A6000, chọn chiều $d \in \{128, 256, 512\}$, số mẫu âm mỗi bộ ba trong $\{32, 64, 128\}$, tốc độ học trong $\{10^{-5}, 10^{-4}, 10^{-3}\}$ và kích thước batch (số bộ ba xử lý trong một bước cập nhật) trong $\{128, 256, 1024\}$. Vì nhiều mô hình cơ sở không công khai đủ mã hay dữ liệu, tác giả tự chạy lại chúng với cùng bộ mã hoá CLIP và BERT. Nhóm \emph{không} tái lập được HFR-MKGC vì mã nguồn không công khai, nên mọi số liệu dưới đây là của bài báo.
 
-\paragraph{Kết quả chính.} Bảng~\ref{tab:main} rút gọn từ Bảng 1 của bài, giữ RotatE làm mốc, các mô hình MMKGC mạnh nhất và LLaVA chạy đơn độc. Ba quan sát:
+\paragraph{Kết quả chính} Bảng~\ref{tab:main} rút gọn từ Bảng 1 của bài, giữ RotatE làm mốc, các mô hình MMKGC mạnh nhất và LLaVA chạy đơn độc. Ba quan sát:
 
 \begin{enumerate}
-\item So với mô hình cơ sở tốt nhất NativE, HFR-MKGC tăng MRR 1{,}83 điểm trên MKG-W và 1{,}61 điểm trên DB15K nhưng chỉ 0{,}66 điểm trên MKG-Y. MKG-Y có 28 quan hệ, cấu trúc đã đủ mạnh nên đa mô thức thêm được ít; điều này nhất quán với động lực của bài.
-\item HFR-MKGC đứng đầu 11 trong 12 ô. Ngoại lệ là Hits@1 trên DB15K (23{,}04\%), thua RSME, APKGC và MyGO. Bài viết rằng phương pháp đạt mức tốt nhất trên mọi độ đo; nhóm cho rằng cần nói chính xác là 11/12.
+\item So với mô hình cơ sở có MRR cao nhất trên từng bộ dữ liệu, HFR-MKGC tăng 1{,}83 điểm trên MKG-W (so với NativE) và 1{,}48 điểm trên DB15K (so với RSME), nhưng chỉ 0{,}66 điểm trên MKG-Y (so với NativE). MKG-Y có 28 quan hệ, cấu trúc đã đủ mạnh nên đa mô thức thêm được ít; điều này nhất quán với động lực của bài.
+\item Theo bảng, HFR-MKGC đứng đầu 11 trong 12 ô. Ngoại lệ là Hits@1 trên DB15K (23{,}04\%), thua RSME, APKGC và MyGO. Trong 11 ô còn lại có ô H@3 trên MKG-Y, thuộc cột mà nhóm nghi bị chép nhầm (xem chú thích Bảng~\ref{tab:main}), nên số ô dẫn đầu đáng tin chỉ là 10. Bài viết rằng phương pháp đạt mức tốt nhất trên mọi độ đo; điều này không đúng.
 \item LLaVA dùng một mình kém xa mọi mô hình KGE, đặc biệt trên MKG-Y (Hits@10 bằng 3{,}58\%). LLM không thay được hàm điểm có cấu trúc; vai trò hợp lý của nó là bổ trợ, đúng như cách MER thiết kế.
 \end{enumerate}
 
 \begin{table*}[t]
 \centering
-\caption{Kết quả chính (\%), rút gọn từ Bảng 1 của~\cite{hfrmkgc}. Tốt nhất in đậm, tốt thứ hai gạch chân (tính trên toàn bộ 14 mô hình cơ sở của bài, không chỉ các dòng hiển thị). LLaVA không tính được MRR vì chỉ sinh 10 ứng viên.}
+\caption{Kết quả chính (\%), rút gọn từ Bảng 1 của~\cite{hfrmkgc}. Tốt nhất in đậm, tốt thứ hai gạch chân (tính trên toàn bộ 14 mô hình cơ sở của bài, không chỉ các dòng hiển thị). LLaVA không tính được MRR vì chỉ sinh 10 ứng viên. Lưu ý: trong bài gốc, cột H@3 của MKG-Y trùng y hệt cột H@3 của MKG-W ở mọi mô hình trừ hai LLM, nhiều khả năng là lỗi chép bảng; nhóm giữ nguyên số nhưng không dựa vào cột này.}
 \label{tab:main}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -470,7 +471,7 @@ HFR-MKGC~\cite{hfrmkgc} & \textbf{38{,}62} & \textbf{51{,}66} & \textbf{42{,}12}
 \end{tabular}
 \end{table*}
 
-\paragraph{Loại bỏ từng phần.} Bảng~\ref{tab:ablation} là nghiên cứu loại bỏ, chỉ làm trên MKG-W. Nhóm đọc bảng này theo hai hướng.
+\paragraph{Loại bỏ từng phần} Bảng~\ref{tab:ablation} là nghiên cứu loại bỏ, chỉ làm trên MKG-W. Nhóm đọc bảng này theo hai hướng.
 
 Theo mô-đun: bỏ RHF (thay bằng trung bình cộng ba mô thức) mất nhiều nhất, 6{,}64 điểm MRR. Đáng chú ý là Hits@10 gần như không đổi (50{,}25 so với 51{,}66) trong khi Hits@1 rớt từ 31{,}37 xuống 20{,}80. Nghĩa là trộn theo quan hệ không giúp tìm thêm ứng viên vào top 10, mà giúp \emph{xếp đúng ứng viên lên hạng nhất}. Bỏ MER mất 5{,}10 điểm, bỏ MNO mất 4{,}61 điểm; thay cách bóp méo của MNO bằng nhiễu ngẫu nhiên (dòng bỏ PTI) mất 4{,}03 điểm, cho thấy cách sinh mẫu giả có ý nghĩa chứ không chỉ là thêm nhiễu.
 
@@ -501,9 +502,9 @@ HFR-MKGC đầy đủ               & \textbf{38{,}62} & \textbf{51{,}66} & \tex
 \end{tabular}
 \end{table}
 
-\paragraph{Độ nhạy siêu tham số.} Tác giả quét chiều $d$ và số mẫu âm trên MKG-W cho cả HFR-MKGC và RotatE. Kết luận có thể dùng được: chiều lớn (512) chỉ phát huy khi có nhiều mẫu âm (128); chiều 256 tốt nhất với 64 mẫu âm; chiều 128 gần như không nhạy với số mẫu âm. MRR và Hits@1 dao động mạnh hơn Hits@10, nhất quán với nhận xét ở phần loại bỏ rằng các mô-đun chủ yếu tác động lên thứ hạng đầu.
+\paragraph{Độ nhạy siêu tham số} Tác giả quét chiều $d$ và số mẫu âm trên MKG-W cho cả HFR-MKGC và RotatE. Kết luận có thể dùng được: chiều lớn (512) chỉ phát huy khi có nhiều mẫu âm (128); chiều 256 tốt nhất với 64 mẫu âm; chiều 128 gần như không nhạy với số mẫu âm. MRR và Hits@1 dao động mạnh hơn Hits@10, nhất quán với nhận xét ở phần loại bỏ rằng các mô-đun chủ yếu tác động lên thứ hạng đầu.
 
-\paragraph{Nghiên cứu tình huống.} Hình~\ref{fig:case} là ví dụ của tác giả với đúng truy vấn Gwen Stefani. Khi thay RHF bằng trọng số ngẫu nhiên, ảnh nhận trọng số cao nhất dù chỉ chứa ngoại hình, và Mezzo-soprano đứng hạng 2. Với RHF, trọng số văn bản tăng, ảnh giảm, đáp án đúng lên hạng 1. Đây là minh chứng định tính cho cơ chế ở Mục~\ref{sec:hfr-stage2}.
+\paragraph{Nghiên cứu tình huống} Hình~\ref{fig:case} là ví dụ của tác giả với đúng truy vấn Gwen Stefani. Khi thay RHF bằng trọng số ngẫu nhiên, ảnh nhận trọng số cao nhất dù chỉ chứa ngoại hình, và Mezzo-soprano đứng hạng 2. Với RHF, trọng số văn bản tăng, ảnh giảm, đáp án đúng lên hạng 1. Đây là minh chứng định tính cho cơ chế ở Mục~\ref{sec:hfr-stage2}.
 
 \begin{figure}[t]
 \centering
@@ -517,7 +518,7 @@ HFR-MKGC đầy đủ               & \textbf{38{,}62} & \textbf{51{,}66} & \tex
 
 Phần lớn chỗ nhóm chưa thấy thuyết phục nằm ở phương pháp. Việc so vector CLIP với vector BERT bằng tích vô hướng ở~\eqref{eq:stage1} và~\eqref{eq:alpha} chỉ có nghĩa khi hai lớp chiếu đã đưa chúng về cùng một không gian. Thế nhưng bài không có hàm mất mát căn chỉnh riêng, cũng không nói có chuẩn hoá vector hay không, nên mọi sự căn chỉnh đều phải đi đường vòng qua hàm mất mát KGC. Cổng $\mathbf{g}$ thì không nhìn ngữ cảnh câu hỏi (Mục~\ref{sec:hfr-mer}), còn mẫu giả của MNO không được kiểm chứng là sai thật (Mục~\ref{sec:hfr-mno}). Thêm nữa, nhiều chi tiết cần để làm lại không được nêu: nội dung prompt, số epoch tinh chỉnh LoRA, cách chọn láng giềng đưa vào prompt, các hằng $\gamma$, $c$, $\mu_1$, nhiệt độ của hàm mất mát tự đối kháng, và tỉ lệ số bước cập nhật giữa $D$ và $G$.
 
-Phần thực nghiệm cũng có vài chỗ cần nói. Mức cải thiện không đều: MKG-Y chỉ tăng 0{,}66 MRR, Hits@1 trên DB15K còn thua, nên câu ``tốt nhất trên mọi độ đo'' là nói quá. Nghiên cứu loại bỏ chỉ làm trên một bộ dữ liệu. Chi phí cũng bị bỏ qua: LLaVA-7B phải chạy cho mỗi ảnh (sinh caption), mỗi truy vấn (đưa gợi ý) và mỗi đoạn văn bản (viết lại), vậy mà bài không cho biết thời gian huấn luyện hay suy diễn so với mô hình cơ sở. Mã nguồn không công khai, nhiều mô hình cơ sở lại do tác giả tự chạy, nên người ngoài rất khó kiểm chứng.
+Phần thực nghiệm cũng có vài chỗ cần nói. Mức cải thiện không đều: MKG-Y chỉ tăng 0{,}66 MRR, Hits@1 trên DB15K còn thua, nên câu ``tốt nhất trên mọi độ đo'' là nói quá. Bảng kết quả chính còn có một lỗi chép: cột H@3 của MKG-Y lặp lại nguyên cột H@3 của MKG-W, và ở vài mô hình cơ sở không hiển thị trong Bảng~\ref{tab:main}, con số này còn lớn hơn H@10 (SNAG: 31{,}59 so với 28{,}14) hoặc nhỏ hơn H@1 (DHNS: 25{,}91 so với 33{,}64), điều không thể xảy ra. Nghiên cứu loại bỏ chỉ làm trên một bộ dữ liệu. Chi phí cũng bị bỏ qua: LLaVA-7B phải chạy cho mỗi ảnh (sinh caption), mỗi truy vấn (đưa gợi ý) và mỗi đoạn văn bản (viết lại), vậy mà bài không cho biết thời gian huấn luyện hay suy diễn so với mô hình cơ sở. Mã nguồn không công khai, nhiều mô hình cơ sở lại do tác giả tự chạy, nên người ngoài rất khó kiểm chứng.
 
 Bài cũng bỏ ngỏ chuyện rò rỉ tri thức. LLaVA và BERT được tiền huấn luyện trên dữ liệu web, nên rất có thể đã ``biết'' sẵn nhiều sự thật trong Wikidata hay DBpedia. Nếu vậy, một phần đóng góp của MER đến từ trí nhớ của mô hình chứ không hẳn từ suy luận, và cách đọc kết quả ở Bảng~\ref{tab:ablation} sẽ khác đi.
 
@@ -622,9 +623,9 @@ P_{\mathrm{drop}}(k) = \min\!\Big(\alpha,\; \frac{k}{N}\,\alpha\Big),
 \end{equation}
 với $\alpha$ là mức trần, chọn bằng $0{,}3$. Khi đến lượt rụng, tung thêm một đồng xu cân bằng để chọn bỏ ảnh hay bỏ văn bản. Mô thức bị bỏ được thay bằng vector 0 chứ không bị xoá khỏi chuỗi, nên chuỗi đưa vào bộ mã hoá có cùng độ dài trong mọi trường hợp.
 
-\paragraph{Tính thử vài giá trị.} Do $k$ không bao giờ vượt $N$, $\frac{k}{N}\alpha$ cũng không bao giờ vượt $\alpha$, nên phép $\min$ thật ra không làm gì cả: lịch chỉ là một đường thẳng đi từ 0 lên $\alpha$ ở epoch cuối. Với $N = 5000$, xác suất rụng ở epoch 1000 là 0{,}06, ở epoch 2500 là 0{,}15 và chỉ chạm 0{,}3 ở epoch 5000. Tính trung bình cả quá trình thì chỉ khoảng 15\% số lượt có rụng, mỗi mô thức phụ bị bỏ chừng 7{,}5\%. Như vậy phần lớn thời gian mô hình vẫn thấy đủ ba mô thức (Hình~\ref{fig:schedules}).
+\paragraph{Tính thử vài giá trị} Do $k$ không bao giờ vượt $N$, $\frac{k}{N}\alpha$ cũng không bao giờ vượt $\alpha$, nên phép $\min$ thật ra không làm gì cả: lịch chỉ là một đường thẳng đi từ 0 lên $\alpha$ ở epoch cuối. Với $N = 5000$, xác suất rụng ở epoch 1000 là 0{,}06, ở epoch 2500 là 0{,}15 và chỉ chạm 0{,}3 ở epoch 5000. Tính trung bình cả quá trình thì chỉ khoảng 15\% số lượt có rụng, mỗi mô thức phụ bị bỏ chừng 7{,}5\%. Như vậy phần lớn thời gian mô hình vẫn thấy đủ ba mô thức (Hình~\ref{fig:schedules}).
 
-\paragraph{So với dropout thông thường.} Dropout thông thường tắt ngẫu nhiên từng phần tử lẻ trong vector để chống quá khớp. MD thô hơn nhiều: mỗi lần rụng là mất trắng cả một mô thức của toàn bộ thực thể, còn cấu trúc thì không bao giờ bị đụng tới. Mục đích cũng khác. MD cố tình tạo ra những lúc mô hình chỉ có cấu trúc với ảnh, hoặc cấu trúc với văn bản, để nó không dồn hết niềm tin vào một mô thức phụ. Lịch tăng dần đi theo trực giác ``học đủ trước, tập thiếu sau'': đầu khoá cần đủ thông tin để các lớp chiếu học được gì đó, càng về sau mới nên tập cho mô hình quen với việc thiếu. Cơ chế này không tốn thêm tham số nào.
+\paragraph{So với dropout thông thường} Dropout thông thường tắt ngẫu nhiên từng phần tử lẻ trong vector để chống quá khớp. MD thô hơn nhiều: mỗi lần rụng là mất trắng cả một mô thức của toàn bộ thực thể, còn cấu trúc thì không bao giờ bị đụng tới. Mục đích cũng khác. MD cố tình tạo ra những lúc mô hình chỉ có cấu trúc với ảnh, hoặc cấu trúc với văn bản, để nó không dồn hết niềm tin vào một mô thức phụ. Lịch tăng dần đi theo trực giác ``học đủ trước, tập thiếu sau'': đầu khoá cần đủ thông tin để các lớp chiếu học được gì đó, càng về sau mới nên tập cho mô hình quen với việc thiếu. Cơ chế này không tốn thêm tham số nào.
 
 MD cũng không phải loại dropout duy nhất trong mô hình. Cấu hình kế thừa từ MyGO còn tắt ngẫu nhiên 90\% phần tử của vector cấu trúc, 40\% của token ảnh và 10\% của token văn bản ở mỗi bước, nên câu ``luôn giữ cấu trúc'' chỉ đúng khi nói ở mức cả mô thức.
 
@@ -680,7 +681,7 @@ Sau MD và BGF, mỗi thực thể thành một chuỗi
 \mathbf{x} = \big[\,[\mathrm{ENT}],\; \mathbf{e}_{\mathrm{str}},\; \mathbf{e}^{(\prime)}_{\mathrm{vis}},\; \mathbf{e}^{(\prime)}_{\mathrm{txt}}\,\big],
 \label{eq:seq}
 \end{equation}
-trong đó $[\mathrm{ENT}]$ là một token học được đặt đầu chuỗi, dấu phẩy trên chỉ có ở trường hợp 1, còn ở trường hợp 2 một trong hai khối cuối là 0. Chuỗi qua một bộ mã hoá Transformer~\cite{transformer}; vector ở vị trí $[\mathrm{ENT}]$ là biểu diễn cuối $\mathbf{h}$ của thực thể. Cũng như Phần A, biểu diễn này không phụ thuộc quan hệ.
+trong đó $[\mathrm{ENT}]$ là một token học được đặt đầu chuỗi, ký hiệu phẩy ($'$) chỉ có ở trường hợp 1, còn ở trường hợp 2 một trong hai khối cuối là 0. Chuỗi qua một bộ mã hoá Transformer~\cite{transformer}; vector ở vị trí $[\mathrm{ENT}]$ là biểu diễn cuối $\mathbf{h}$ của thực thể. Cũng như Phần A, biểu diễn này không phụ thuộc quan hệ.
 
 Điểm của bộ ba được tính bằng TuckER~\cite{tucker}:
 \begin{equation}
@@ -710,7 +711,7 @@ N_{\mathrm{random}} = N_{\mathrm{neg}} - N_{\mathrm{hard}}.
 \end{gathered}
 \label{eq:pneg}
 \end{equation}
-Ứng viên khó là $N_{\mathrm{hard}}$ thực thể sai có điểm cao nhất theo chính mô hình hiện tại; phần còn lại lấy ngẫu nhiên. Với $\beta = 0{,}8$: ở epoch 2500 có 8 ứng viên khó và 12 ngẫu nhiên; đến epoch cuối là 16 và 4. Lịch này hợp lý ở chỗ: đầu khoá mô hình còn yếu nên những ứng viên điểm cao phần lớn chỉ là nhiễu, lấy ngẫu nhiên cho đa dạng thì tốt hơn; về sau, ứng viên điểm cao mới thật sự là thứ dễ gây nhầm.
+Ứng viên khó là $N_{\mathrm{hard}}$ thực thể sai có điểm cao nhất theo chính mô hình hiện tại; phần còn lại lấy ngẫu nhiên. Đoạn này mô tả theo mã nguồn, nơi ứng viên được chọn trong toàn bộ thực thể; bài báo thì viết rằng mẫu âm được lấy trong tập thực thể của batch (xem Bảng~\ref{tab:mdbgf-code}). Với $\beta = 0{,}8$: ở epoch 2500 có 8 ứng viên khó và 12 ngẫu nhiên; đến epoch cuối là 16 và 4. Lịch này hợp lý ở chỗ: đầu khoá mô hình còn yếu nên những ứng viên điểm cao phần lớn chỉ là nhiễu, lấy ngẫu nhiên cho đa dạng thì tốt hơn; về sau, ứng viên điểm cao mới thật sự là thứ dễ gây nhầm.
 
 Hàm mất mát cuối cùng là
 \begin{equation}
@@ -724,9 +725,9 @@ Mẫu âm trong AHNS luôn là các thực thể khác, không phải phiên b�
 \subsection{Thực nghiệm}
 \label{sec:mdbgf-exp}
 
-\paragraph{Thiết lập.} Ba bộ dữ liệu như Bảng~\ref{tab:datasets}. Huấn luyện 5000 epoch, batch 2048 (MKG-Y dùng 1024 theo kịch bản chạy của tác giả), $d = 256$, trên một GPU A800. Các mô hình cơ sở phần lớn lấy số từ bài gốc của chúng; riêng một số ô của MoMoK do tác giả MDBGF tự chạy lại. Lưu ý: bảng thống kê của MDBGF ghi mọi thực thể DB15K đều có văn bản, khác con số 70{,}7\% ở Bảng~\ref{tab:datasets}. Bài không giải thích chênh lệch này, nhiều khả năng do hai bài dùng nguồn mô tả khác nhau.
+\paragraph{Thiết lập} Ba bộ dữ liệu như Bảng~\ref{tab:datasets}. Huấn luyện 5000 epoch, batch 2048 (MKG-Y dùng 1024 theo kịch bản chạy của tác giả), $d = 256$, trên một GPU A800. Các mô hình cơ sở phần lớn lấy số từ bài gốc của chúng; riêng một số ô của MoMoK do tác giả MDBGF tự chạy lại. Lưu ý: bảng thống kê của MDBGF ghi mọi thực thể DB15K đều có văn bản, khác con số 70{,}7\% ở Bảng~\ref{tab:datasets}. Bài không giải thích chênh lệch này, nhiều khả năng do hai bài dùng nguồn mô tả khác nhau.
 
-\paragraph{Kết quả chính.} Bảng~\ref{tab:mdbgf-main} rút gọn từ Bảng 1 của bài, giữ RotatE và TuckER làm mốc, cùng MyGO (khung nền) và các mô hình MMKGC mạnh nhất. Có bốn điểm đáng nói:
+\paragraph{Kết quả chính} Bảng~\ref{tab:mdbgf-main} rút gọn từ Bảng 1 của bài, giữ RotatE và TuckER làm mốc, cùng MyGO (khung nền) và các mô hình MMKGC mạnh nhất. Có bốn điểm đáng nói:
 
 \begin{enumerate}
 \item Trên MKG-W, MRR tăng 2{,}70 điểm so với APKGC, một khoảng cách đáng kể. Hai bộ còn lại thì khiêm tốn hơn nhiều: 0{,}79 điểm trên DB15K và 0{,}21 điểm trên MKG-Y so với MCKGC. Bài trình bày mức tăng bằng phần trăm tương đối (7{,}22\%, 1{,}99\%, 0{,}54\%) nên đọc qua dễ tưởng cách biệt lớn hơn thực tế.
@@ -761,7 +762,7 @@ MDBGF~\cite{mdbgf}     & \textbf{40{,}10} & \textbf{52{,}35} & \textbf{42{,}83} 
 \end{tabular}
 \end{table*}
 
-\paragraph{Loại bỏ từng phần.} Bảng~\ref{tab:mdbgf-ablation} gộp ba bảng phân tích của bài, đều trên MKG-W. Bỏ mô-đun nào cũng mất khoảng 1{,}4--1{,}5 điểm MRR. Ba mức gần như bằng nhau, lại không có độ lệch giữa các lần chạy, nên không thể nói mô-đun nào quan trọng hơn. Khi thay BGF, tác giả dùng một cơ chế trộn bằng chú ý đơn giản chứ không bỏ hẳn bước trộn.
+\paragraph{Loại bỏ từng phần} Bảng~\ref{tab:mdbgf-ablation} gộp ba bảng phân tích của bài, đều trên MKG-W. Bỏ mô-đun nào cũng mất khoảng 1{,}4--1{,}5 điểm MRR. Ba mức gần như bằng nhau, lại không có độ lệch giữa các lần chạy, nên không thể nói mô-đun nào quan trọng hơn. Khi thay BGF, tác giả dùng một cơ chế trộn bằng chú ý đơn giản chứ không bỏ hẳn bước trộn.
 
 Về cách rụng, chỉ bỏ ảnh hoặc chỉ bỏ văn bản đều thua cách bỏ ngẫu nhiên một trong hai khoảng 1{,}3 điểm MRR. Bỏ cả hai cùng lúc (nhóm hiểu là chỉ còn cấu trúc) nằm ở giữa. Điều này khớp với lập luận rằng mô hình cần gặp nhiều kiểu thiếu khác nhau.
 
@@ -793,11 +794,11 @@ MDBGF đầy đủ                  & \textbf{40{,}10} & \textbf{52{,}35} & \tex
 \end{tabular}
 \end{table}
 
-\paragraph{Cạnh tranh mô thức và thử nghiệm thiếu dữ liệu.} Với mô hình nền (bỏ cả MD và BGF), bài thử các tổ hợp mô thức khi suy diễn. Đủ ba mô thức đạt MRR 37{,}3; cấu trúc + văn bản đạt 38{,}9; cấu trúc + ảnh đạt 36{,}7; ảnh + văn bản (bỏ cấu trúc) đạt 36{,}4. Ảnh trên MKG-W rõ ràng đang làm hại mô hình nền, đúng như động lực của bài. Nhưng bảng này còn cho thấy một điều bài không nhắc tới: chỉ cần bỏ ảnh khỏi mô hình nền là được 38{,}9, cao hơn cả bản bỏ MD (38{,}63) lẫn bản bỏ BGF (38{,}70) của MDBGF. So với cách làm đơn giản ``bỏ ảnh đi'', MD và BGF cộng lại chỉ hơn khoảng 1{,}2 điểm MRR (40{,}10 so với 38{,}9).
+\paragraph{Cạnh tranh mô thức và thử nghiệm thiếu dữ liệu} Với mô hình nền (bỏ cả MD và BGF), bài thử các tổ hợp mô thức khi suy diễn. Đủ ba mô thức đạt MRR 37{,}3; cấu trúc + văn bản đạt 38{,}9; cấu trúc + ảnh đạt 36{,}7; ảnh + văn bản (bỏ cấu trúc) đạt 36{,}4. Ảnh trên MKG-W rõ ràng đang làm hại mô hình nền, đúng như động lực của bài. Nhưng bảng này còn cho thấy một điều bài không nhắc tới: chỉ cần bỏ ảnh khỏi mô hình nền là được 38{,}9, cao hơn cả bản bỏ MD (38{,}63) lẫn bản bỏ BGF (38{,}70) của MDBGF. So với cách làm đơn giản ``bỏ ảnh đi'', MD và BGF cộng lại chỉ hơn khoảng 1{,}2 điểm MRR (40{,}10 so với 38{,}9).
 
 Để thử độ bền, tác giả che bớt mô thức trên tập kiểm thử theo đúng cách MD làm khi huấn luyện, và MRR giảm từ 40{,}10 xuống 38{,}19. Trong cả bài, chỉ thực nghiệm này đo trực tiếp chữ ``robust'' ở tiêu đề. Tiếc là không có mô hình cơ sở nào được chạy trong cùng điều kiện, nên chưa thể nói MDBGF bền hơn các phương pháp khác.
 
-\paragraph{Tính tổng quát và chi phí.} Theo Hình 3 của bài, cắm MD vào MyGO và AdaMF đều làm tăng kết quả trên MKG-W. Bài chỉ vẽ biểu đồ cột, không ghi số, nên ở đây không trích lại. Về chọn cặp mô thức cho BGF (Hình 4 của bài), cặp ảnh--văn bản cho mức tăng lớn nhất; các cặp có cấu trúc tham gia cổng cho mức tăng thấp hơn. Bảng~\ref{tab:mdbgf-neg} so AHNS với hai cách lấy mẫu âm của MyGO (FGCL, tương phản mịn) và AdaMF (sinh nhiễu đối kháng). Về độ chính xác, AHNS chỉ hơn FGCL 0{,}12 điểm MRR, nhỏ tới mức khó coi là khác biệt thật. Cái AHNS thắng rõ là bộ nhớ: khoảng 21 GB so với 40 GB và 53 GB. Gắn AHNS vào chính MyGO thay cho FGCL cũng tăng MRR từ 36{,}10 lên 37{,}50. Toàn bộ ba mô-đun chỉ làm tăng bộ nhớ khoảng 3\% so với mô hình nền (21286 MB so với 20622 MB), phần lớn do hai cổng của BGF.
+\paragraph{Tính tổng quát và chi phí} Theo Hình 3 của bài, cắm MD vào MyGO và AdaMF đều làm tăng kết quả trên MKG-W. Bài chỉ vẽ biểu đồ cột, không ghi số, nên ở đây không trích lại. Về chọn cặp mô thức cho BGF (Hình 4 của bài), cặp ảnh--văn bản cho mức tăng lớn nhất; các cặp có cấu trúc tham gia cổng cho mức tăng thấp hơn. Bảng~\ref{tab:mdbgf-neg} so AHNS với hai cách lấy mẫu âm của MyGO (FGCL, tương phản mịn) và AdaMF (sinh nhiễu đối kháng). Về độ chính xác, AHNS chỉ hơn FGCL 0{,}12 điểm MRR, nhỏ tới mức khó coi là khác biệt thật. Cái AHNS thắng rõ là bộ nhớ: khoảng 21 GB so với 40 GB và 53 GB. Gắn AHNS vào chính MyGO thay cho FGCL cũng tăng MRR từ 36{,}10 lên 37{,}50. Toàn bộ ba mô-đun chỉ làm tăng bộ nhớ khoảng 3\% so với mô hình nền (21286 MB so với 20622 MB), phần lớn do hai cổng của BGF.
 
 \begin{table}[t]
 \centering
@@ -817,9 +818,9 @@ AHNS                           & \textbf{40{,}10} & \textbf{33{,}42} & 21286\\
 \end{tabular}
 \end{table}
 
-\paragraph{Siêu tham số.} Tác giả quét ba giá trị cho mỗi siêu tham số chính trên MKG-W: $\alpha \in \{0{,}15;\,0{,}3;\,0{,}45\}$, $\beta \in \{0{,}4;\,0{,}6;\,0{,}8\}$, $\lambda \in \{0{,}1;\,0{,}01;\,0{,}001\}$ và $N_{\mathrm{neg}}$ từ 5 tới 40. Xét theo MRR, giá trị được chọn luôn là tốt nhất, và mọi biến thể chỉ kém dưới 1 điểm. Như vậy phương pháp không quá nhạy với siêu tham số. Nhưng cũng vì chênh lệch nhỏ như thế, với một lần chạy duy nhất khó biết giá trị ``tốt nhất'' tốt thật hay chỉ do may. Bài cũng cho thấy MD có ích nhiều hơn khi giữ nhiều token ảnh và văn bản hơn, tức khi mô thức phụ chứa nhiều thông tin nhưng cũng nhiều nhiễu.
+\paragraph{Siêu tham số} Tác giả quét ba giá trị cho mỗi siêu tham số chính trên MKG-W: $\alpha \in \{0{,}15;\,0{,}3;\,0{,}45\}$, $\beta \in \{0{,}4;\,0{,}6;\,0{,}8\}$, $\lambda \in \{0{,}1;\,0{,}01;\,0{,}001\}$ và $N_{\mathrm{neg}}$ từ 5 tới 40. Xét theo MRR, giá trị được chọn luôn là tốt nhất, và mọi biến thể chỉ kém dưới 1 điểm. Như vậy phương pháp không quá nhạy với siêu tham số. Nhưng cũng vì chênh lệch nhỏ như thế, với một lần chạy duy nhất khó biết giá trị ``tốt nhất'' tốt thật hay chỉ do may. Bài cũng cho thấy MD có ích nhiều hơn khi giữ nhiều token ảnh và văn bản hơn, tức khi mô thức phụ chứa nhiều thông tin nhưng cũng nhiều nhiễu.
 
-\paragraph{Tái lập của nhóm.} \todo{Chạy lại MDBGF trên MKG-W bằng mã nguồn tác giả. Ghi WandB công khai và gắn link ngay cạnh: (1) kết quả chính, (2) loại bỏ từng phần, (3) so sánh lịch rụng theo bài và theo mã. Link repo GitHub của nhóm đặt tại đây.}
+Kết quả nhóm tự chạy lại được trình bày riêng ở Mục~\ref{sec:mdbgf-repro}, sau phần đối chiếu mã nguồn.
 
 \subsection{Đối chiếu bài báo với mã nguồn công khai}
 \label{sec:mdbgf-code}
@@ -848,6 +849,36 @@ Chọn kết quả & không nêu & đánh giá mỗi 50 epoch; báo cáo lần c
 
 Đáng lo nhất là dòng cuối. Kết quả ``tốt nhất'' được giữ lại theo MRR trên tập kiểm thử chứ không theo tập kiểm định, tức là trong 100 lần đánh giá, lần nào đẹp nhất trên tập kiểm thử thì lấy lần đó. Cách chọn này luôn nghiêng về phía có lợi, trong khi các chênh lệch ở Bảng~\ref{tab:mdbgf-ablation} chỉ cỡ 1{,}5 điểm. Dòng đầu bảng cũng đặt ra một câu hỏi: nếu mã không dùng lịch tuyến tính, thì thí nghiệm rụng trước/sau epoch 500 và phần quét $\alpha$ được chạy bằng phiên bản nào?
 
+\subsection{Tái lập của nhóm}
+\label{sec:mdbgf-repro}
+
+\paragraph{Thiết lập} Nhóm dùng nguyên mô hình trong mã của tác giả (commit \texttt{c512d79}) và viết thêm một script huấn luyện, công khai tại \url{https://github.com/HatDuaa/DLDT/tree/main/bao-cao-seminar-MMKGC/MDBGF/reproduce}. So với script gốc, script của nhóm ghi toàn bộ quá trình lên Weights \& Biases, lưu checkpoint để chạy tiếp khi phiên làm việc bị ngắt, và đánh giá theo lô thay vì từng bộ ba. Nhóm đã kiểm tra trên dữ liệu giả rằng cách đánh giá theo lô cho ra đúng thứ hạng như hàm của tác giả, kể cả khi có điểm hoà. Mỗi lần đánh giá, script ghi kết quả trên cả tập kiểm định lẫn tập kiểm thử, nhờ vậy báo được cả hai cách chọn mô hình: theo MRR kiểm định (cách đúng) và theo MRR kiểm thử (cách trong mã gốc, Mục~\ref{sec:mdbgf-code}).
+
+Thực nghiệm chạy trên một GPU NVIDIA L4 24 GB của Google Colab Pro. Đỉnh bộ nhớ đo được là 16{,}5 GB, thấp hơn mức khoảng 21 GB ở Bảng 6 của bài. Mỗi epoch mất 17{,}4 giây, nên chạy đủ 5000 epoch như bài sẽ tốn khoảng 24 giờ GPU cho \emph{mỗi} cấu hình, vượt ngân sách của nhóm. Vì vậy nhóm chạy 1550 epoch. Con số này không tuỳ tiện: lịch tốc độ học của tác giả giảm theo hàm cos rồi khởi động lại với chu kỳ dài gấp đôi sau mỗi lần (50, 100, 200, 400, 800 epoch), và epoch 1550 là điểm kết thúc một chu kỳ, lúc tốc độ học về gần 0. Các siêu tham số khác giữ đúng như kịch bản chạy của tác giả cho MKG-W. Rụng mô thức dùng đúng như mã công khai (xác suất cố định 0{,}3). Với $N = 1550$, tỉ lệ mẫu âm khó của AHNS vẫn tăng tuyến tính tới $\beta = 0{,}8$, chỉ là tăng nhanh hơn theo số epoch.
+
+\paragraph{Kết quả} Bảng~\ref{tab:mdbgf-repro} so kết quả của nhóm với số trong bài. Quá trình huấn luyện của từng dòng được ghi tại: kết quả chính \url{https://wandb.ai/minhdatngo-forwork-ho-chi-minh-city-university-of-science/mdbgf-reproduce/runs/xxejayyu}; bỏ MD \todo{link WandB run no\_md}.
+
+\begin{table}[t]
+\centering
+\caption{Kết quả nhóm chạy lại MDBGF trên MKG-W (\%). Dòng đầu lấy từ Bảng 1 của~\cite{mdbgf}; các dòng còn lại do nhóm chạy, 1550 epoch, chọn mô hình theo MRR kiểm định trừ dòng có dấu $^{*}$ (chọn theo kiểm thử như mã gốc).}
+\label{tab:mdbgf-repro}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{l cccc c}
+\toprule
+Thiết lập & MRR & H@10 & H@3 & H@1 & Epoch\\
+\midrule
+Bài báo (5000 epoch)        & 40{,}10 & 52{,}35 & 42{,}83 & 33{,}42 & ---\\
+\midrule
+Nhóm, chọn theo kiểm định   & \tbd & \tbd & \tbd & \tbd & \tbd\\
+Nhóm, chọn theo kiểm thử$^{*}$ & \tbd & \tbd & \tbd & \tbd & \tbd\\
+Nhóm, bỏ MD                 & \tbd & \tbd & \tbd & \tbd & \tbd\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\todo{Nhận xét khi có số liệu: (1) khoảng cách với bài báo và phần nào do chạy ít epoch hơn (xem đường MRR kiểm định trên WandB còn tăng hay đã bão hoà); (2) chênh lệch giữa hai cách chọn mô hình; (3) ở 1550 epoch, MD có còn giúp như Bảng~\ref{tab:mdbgf-ablation} hay không.}
+
 \subsection{Nhận xét và hạn chế}
 \label{sec:mdbgf-limits}
 
@@ -865,7 +896,15 @@ Bỏ qua những điểm trên, ý tưởng chính của MDBGF vẫn đơn giả
 \section{Đối chiếu hai bài và kết luận}
 \label{sec:compare}
 
-\todo{Viết hoàn chỉnh mục này; dưới đây là đoạn sơ bộ.} Điểm đối chiếu nhóm đã thấy từ phía HFR-MKGC: hai bài cùng dùng ba bộ dữ liệu, cùng đặt câu hỏi ``dùng ảnh và văn bản thế nào cho bền vững'', nhưng chọn hai giả định ngược nhau về các biến thể của một thực thể. HFR-MKGC coi bản bóp méo của một thực thể là mẫu âm cần đẩy xa; MDBGF coi bản thiếu ảnh hoặc thiếu văn bản vẫn là chính thực thể đó và vẫn phải dự đoán đúng. Trọng số mô thức của HFR-MKGC phụ thuộc quan hệ; cổng của MDBGF thì không. Cả hai đều không có hàm mất mát căn chỉnh mô thức riêng. HFR-MKGC đưa LLM vào vòng lặp với chi phí lớn và không công khai mã; MDBGF không dùng LLM, tăng bộ nhớ khoảng 3\% và có mã công khai. Số liệu mô hình cơ sở ở hai bài lệch nhau đáng kể (Mục~\ref{sec:mdbgf-limits}), nên không thể so trực tiếp MRR 38{,}62 của HFR-MKGC với 40{,}10 của MDBGF trên MKG-W.
+Hai bài cùng giải một bài toán, trên cùng ba bộ dữ liệu, và đều thuộc nhóm nhúng đồ thị tri thức. Điểm thú vị là chúng đi theo hai giả định gần như ngược nhau về chuyện một thực thể bị ``thiếu'' hoặc ``méo'' thông tin. HFR-MKGC coi bản bóp méo của một thực thể (văn bản viết lại, ảnh bị xoay và thêm nhiễu) là mẫu âm cần đẩy ra xa. MDBGF lại coi bản thiếu ảnh hoặc thiếu văn bản vẫn là chính thực thể đó, và mô hình vẫn phải đoán đúng. Một bên dạy mô hình phân biệt thật kỹ, bên kia dạy mô hình chịu được thiếu sót. Theo nhóm, hai cách không loại trừ nhau, vì chúng tác động lên hai kiểu biến thể khác nhau: méo nội dung và mất hẳn một mô thức.
+
+Khác biệt rõ nhất về thiết kế nằm ở cách trộn mô thức. Trọng số của HFR-MKGC phụ thuộc quan hệ đang hỏi, nên cùng một thực thể có thể nghe theo văn bản khi hỏi về giọng hát và nghe theo ảnh khi hỏi về giới tính. Cổng BGF của MDBGF thì không nhìn quan hệ. Chính lời phê bình của HFR-MKGC đối với các phương pháp trước áp dụng được cho MDBGF. Ngược lại, MDBGF chỉ ra một điều HFR-MKGC không xét tới: cho mô hình xem đủ mọi mô thức trong suốt quá trình huấn luyện có thể làm nó lệ thuộc vào mô thức ``ồn ào'' nhất. Cách đầu vào được biểu diễn cũng khác. HFR-MKGC dùng một vector cho mỗi mô thức, cộng thêm caption do LLaVA sinh; MDBGF dùng chuỗi token rời rạc được chọn theo tần suất. Về hàm điểm, một bên là RotatE với mẫu âm và hàm mất mát tự đối kháng, bên kia là TuckER với huấn luyện 1-N.
+
+Chi phí của hai bài chênh nhau rất xa. HFR-MKGC đưa LLaVA-7B vào ba chỗ (sinh caption, gợi ý đáp án, viết lại văn bản) nhưng không báo cáo thời gian chạy. MDBGF chỉ tốn thêm khoảng 3\% bộ nhớ so với khung nền, và lấy mẫu âm khó gần như miễn phí từ bảng điểm có sẵn. Về khả năng kiểm chứng, HFR-MKGC không công khai mã. MDBGF có công khai, nhưng mã khác bài ở vài điểm cốt lõi; dù vậy, nhờ có mã mà nhóm chạy lại được (Mục~\ref{sec:mdbgf-repro}).
+
+Không thể so trực tiếp kết quả của hai bài. MDBGF đạt MRR 40{,}10 trên MKG-W, còn HFR-MKGC đạt 38{,}62, nhưng hai bài dùng hai bộ số khác nhau cho cùng các mô hình cơ sở: RotatE trên MKG-W là 32{,}92 ở bài này và 33{,}67 ở bài kia, MyGO là 33{,}40 và 36{,}10, APKGC là 32{,}67 và 37{,}40. Chênh lệch giữa hai bảng số cho cùng một mô hình đã lớn hơn phần lớn mức cải thiện mà mỗi bài tuyên bố. Hai bài còn giống nhau ở cách trình bày kết quả: cả hai cùng tự nhận đạt kết quả tốt nhất nhưng thực ra chỉ dẫn đầu 11/12 ô, đều thua ở một ô Hits@1, và đều chỉ làm phân tích phụ trên MKG-W với một lần chạy.
+
+Từ hai bài, nhóm rút ra ba điều. Thứ nhất, trọng số trộn mô thức nên phụ thuộc câu hỏi, và ý này ghép được vào MDBGF bằng cách cho cổng BGF nhận thêm vector quan hệ. Thứ hai, không nên mặc định mọi mô thức lúc nào cũng có ích; rụng mô thức là một cách rẻ để điều hoà và có thể thử ngay trên HFR-MKGC. Thứ ba, các tuyên bố ``tốt nhất'' trong lĩnh vực này cần được đọc kỹ: nên nhìn mức tăng tuyệt đối, xem số của mô hình cơ sở lấy từ đâu, hỏi có độ lệch giữa các lần chạy hay không, và kiểm tra mô hình được chọn theo tập kiểm định hay tập kiểm thử. Lần đọc mã nguồn MDBGF cho thấy điều cuối cùng không phải là chuyện lý thuyết.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
