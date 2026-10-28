@@ -23,7 +23,7 @@
 \usepackage{enumitem}
 \setlist{nosep,leftmargin=*}
 \usepackage[hyphens]{url}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks, urlcolor=blue, linkcolor=black, citecolor=black]{hyperref}
 \usepackage{etoolbox}
 \gappto\captionsvietnamese{\renewcommand{\refname}{Tài liệu tham khảo}}
 \renewcommand{\IEEEkeywordsname}{Từ khoá}
@@ -856,7 +856,7 @@ Chọn kết quả & không nêu & đánh giá mỗi 50 epoch; báo cáo lần c
 
 Thực nghiệm chạy trên một GPU NVIDIA L4 24 GB của Google Colab Pro. Đỉnh bộ nhớ đo được là 16{,}5 GB, thấp hơn mức khoảng 21 GB ở Bảng 6 của bài. Mỗi epoch mất 17{,}4 giây, nên chạy đủ 5000 epoch như bài sẽ tốn khoảng 24 giờ GPU cho \emph{mỗi} cấu hình, vượt ngân sách của nhóm. Vì vậy nhóm chạy 1550 epoch. Con số này không tuỳ tiện: lịch tốc độ học của tác giả giảm theo hàm cos rồi khởi động lại với chu kỳ dài gấp đôi sau mỗi lần (50, 100, 200, 400, 800 epoch), và epoch 1550 là điểm kết thúc một chu kỳ, lúc tốc độ học về gần 0. Các siêu tham số khác giữ đúng như kịch bản chạy của tác giả cho MKG-W. Rụng mô thức dùng đúng như mã công khai (xác suất cố định 0{,}3). Với $N = 1550$, tỉ lệ mẫu âm khó của AHNS vẫn tăng tuyến tính tới $\beta = 0{,}8$, chỉ là tăng nhanh hơn theo số epoch.
 
-\paragraph{Kết quả} Bảng~\ref{tab:mdbgf-repro} so kết quả của nhóm với số trong bài. Quá trình huấn luyện của từng dòng được ghi tại: kết quả chính \url{https://wandb.ai/minhdatngo-forwork-ho-chi-minh-city-university-of-science/mdbgf-reproduce/runs/xxejayyu}; bỏ MD \todo{link WandB run no\_md}.
+\paragraph{Kết quả} Bảng~\ref{tab:mdbgf-repro} so kết quả của nhóm với số trong bài. Quá trình huấn luyện của từng dòng được ghi tại: kết quả chính \href{https://wandb.ai/minhdatngo-forwork-ho-chi-minh-city-university-of-science/mdbgf-reproduce/runs/xxejayyu}{WandB, run \texttt{main\_code}}; bỏ MD \todo{link WandB run no\_md}.
 
 \begin{table}[t]
 \centering
